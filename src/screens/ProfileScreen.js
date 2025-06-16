@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 const GALLERY_IMAGES = [
@@ -16,6 +26,49 @@ const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
+  const [profileImage, setProfileImage] = useState(null);
+
+  const pickFromCamera = async () => {
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert('Permission required', 'Camera permission is needed to take a photo.');
+      return;
+    }
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
+  const pickFromLibrary = async () => {
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      Alert.alert('Permission required', 'Media library permission is needed to select a photo.');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.7,
+    });
+    if (!result.canceled) {
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
+  const changePhoto = () => {
+    Alert.alert('Change Profile Picture', 'Select an option', [
+      { text: 'Camera', onPress: pickFromCamera },
+      { text: 'Library', onPress: pickFromLibrary },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -32,11 +85,20 @@ export default function ProfileScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Profile Info */}
         <View style={styles.profileInfo}>
-          <Image source={require('../explore_bg.png')} style={styles.avatar} />
+          <TouchableOpacity onPress={changePhoto}>
+            <Image
+              source={profileImage ? { uri: profileImage } : require('../explore_bg.png')}
+              style={styles.avatar}
+            />
+          </TouchableOpacity>
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>
-            <TouchableOpacity style={styles.editBtn}><Text style={styles.editText}>Edit</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.shareBtn}><Text style={styles.shareText}>Share</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.editBtn} onPress={changePhoto}>
+              <Text style={styles.editText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareBtn}>
+              <Text style={styles.shareText}>Share</Text>
+            </TouchableOpacity>
           </View>
         </View>
         {/* Tabs */}

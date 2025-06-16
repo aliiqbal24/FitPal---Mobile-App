@@ -9,13 +9,28 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@gorhom/bottom-sheet": "^5.1.6",
+    "@react-navigation/bottom-tabs": "^7.3.14",
+    "@react-navigation/native": "^7.1.10",
+    "@react-three/drei": "^10.2.0",
+    "@react-three/fiber": "^9.1.2",
     "expo": "~53.0.11",
+    "expo-file-system": "~18.1.10",
+    "expo-gl": "~15.1.6",
+    "expo-linear-gradient": "~14.1.5",
     "expo-status-bar": "~2.2.3",
+    "expo-three": "^8.0.0",
     "react": "19.0.0",
-    "react-native": "0.79.3"
+    "react-native": "0.79.3",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-safe-area-context": "5.4.0",
+    "react-native-screens": "^4.11.1",
+    "three": "^0.166.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9"
   },
   "private": true
 }

@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+  Alert,
+} from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 
 const GALLERY_IMAGES = [
@@ -16,6 +26,36 @@ const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
+  const [galleryImages, setGalleryImages] = useState([...GALLERY_IMAGES]);
+
+  const addImage = async (fromCamera) => {
+    let permissionResult;
+    if (fromCamera) {
+      permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+    } else {
+      permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    }
+    if (permissionResult.status !== 'granted') {
+      Alert.alert('Permission required', 'Permission to access camera roll is required!');
+      return;
+    }
+
+    const result = fromCamera
+      ? await ImagePicker.launchCameraAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 1 })
+      : await ImagePicker.launchImageLibraryAsync({ mediaTypes: ImagePicker.MediaTypeOptions.Images, quality: 1 });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setGalleryImages([...galleryImages, { uri: result.assets[0].uri }]);
+    }
+  };
+
+  const handleAddPhoto = () => {
+    Alert.alert('Add Photo', 'Choose a source', [
+      { text: 'Camera', onPress: () => addImage(true) },
+      { text: 'Library', onPress: () => addImage(false) },
+      { text: 'Cancel', style: 'cancel' },
+    ]);
+  };
 
   return (
     <View style={styles.container}>
@@ -47,8 +87,8 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => setTab('Collection')} style={[styles.tabBtn, tab === 'Collection' && styles.tabActive]}>
             <Text style={[styles.tabText, tab === 'Collection' && styles.tabTextActive]}>Collection</Text>
           </TouchableOpacity>
-          {tab === 'Collection' && (
-            <TouchableOpacity style={styles.plusBtn}>
+          {tab === 'Gallery' && (
+            <TouchableOpacity style={styles.plusBtn} onPress={handleAddPhoto}>
               <Ionicons name="add-circle" size={36} color="#007AFF" />
             </TouchableOpacity>
           )}
@@ -56,7 +96,7 @@ export default function ProfileScreen() {
         {/* Content */}
         {tab === 'Gallery' ? (
           <View style={styles.galleryGrid}>
-            {GALLERY_IMAGES.map((img, idx) => (
+            {galleryImages.map((img, idx) => (
               <View key={idx} style={styles.galleryCard}>
                 <Image source={img} style={styles.galleryImg} resizeMode="cover" />
               </View>

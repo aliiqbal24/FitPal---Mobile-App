@@ -7,7 +7,7 @@ export default function LoginScreen() {
 
   return (
     <ImageBackground
-      source={require('../gpt_image.png')}
+      source={require('../../assets/loading.png')}
       style={styles.container}
       resizeMode="cover"
     >

@@ -8,7 +8,6 @@ import {
   TextInput,
   ScrollView,
   ImageBackground,
-  Alert,
   Dimensions,
   Image,
   Button,
@@ -83,6 +82,7 @@ export default function GymScreen() {
 
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
+  const [showStatsModal, setShowStatsModal] = useState(false);
 
   const addSet = useCallback(() => {
     setExp(e => e + 1);
@@ -95,11 +95,9 @@ export default function GymScreen() {
     }
   }, [exp, level]);
 
-  const stars = Math.min(5, 1 + Math.floor((level - 1) / 5));
-
   const showStats = useCallback(() => {
-    Alert.alert('Stats', `EXP: ${exp}\nLevel: ${level}\nStars: ${'\u2B50'.repeat(stars)}`);
-  }, [exp, level, stars]);
+    setShowStatsModal(true);
+  }, []);
 
   const entities = {
     physics: { engine: engine.current, world },
@@ -390,6 +388,31 @@ export default function GymScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* Stats Modal */}
+      <Modal visible={showStatsModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Character Stats</Text>
+            <Text style={styles.levelText}>Level {level}</Text>
+            <View style={styles.expBar}>
+              <View
+                style={[
+                  styles.expProgress,
+                  { width: `${((exp % 20) / 20) * 100}%` },
+                ]}
+              />
+            </View>
+            <Text style={styles.expText}>{exp % 20}/20 EXP</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setShowStatsModal(false)}
+            >
+              <Text style={styles.modalButtonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
     </ImageBackground>
   );
@@ -502,6 +525,29 @@ const styles = StyleSheet.create({
   modalCancelText: {
     color: '#007AFF',
     fontWeight: '600',
+  },
+  levelText: {
+    fontSize: 18,
+    color: '#222',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  expBar: {
+    width: '100%',
+    height: 8,
+    backgroundColor: '#eee',
+    borderRadius: 4,
+    marginBottom: 8,
+  },
+  expProgress: {
+    height: '100%',
+    backgroundColor: '#4CAF50',
+    borderRadius: 4,
+  },
+  expText: {
+    textAlign: 'center',
+    color: '#222',
+    marginBottom: 12,
   },
   gameContainer: {
     height: 200,

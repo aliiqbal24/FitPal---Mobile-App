@@ -101,10 +101,7 @@ export default function GymScreen() {
 
   const entities = {
     physics: { engine: engine.current, world },
-    character: {
-      body: characterBody,
-      renderer: <Character body={characterBody} onPress={showStats} />,
-    },
+    character: { body: characterBody },
   };
 
   useEffect(() => {
@@ -249,7 +246,9 @@ export default function GymScreen() {
     >
       <SafeAreaView style={styles.container}>
       <View style={styles.gameContainer}>
-        <GameEngine systems={[Physics]} entities={entities} style={styles.engine} />
+        <GameEngine systems={[Physics]} entities={entities} style={styles.engine}>
+          <Character body={characterBody} onPress={showStats} />
+        </GameEngine>
         <View style={styles.buttonContainer}>
           <Button title="+ Set" onPress={addSet} />
         </View>
@@ -426,7 +425,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'transparent',
   },
   contentContainer: {
     padding: 16,

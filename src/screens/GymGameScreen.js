@@ -65,12 +65,14 @@ export default function GymGameScreen() {
 
   const entities = {
     physics: { engine: engine.current, world },
-    character: { body: characterBody, renderer: <Character body={characterBody} onPress={showStats} /> },
+    character: { body: characterBody },
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <GameEngine style={styles.engine} systems={[Physics]} entities={entities} />
+      <GameEngine style={styles.engine} systems={[Physics]} entities={entities}>
+        <Character body={characterBody} onPress={showStats} />
+      </GameEngine>
       <View style={styles.buttonContainer}>
         <Button title="+ Set" onPress={addSet} />
       </View>

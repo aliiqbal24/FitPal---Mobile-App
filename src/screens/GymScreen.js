@@ -7,6 +7,7 @@ import {
   Modal,
   TextInput,
   ScrollView,
+  ImageBackground,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -165,7 +166,12 @@ export default function GymScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ImageBackground
+      source={require('../../assets/app_background.png')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts.map((wk, wIdx) => (
           <View key={wIdx} style={styles.workoutCard}>
@@ -301,10 +307,16 @@ export default function GymScreen() {
         </View>
       </Modal>
     </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
   container: {
     flex: 1,
     backgroundColor: '#000',

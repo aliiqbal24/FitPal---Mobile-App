@@ -25,9 +25,8 @@ export default function ProfileScreen() {
       {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-          <Ionicons name="settings-outline" size={24} color="#222" />
+          <Ionicons name="settings-outline" size={32} color="#222" />
         </TouchableOpacity>
-        <Text style={styles.usernameTop}>vscotest40</Text>
         <TouchableOpacity>
           <Ionicons name="notifications-outline" size={24} color="#222" />
         </TouchableOpacity>
@@ -86,8 +85,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingTop: 48,
-    paddingBottom: 8,
+    paddingTop: 2, // was 48, increased to move icons lower
+    paddingBottom: 0,
     backgroundColor: '#fff',
   },
   usernameTop: {
@@ -199,4 +198,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 24,
   },
-}); 
+});

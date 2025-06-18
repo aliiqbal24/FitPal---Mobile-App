@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     marginBottom: 16,
-    width: '75%',
+    width: '55%',
     alignSelf: 'center',
   },
   workoutHeader: {

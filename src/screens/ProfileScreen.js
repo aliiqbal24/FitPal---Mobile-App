@@ -27,7 +27,7 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <Ionicons name="settings-outline" size={32} color="#222" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Activity')}>
           <Ionicons name="notifications-outline" size={24} color="#222" />
         </TouchableOpacity>
       </View>

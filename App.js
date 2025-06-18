@@ -3,7 +3,7 @@ import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import TabNavigator from './src/navigation/TabNavigator';
+import RootNavigator from './src/navigation/RootNavigator';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -16,7 +16,7 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <TabNavigator />
+          <RootNavigator />
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>

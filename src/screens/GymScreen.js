@@ -19,6 +19,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import ExpCircle from '../components/ExpCircle';
+import TouchHandler from '../systems/TouchHandler';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -29,20 +30,16 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body, onPress }) => {
+const Character = React.memo(({ body }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
   const y = body.position.y - height / 2;
 
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      activeOpacity={0.8}
-      style={[styles.character, { left: x, top: y, width, height }]}
-    >
+    <View style={[styles.character, { left: x, top: y, width, height }]}> 
       <Image source={SPRITE} style={styles.sprite} resizeMode="contain" />
-    </TouchableOpacity>
+    </View>
   );
 });
 
@@ -104,6 +101,15 @@ export default function GymScreen() {
     physics: { engine: engine.current, world },
     character: { body: characterBody },
   };
+
+  const onEvent = useCallback(
+    e => {
+      if (e.type === 'show-stats') {
+        showStats();
+      }
+    },
+    [showStats]
+  );
 
   useEffect(() => {
     (async () => {
@@ -247,8 +253,13 @@ export default function GymScreen() {
     >
       <SafeAreaView style={styles.container}>
       <View style={styles.gameContainer}>
-        <GameEngine systems={[Physics]} entities={entities} style={styles.engine}>
-          <Character body={characterBody} onPress={showStats} />
+        <GameEngine
+          systems={[Physics, TouchHandler]}
+          entities={entities}
+          style={styles.engine}
+          onEvent={onEvent}
+        >
+          <Character body={characterBody} />
         </GameEngine>
         <View style={styles.buttonContainer}>
           <Button title="+ Set" onPress={addSet} />

@@ -18,6 +18,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import ExpCircle from '../components/ExpCircle';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -394,15 +395,9 @@ export default function GymScreen() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Character Stats</Text>
             <Text style={styles.levelText}>Level {level}</Text>
-            <View style={styles.expBar}>
-              <View
-                style={[
-                  styles.expProgress,
-                  { width: `${((exp % 20) / 20) * 100}%` },
-                ]}
-              />
+            <View style={styles.circleWrapper}>
+              <ExpCircle exp={exp} />
             </View>
-            <Text style={styles.expText}>{exp % 20}/20 EXP</Text>
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setShowStatsModal(false)}
@@ -531,21 +526,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
   },
-  expBar: {
-    width: '100%',
-    height: 8,
-    backgroundColor: '#eee',
-    borderRadius: 4,
-    marginBottom: 8,
-  },
-  expProgress: {
-    height: '100%',
-    backgroundColor: '#4CAF50',
-    borderRadius: 4,
-  },
-  expText: {
-    textAlign: 'center',
-    color: '#222',
+  circleWrapper: {
+    alignItems: 'center',
     marginBottom: 12,
   },
   gameContainer: {

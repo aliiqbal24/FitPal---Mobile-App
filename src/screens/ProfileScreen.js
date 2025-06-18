@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 const GALLERY_IMAGES = [
@@ -16,12 +17,13 @@ const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <Ionicons name="settings-outline" size={24} color="#222" />
         </TouchableOpacity>
         <Text style={styles.usernameTop}>vscotest40</Text>

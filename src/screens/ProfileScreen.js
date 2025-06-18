@@ -32,7 +32,7 @@ export default function ProfileScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Profile Info */}
         <View style={styles.profileInfo}>
-          <Image source={require('../explore_bg.png')} style={styles.avatar} />
+          <Image source={require('../../assets/AppSprite.png')} style={styles.avatar} />
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>
             <TouchableOpacity style={styles.editBtn}><Text style={styles.editText}>Edit</Text></TouchableOpacity>
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 36,
     marginBottom: 8,
     backgroundColor: '#eee',
+    overflow: 'hidden',
   },
   username: {
     fontSize: 18,

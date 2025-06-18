@@ -258,16 +258,6 @@ export default function GymScreen() {
       resizeMode="cover"
     >
       <SafeAreaView style={styles.container}>
-      <View style={styles.gameContainer}>
-        <GameEngine
-          systems={[Physics, TouchHandler]}
-          entities={entities}
-          style={styles.engine}
-          onEvent={onEvent}
-        >
-          <Character body={characterBody} />
-        </GameEngine>
-      </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
           <View key={selectedWorkoutIdx} style={styles.workoutCard}>
@@ -298,6 +288,16 @@ export default function GymScreen() {
           </View>
         )}
       </ScrollView>
+      <View style={styles.gameContainer}>
+        <GameEngine
+          systems={[Physics, TouchHandler]}
+          entities={entities}
+          style={styles.engine}
+          onEvent={onEvent}
+        >
+          <Character body={characterBody} />
+        </GameEngine>
+      </View>
 
       <View style={styles.carouselContainer}>
         <ScrollView

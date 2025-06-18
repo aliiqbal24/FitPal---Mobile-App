@@ -86,10 +86,6 @@ export default function GymScreen() {
   const [level, setLevel] = useState(1);
   const [showStatsModal, setShowStatsModal] = useState(false);
 
-  const addSet = useCallback(() => {
-    setExp(e => e + 1);
-  }, []);
-
   useEffect(() => {
     const newLevel = Math.floor(exp / 20) + 1;
     if (newLevel !== level) {
@@ -260,36 +256,6 @@ export default function GymScreen() {
         <GameEngine systems={[Physics]} entities={entities} style={styles.engine}>
           <Character body={characterBody} onPress={showStats} />
         </GameEngine>
-        <View style={styles.buttonContainer}>
-          <Button title="+ Set" onPress={addSet} />
-        </View>
-      </View>
-      <View style={styles.carouselContainer}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.carouselScroll}
-        >
-          {workouts.map((wk, idx) => (
-            <TouchableOpacity
-              key={idx}
-              style={[
-                styles.carouselItem,
-                selectedWorkoutIdx === idx && styles.carouselItemSelected,
-              ]}
-              onPress={() => setSelectedWorkoutIdx(idx)}
-            >
-              <Text
-                style={[
-                  styles.carouselItemText,
-                  selectedWorkoutIdx === idx && styles.carouselItemTextSelected,
-                ]}
-              >
-                {wk.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
       </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
@@ -321,6 +287,34 @@ export default function GymScreen() {
           </View>
         )}
       </ScrollView>
+
+      <View style={styles.carouselContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.carouselScroll}
+        >
+          {workouts.map((wk, idx) => (
+            <TouchableOpacity
+              key={idx}
+              style={[
+                styles.carouselItem,
+                selectedWorkoutIdx === idx && styles.carouselItemSelected,
+              ]}
+              onPress={() => setSelectedWorkoutIdx(idx)}
+            >
+              <Text
+                style={[
+                  styles.carouselItemText,
+                  selectedWorkoutIdx === idx && styles.carouselItemTextSelected,
+                ]}
+              >
+                {wk.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
 
       <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
         <Ionicons name="add" size={32} color="#fff" />
@@ -468,6 +462,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     marginBottom: 16,
+    width: '75%',
+    alignSelf: 'center',
   },
   workoutHeader: {
     flexDirection: 'row',
@@ -581,11 +577,6 @@ const styles = StyleSheet.create({
   sprite: {
     width: '100%',
     height: '100%',
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 10,
-    alignSelf: 'center',
   },
   carouselContainer: {
     paddingVertical: 12,

@@ -51,6 +51,7 @@ export default function GymScreen() {
   const [showWorkoutModal, setShowWorkoutModal] = useState(false);
   const [workoutName, setWorkoutName] = useState('');
   const [currentWorkoutIdx, setCurrentWorkoutIdx] = useState(null);
+  const [selectedWorkoutIdx, setSelectedWorkoutIdx] = useState(0);
 
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [exerciseForm, setExerciseForm] = useState({
@@ -119,6 +120,13 @@ export default function GymScreen() {
   useEffect(() => {
     AsyncStorage.setItem('workouts', JSON.stringify(workouts));
   }, [workouts]);
+
+  // ensure selected workout index stays valid when workouts change
+  useEffect(() => {
+    if (selectedWorkoutIdx >= workouts.length && workouts.length > 0) {
+      setSelectedWorkoutIdx(workouts.length - 1);
+    }
+  }, [workouts, selectedWorkoutIdx]);
 
   const getStartOfWeek = date => {
     const d = new Date(date);
@@ -191,6 +199,7 @@ export default function GymScreen() {
   const openEditWorkout = idx => {
     setWorkoutName(workouts[idx].name);
     setCurrentWorkoutIdx(idx);
+    setSelectedWorkoutIdx(idx);
     setShowWorkoutModal(true);
   };
 
@@ -205,6 +214,7 @@ export default function GymScreen() {
         ...w,
         { name: workoutName, exercises: [], date: new Date().toISOString() },
       ]);
+      setSelectedWorkoutIdx(workouts.length);
     }
     setShowWorkoutModal(false);
   };
@@ -254,20 +264,47 @@ export default function GymScreen() {
           <Button title="+ Set" onPress={addSet} />
         </View>
       </View>
+      <View style={styles.carouselContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.carouselScroll}
+        >
+          {workouts.map((wk, idx) => (
+            <TouchableOpacity
+              key={idx}
+              style={[
+                styles.carouselItem,
+                selectedWorkoutIdx === idx && styles.carouselItemSelected,
+              ]}
+              onPress={() => setSelectedWorkoutIdx(idx)}
+            >
+              <Text
+                style={[
+                  styles.carouselItemText,
+                  selectedWorkoutIdx === idx && styles.carouselItemTextSelected,
+                ]}
+              >
+                {wk.name}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
       <ScrollView contentContainerStyle={styles.contentContainer}>
-        {workouts.map((wk, wIdx) => (
-          <View key={wIdx} style={styles.workoutCard}>
+        {workouts[selectedWorkoutIdx] && (
+          <View key={selectedWorkoutIdx} style={styles.workoutCard}>
             <View style={styles.workoutHeader}>
-              <Text style={styles.workoutName}>{wk.name}</Text>
-              <TouchableOpacity onPress={() => openEditWorkout(wIdx)}>
+              <Text style={styles.workoutName}>{workouts[selectedWorkoutIdx].name}</Text>
+              <TouchableOpacity onPress={() => openEditWorkout(selectedWorkoutIdx)}>
                 <Ionicons name="create-outline" size={20} color="#007AFF" />
               </TouchableOpacity>
             </View>
-            {wk.exercises.map((ex, eIdx) => (
+            {workouts[selectedWorkoutIdx].exercises.map((ex, eIdx) => (
               <TouchableOpacity
                 key={eIdx}
                 style={styles.exerciseRow}
-                onPress={() => openEditExercise(wIdx, eIdx)}
+                onPress={() => openEditExercise(selectedWorkoutIdx, eIdx)}
               >
                 <Text style={styles.exerciseText}>
                   {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}
@@ -276,13 +313,13 @@ export default function GymScreen() {
             ))}
             <TouchableOpacity
               style={styles.addExerciseBtn}
-              onPress={() => openNewExercise(wIdx)}
+              onPress={() => openNewExercise(selectedWorkoutIdx)}
             >
               <Ionicons name="add-circle-outline" size={20} color="#007AFF" />
               <Text style={styles.addExerciseText}>Add Exercise</Text>
             </TouchableOpacity>
           </View>
-        ))}
+        )}
       </ScrollView>
 
       <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
@@ -549,5 +586,28 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     alignSelf: 'center',
+  },
+  carouselContainer: {
+    paddingVertical: 12,
+  },
+  carouselScroll: {
+    paddingHorizontal: 16,
+  },
+  carouselItem: {
+    backgroundColor: '#fff',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    borderRadius: 16,
+    marginRight: 8,
+  },
+  carouselItemSelected: {
+    backgroundColor: '#007AFF',
+  },
+  carouselItemText: {
+    color: '#222',
+    fontWeight: '600',
+  },
+  carouselItemTextSelected: {
+    color: '#fff',
   },
 });

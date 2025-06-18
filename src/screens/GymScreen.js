@@ -288,6 +288,15 @@ export default function GymScreen() {
           </View>
         )}
       </ScrollView>
+      <View style={styles.expImageWrapper}>
+        <TouchableOpacity onPress={showStats}>
+          <Image
+            source={require('../../assets/app_background.png')}
+            style={styles.expImage}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.gameContainer}>
         <GameEngine
           systems={[Physics, TouchHandler]}
@@ -611,5 +620,13 @@ const styles = StyleSheet.create({
   },
   carouselItemTextSelected: {
     color: '#fff',
+  },
+  expImageWrapper: {
+    alignItems: 'center',
+    marginVertical: 16,
+  },
+  expImage: {
+    width: 150,
+    height: 150,
   },
 });

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, View, Image, Alert, TouchableOpacity, Button, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, Alert, Button, Dimensions } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import TouchHandler from '../systems/TouchHandler';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -13,16 +14,16 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body, onPress }) => {
+const Character = React.memo(({ body }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
   const y = body.position.y - height / 2;
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.8} style={[styles.character, { left: x, top: y, width, height }]}> 
+    <View style={[styles.character, { left: x, top: y, width, height }]}>
       <Image source={SPRITE} style={styles.sprite} resizeMode="contain" />
-    </TouchableOpacity>
+    </View>
   );
 });
 
@@ -68,10 +69,24 @@ export default function GymGameScreen() {
     character: { body: characterBody },
   };
 
+  const onEvent = useCallback(
+    e => {
+      if (e.type === 'show-stats') {
+        showStats();
+      }
+    },
+    [showStats]
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      <GameEngine style={styles.engine} systems={[Physics]} entities={entities}>
-        <Character body={characterBody} onPress={showStats} />
+      <GameEngine
+        style={styles.engine}
+        systems={[Physics, TouchHandler]}
+        entities={entities}
+        onEvent={onEvent}
+      >
+        <Character body={characterBody} />
       </GameEngine>
       <View style={styles.buttonContainer}>
         <Button title="+ Set" onPress={addSet} />

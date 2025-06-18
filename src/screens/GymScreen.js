@@ -291,7 +291,7 @@ export default function GymScreen() {
       <View style={styles.expImageWrapper}>
         <TouchableOpacity onPress={showStats}>
           <Image
-            source={require('../../assets/app_background.png')}
+            source={require('../../assets/AppSprite.png')}
             style={styles.expImage}
             resizeMode="contain"
           />

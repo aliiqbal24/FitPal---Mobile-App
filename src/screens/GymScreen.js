@@ -12,6 +12,7 @@ import {
   Image,
   Button,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
@@ -63,6 +64,7 @@ export default function GymScreen() {
   const [editingExerciseIdx, setEditingExerciseIdx] = useState(null);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [weeklySummary, setWeeklySummary] = useState(null);
+  const [deleteMode, setDeleteMode] = useState(false);
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -232,6 +234,11 @@ export default function GymScreen() {
     setShowWorkoutModal(false);
   };
 
+  const handleDeleteWorkout = idx => {
+    setWorkouts(w => w.filter((_, i) => i !== idx));
+    setDeleteMode(false);
+  };
+
   const openNewExercise = idx => {
     setCurrentWorkoutIdx(idx);
     setExerciseForm({ name: '', sets: '', reps: '', weight: '' });
@@ -272,15 +279,24 @@ export default function GymScreen() {
       style={styles.background}
       resizeMode="cover"
     >
+      <TouchableWithoutFeedback onPress={() => deleteMode && setDeleteMode(false)}>
       <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
           <View key={selectedWorkoutIdx} style={styles.workoutCard}>
             <View style={styles.workoutHeader}>
               <Text style={styles.workoutName}>{workouts[selectedWorkoutIdx].name}</Text>
-              <TouchableOpacity onPress={() => openEditWorkout(selectedWorkoutIdx)}>
-                <Ionicons name="create-outline" size={20} color="#007AFF" />
-              </TouchableOpacity>
+              <View style={styles.headerActions}>
+                <TouchableOpacity onPress={() => openEditWorkout(selectedWorkoutIdx)}>
+                  <Ionicons name="create-outline" size={20} color="#007AFF" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.deleteBtn}
+                  onPress={() => handleDeleteWorkout(selectedWorkoutIdx)}
+                >
+                  <Ionicons name="trash-outline" size={20} color="red" />
+                </TouchableOpacity>
+              </View>
             </View>
             {workouts[selectedWorkoutIdx].exercises.map((ex, eIdx) => (
               <TouchableOpacity
@@ -336,7 +352,14 @@ export default function GymScreen() {
                 styles.carouselItem,
                 selectedWorkoutIdx === idx && styles.carouselItemSelected,
               ]}
-              onPress={() => setSelectedWorkoutIdx(idx)}
+              onLongPress={() => setDeleteMode(true)}
+              onPress={() => {
+                if (deleteMode) {
+                  setDeleteMode(false);
+                } else {
+                  setSelectedWorkoutIdx(idx);
+                }
+              }}
             >
               <Text
                 style={[
@@ -346,6 +369,14 @@ export default function GymScreen() {
               >
                 {wk.name}
               </Text>
+              {deleteMode && (
+                <TouchableOpacity
+                  style={styles.carouselDelete}
+                  onPress={() => handleDeleteWorkout(idx)}
+                >
+                  <Ionicons name="close" size={12} color="#fff" />
+                </TouchableOpacity>
+              )}
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -471,6 +502,7 @@ export default function GymScreen() {
         </View>
       </Modal>
     </SafeAreaView>
+    </TouchableWithoutFeedback>
     </ImageBackground>
   );
 }
@@ -502,6 +534,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  deleteBtn: {
+    marginLeft: 8,
   },
   workoutName: {
     fontSize: 18,
@@ -625,6 +664,14 @@ const styles = StyleSheet.create({
   },
   carouselItemSelected: {
     backgroundColor: '#007AFF',
+  },
+  carouselDelete: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    backgroundColor: 'red',
+    borderRadius: 8,
+    padding: 2,
   },
   carouselItemText: {
     color: '#222',

@@ -24,6 +24,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
+import EquipmentGrid from '../components/EquipmentGrid';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -333,6 +334,9 @@ export default function GymScreen() {
     setWorkoutActive(active => !active);
   }, []);
 
+  const currentExercises =
+    workouts[selectedWorkoutIdx]?.exercises ?? [];
+
   return (
     <ImageBackground
       source={require('../../assets/app_background.png')}
@@ -398,6 +402,7 @@ export default function GymScreen() {
           <Character body={characterBody} />
         </GameEngine>
       </View>
+      {workoutActive && <EquipmentGrid exercises={currentExercises} />}
 
       <View style={styles.carouselContainer}>
         <ScrollView

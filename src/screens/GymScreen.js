@@ -761,15 +761,16 @@ const styles = StyleSheet.create({
   },
   workoutToggleBtn: {
     position: 'absolute',
-    bottom: 24,
-    left: 24,
+    alignSelf: 'center',
+    bottom: 160,
     backgroundColor: '#000',
     borderRadius: 8,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 26,
   },
   workoutToggleBtnText: {
     color: '#fff',
     fontWeight: '700',
+    fontSize: 21,
   },
 });

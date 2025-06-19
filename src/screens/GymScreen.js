@@ -13,6 +13,7 @@ import {
   Button,
   Alert,
   TouchableWithoutFeedback,
+  Animated,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
@@ -44,6 +45,51 @@ const Character = React.memo(({ body }) => {
     <View style={[styles.character, { left: x, top: y, width, height }]}> 
       <Image source={SPRITE} style={styles.sprite} resizeMode="contain" />
     </View>
+  );
+});
+
+const AnimatedTouchable = Animated.createAnimatedComponent(TouchableOpacity);
+
+const WiggleItem = React.memo(function WiggleItem({ deleteMode, style, children, ...rest }) {
+  const anim = useRef(new Animated.Value(0)).current;
+  const loop = useRef();
+
+  useEffect(() => {
+    if (deleteMode) {
+      anim.setValue(0);
+      loop.current = Animated.loop(
+        Animated.sequence([
+          Animated.timing(anim, { toValue: 1, duration: 80, useNativeDriver: true }),
+          Animated.timing(anim, { toValue: -1, duration: 80, useNativeDriver: true }),
+        ])
+      );
+      loop.current.start();
+    } else {
+      if (loop.current) {
+        loop.current.stop();
+      }
+      anim.setValue(0);
+    }
+
+    return () => {
+      if (loop.current) {
+        loop.current.stop();
+      }
+    };
+  }, [deleteMode, anim]);
+
+  const rotate = anim.interpolate({
+    inputRange: [-1, 1],
+    outputRange: ['-4deg', '4deg'],
+  });
+
+  return (
+    <AnimatedTouchable
+      {...rest}
+      style={[style, deleteMode && { transform: [{ rotate }] }]}
+    >
+      {children}
+    </AnimatedTouchable>
   );
 });
 
@@ -346,8 +392,9 @@ export default function GymScreen() {
           contentContainerStyle={styles.carouselScroll}
         >
           {workouts.map((wk, idx) => (
-            <TouchableOpacity
+            <WiggleItem
               key={idx}
+              deleteMode={deleteMode}
               style={[
                 styles.carouselItem,
                 selectedWorkoutIdx === idx && styles.carouselItemSelected,
@@ -377,7 +424,7 @@ export default function GymScreen() {
                   <Ionicons name="close" size={12} color="#fff" />
                 </TouchableOpacity>
               )}
-            </TouchableOpacity>
+            </WiggleItem>
           ))}
         </ScrollView>
       </View>
@@ -667,11 +714,14 @@ const styles = StyleSheet.create({
   },
   carouselDelete: {
     position: 'absolute',
-    top: -4,
-    right: -4,
+    top: -8,
+    right: -8,
     backgroundColor: 'red',
-    borderRadius: 8,
-    padding: 2,
+    borderRadius: 12,
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   carouselItemText: {
     color: '#222',

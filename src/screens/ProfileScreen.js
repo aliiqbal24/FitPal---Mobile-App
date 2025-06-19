@@ -27,9 +27,14 @@ export default function ProfileScreen() {
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
           <Ionicons name="settings-outline" size={32} color="#222" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('Activity')}>
-          <Ionicons name="notifications-outline" size={24} color="#222" />
-        </TouchableOpacity>
+        <View style={styles.topBarRight}>
+          <TouchableOpacity onPress={() => navigation.navigate('Friends')} style={styles.iconBtn}>
+            <Ionicons name="people-outline" size={24} color="#222" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Activity')} style={styles.iconBtn}>
+            <Ionicons name="notifications-outline" size={24} color="#222" />
+          </TouchableOpacity>
+        </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Profile Info */}
@@ -88,6 +93,14 @@ const styles = StyleSheet.create({
     paddingTop: 2, // was 48, increased to move icons lower
     paddingBottom: 0,
     backgroundColor: '#fff',
+  },
+  topBarRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  iconBtn: {
+    paddingHorizontal: 4,
   },
   usernameTop: {
     fontSize: 16,

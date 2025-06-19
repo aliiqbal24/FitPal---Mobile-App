@@ -3,12 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ActivityScreen({ navigation }) {
-  const activities = [
-    'nuha545 sent you a follow request',
-    'kenzie sent you a follow request',
-    'ayah sent you a follow request',
-  ];
+export default function FriendsScreen({ navigation }) {
+  const friends = ['MegMx', 'malak', 'DorothyDark'];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -16,13 +12,13 @@ export default function ActivityScreen({ navigation }) {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#222" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Activity</Text>
+        <Text style={styles.headerTitle}>Friends</Text>
         <View style={{ width: 24 }} />
       </View>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {activities.map((msg, idx) => (
-          <View key={idx} style={styles.activityItem}>
-            <Text style={styles.activityText}>{msg}</Text>
+        {friends.map((name, idx) => (
+          <View key={idx} style={styles.friendItem}>
+            <Text style={styles.friendText}>{name}</Text>
           </View>
         ))}
       </ScrollView>
@@ -52,12 +48,12 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
   },
-  activityItem: {
+  friendItem: {
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderColor: '#eee',
   },
-  activityText: {
+  friendText: {
     fontSize: 21,
     color: '#222',
   },

@@ -762,7 +762,7 @@ const styles = StyleSheet.create({
   workoutToggleBtn: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: 160,
+    bottom: 100,
     backgroundColor: '#000',
     borderRadius: 8,
     paddingVertical: 16,

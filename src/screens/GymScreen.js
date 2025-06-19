@@ -24,7 +24,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
-import { EXERCISES } from '../data/exerciseList';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -307,10 +306,6 @@ export default function GymScreen() {
 
   const handleSaveExercise = () => {
     const ex = { ...exerciseForm };
-    if (!EXERCISES.includes(ex.name)) {
-      Alert.alert('Please select a valid exercise from the list.');
-      return;
-    }
     setWorkouts(w => {
       const updated = [...w];
       const exercises = updated[currentWorkoutIdx].exercises;

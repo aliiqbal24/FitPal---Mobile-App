@@ -3,13 +3,11 @@ import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-nativ
 import { EXERCISES } from '../data/exerciseList';
 
 export default function ExerciseSelector({ value, onChange }) {
+  const query = value.trim().toLowerCase();
   const suggestions = useMemo(() => {
-    const query = value.trim().toLowerCase();
-    if (!query) {
-      return ['Barbell Squat', 'Barbell Bench Press', 'Dumbbell Lunge', 'Deadlift'];
-    }
+    if (!query) return [];
     return EXERCISES.filter(ex => ex.toLowerCase().includes(query)).slice(0, 4);
-  }, [value]);
+  }, [query]);
 
   return (
     <View>

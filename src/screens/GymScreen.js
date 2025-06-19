@@ -319,6 +319,16 @@ export default function GymScreen() {
     setShowExerciseModal(false);
   };
 
+  const handleDeleteExercise = () => {
+    if (editingExerciseIdx === null) return;
+    setWorkouts(w => {
+      const updated = [...w];
+      updated[currentWorkoutIdx].exercises = updated[currentWorkoutIdx].exercises.filter((_, i) => i !== editingExerciseIdx);
+      return updated;
+    });
+    setShowExerciseModal(false);
+  };
+
   const toggleWorkout = useCallback(() => {
     setWorkoutActive(active => !active);
   }, []);
@@ -497,6 +507,14 @@ export default function GymScreen() {
       <Modal visible={showExerciseModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
+            {editingExerciseIdx !== null && (
+              <TouchableOpacity
+                style={styles.exerciseDelete}
+                onPress={handleDeleteExercise}
+              >
+                <Ionicons name="trash-outline" size={20} color="red" />
+              </TouchableOpacity>
+            )}
             <Text style={styles.modalTitle}>
               {editingExerciseIdx !== null ? 'Edit Exercise' : 'New Exercise'}
             </Text>
@@ -643,6 +661,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
     padding: 20,
+    overflow: 'visible',
   },
   modalTitle: {
     fontSize: 18,
@@ -681,6 +700,11 @@ const styles = StyleSheet.create({
   modalCancelText: {
     color: '#007AFF',
     fontWeight: '600',
+  },
+  exerciseDelete: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   levelText: {
     fontSize: 18,

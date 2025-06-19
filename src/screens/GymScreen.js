@@ -11,6 +11,7 @@ import {
   Dimensions,
   Image,
   Button,
+  Alert,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
@@ -193,6 +194,10 @@ export default function GymScreen() {
   );
 
   const openNewWorkout = () => {
+    if (workouts.length >= 3) {
+      Alert.alert('Upgrade Required', 'Upgrade to pro for more');
+      return;
+    }
     setWorkoutName('');
     setCurrentWorkoutIdx(null);
     setShowWorkoutModal(true);
@@ -212,6 +217,10 @@ export default function GymScreen() {
         w.map((wk, i) => (i === currentWorkoutIdx ? { ...wk, name: workoutName } : wk))
       );
     } else {
+      if (workouts.length >= 3) {
+        Alert.alert('Upgrade Required', 'Upgrade to pro for more');
+        return;
+      }
       setWorkouts(w => [
         ...w,
         { name: workoutName, exercises: [], date: new Date().toISOString() },

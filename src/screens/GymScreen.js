@@ -110,6 +110,7 @@ export default function GymScreen() {
   const [editingExerciseIdx, setEditingExerciseIdx] = useState(null);
   const [showSummaryModal, setShowSummaryModal] = useState(false);
   const [weeklySummary, setWeeklySummary] = useState(null);
+  const [workoutActive, setWorkoutActive] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
@@ -319,6 +320,10 @@ export default function GymScreen() {
     setShowExerciseModal(false);
   };
 
+  const toggleWorkout = useCallback(() => {
+    setWorkoutActive(active => !active);
+  }, []);
+
   return (
     <ImageBackground
       source={require('../../assets/app_background.png')}
@@ -431,6 +436,12 @@ export default function GymScreen() {
 
       <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
         <Ionicons name="add" size={32} color="#fff" />
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.workoutToggleBtn} onPress={toggleWorkout}>
+        <Text style={styles.workoutToggleBtnText}>
+          {workoutActive ? 'END' : 'LIFT'}
+        </Text>
       </TouchableOpacity>
 
       {/* Summary Modal */}
@@ -737,5 +748,18 @@ const styles = StyleSheet.create({
   expImage: {
     width: 150,
     height: 150,
+  },
+  workoutToggleBtn: {
+    position: 'absolute',
+    bottom: 24,
+    left: 24,
+    backgroundColor: '#000',
+    borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  workoutToggleBtnText: {
+    color: '#fff',
+    fontWeight: '700',
   },
 });

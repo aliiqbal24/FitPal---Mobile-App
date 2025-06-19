@@ -68,7 +68,11 @@ const WiggleItem = React.memo(function WiggleItem({ deleteMode, style, children,
       if (loop.current) {
         loop.current.stop();
       }
-      anim.setValue(0);
+      Animated.timing(anim, { toValue: 0, duration: 80, useNativeDriver: true }).start(({ finished }) => {
+        if (finished) {
+          anim.setValue(0);
+        }
+      });
     }
 
     return () => {
@@ -392,6 +396,7 @@ export default function GymScreen() {
 
       <View style={styles.carouselContainer}>
         <ScrollView
+          style={styles.carouselScrollView}
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.carouselScroll}
@@ -708,7 +713,12 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   carouselContainer: {
-    paddingVertical: 12,
+    paddingBottom: 12,
+    paddingTop: 20,
+    marginTop: -8,
+  },
+  carouselScrollView: {
+    overflow: 'visible',
   },
   carouselScroll: {
     paddingHorizontal: 16,

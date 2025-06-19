@@ -25,6 +25,7 @@ import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import { EXERCISES } from '../data/exerciseList';
+import { sanitizeInteger, limitSets } from '../utils/inputUtils';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -107,7 +108,7 @@ export default function GymScreen() {
   const [showExerciseModal, setShowExerciseModal] = useState(false);
   const [exerciseForm, setExerciseForm] = useState({
     name: '',
-    sets: '',
+    sets: '3',
     reps: '',
     weight: '',
   });
@@ -292,7 +293,7 @@ export default function GymScreen() {
 
   const openNewExercise = idx => {
     setCurrentWorkoutIdx(idx);
-    setExerciseForm({ name: '', sets: '', reps: '', weight: '' });
+    setExerciseForm({ name: '', sets: '3', reps: '', weight: '' });
     setEditingExerciseIdx(null);
     setShowExerciseModal(true);
   };
@@ -303,6 +304,31 @@ export default function GymScreen() {
     setExerciseForm(ex);
     setEditingExerciseIdx(exerciseIdx);
     setShowExerciseModal(true);
+  };
+
+  const handleSetsChange = text => {
+    const digits = sanitizeInteger(text);
+    if (digits) {
+      const num = parseInt(digits, 10);
+      if (num > 20) {
+        Alert.alert('someone had too much pre Haha, 20 sets max');
+      }
+    }
+    setExerciseForm(f => ({ ...f, sets: limitSets(digits) }));
+  };
+
+  const handleRepsChange = text => {
+    const digits = sanitizeInteger(text);
+    setExerciseForm(f => ({ ...f, reps: digits }));
+  };
+
+  const handleSetsFocus = () => {
+    setExerciseForm(f => {
+      if (editingExerciseIdx === null && f.sets === '3') {
+        return { ...f, sets: '' };
+      }
+      return f;
+    });
   };
 
   const handleSaveExercise = () => {
@@ -515,7 +541,8 @@ export default function GymScreen() {
               placeholderTextColor="#888"
               keyboardType="numeric"
               value={exerciseForm.sets}
-              onChangeText={t => setExerciseForm({ ...exerciseForm, sets: t })}
+              onFocus={handleSetsFocus}
+              onChangeText={handleSetsChange}
             />
             <TextInput
               style={styles.input}
@@ -523,7 +550,7 @@ export default function GymScreen() {
               placeholderTextColor="#888"
               keyboardType="numeric"
               value={exerciseForm.reps}
-              onChangeText={t => setExerciseForm({ ...exerciseForm, reps: t })}
+              onChangeText={handleRepsChange}
             />
             <TextInput
               style={styles.input}

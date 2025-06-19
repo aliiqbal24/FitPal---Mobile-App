@@ -28,9 +28,6 @@ export default function ProfileScreen() {
           <Ionicons name="settings-outline" size={32} color="#222" />
         </TouchableOpacity>
         <View style={styles.topBarRight}>
-          <TouchableOpacity onPress={() => navigation.navigate('Friends')} style={styles.iconBtn}>
-            <Ionicons name="people-outline" size={24} color="#222" />
-          </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('Activity')} style={styles.iconBtn}>
             <Ionicons name="notifications-outline" size={24} color="#222" />
           </TouchableOpacity>
@@ -42,8 +39,15 @@ export default function ProfileScreen() {
           <Image source={require('../../assets/AppSprite.png')} style={styles.avatar} />
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>
-            <TouchableOpacity style={styles.editBtn}><Text style={styles.editText}>Edit</Text></TouchableOpacity>
-            <TouchableOpacity style={styles.shareBtn}><Text style={styles.shareText}>Share</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.editBtn}>
+              <Text style={styles.editText}>Edit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.shareBtn}>
+              <Text style={styles.shareText}>Share</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Friends')} style={styles.friendsBtn}>
+              <Text style={styles.friendsText}>Friends</Text>
+            </TouchableOpacity>
           </View>
         </View>
         {/* Tabs */}
@@ -151,6 +155,16 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   shareText: {
+    color: '#222',
+    fontWeight: '600',
+  },
+  friendsBtn: {
+    backgroundColor: '#eee',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+  },
+  friendsText: {
     color: '#222',
     fontWeight: '600',
   },

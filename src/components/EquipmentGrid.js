@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
-export default function EquipmentGrid({ exercises = [] }) {
+export default function EquipmentGrid({ exercises = [], progress = [], onIncrement }) {
   const { width, height } = Dimensions.get('window');
 
   const zoneTop = height * 0.3;
@@ -13,9 +13,10 @@ export default function EquipmentGrid({ exercises = [] }) {
   const cellHeight = zoneHeight / 3;
 
   const positions = useMemo(() => {
-    const mapping = exercises.length <= 4
-      ? [0, 2, 6, 8]
-      : [0, 1, 2, 3, 5, 6, 8];
+    const mapping =
+      exercises.length <= 4
+        ? [0, 2, 6, 8]
+        : [0, 1, 2, 3, 5, 6, 8];
 
     return mapping.slice(0, exercises.length).map((idx, i) => {
       const row = Math.floor(idx / 3);
@@ -24,21 +25,24 @@ export default function EquipmentGrid({ exercises = [] }) {
         left: col * cellWidth,
         top: row * cellHeight,
         name: exercises[i].name,
+        sets: parseInt(exercises[i].sets, 10) || 0,
       };
     });
   }, [exercises, cellWidth, cellHeight]);
 
   return (
-    <View pointerEvents="none" style={[styles.container, { top: zoneTop, height: zoneHeight, width: zoneWidth }]}>
+    <View style={[styles.container, { top: zoneTop, height: zoneHeight, width: zoneWidth }]}>
       {positions.map((pos, idx) => (
-        <View
+        <TouchableOpacity
           key={idx}
           style={[styles.box, { left: pos.left, top: pos.top, width: cellWidth, height: cellHeight }]}
+          onPress={() => onIncrement && onIncrement(idx)}
         >
+          <Text style={styles.progress}>{(progress[idx] ?? 0)}/{pos.sets}</Text>
           <Text style={styles.label} numberOfLines={1} adjustsFontSizeToFit>
             {pos.name}
           </Text>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -62,5 +66,10 @@ const styles = StyleSheet.create({
     color: '#222',
     fontWeight: '600',
     textAlign: 'center',
+  },
+  progress: {
+    color: '#007AFF',
+    fontWeight: '700',
+    marginBottom: 4,
   },
 });

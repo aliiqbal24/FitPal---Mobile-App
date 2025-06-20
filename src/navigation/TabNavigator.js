@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 import GymScreen from '../screens/GymScreen';
-import ExploreScreen from '../screens/ExploreScreen';
+import HistoryScreen from '../screens/HistoryScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
@@ -19,8 +19,8 @@ export default function TabNavigator() {
             iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === 'Gym') {
             iconName = focused ? 'barbell' : 'barbell-outline';
-          } else if (route.name === 'Explore') {
-            iconName = focused ? 'compass' : 'compass-outline';
+          } else if (route.name === 'History') {
+            iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Login') {
             iconName = focused ? 'log-in' : 'log-in-outline';
           }
@@ -34,8 +34,8 @@ export default function TabNavigator() {
     >
       <Tab.Screen name="Profile" component={ProfileScreen} />
       <Tab.Screen name="Gym" component={GymScreen} />
-      <Tab.Screen name="Explore" component={ExploreScreen} />
+      <Tab.Screen name="History" component={HistoryScreen} />
       <Tab.Screen name="Login" component={LoginScreen} />
     </Tab.Navigator>
   );
-} 
+}

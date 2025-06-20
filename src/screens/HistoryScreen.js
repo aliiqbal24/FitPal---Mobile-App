@@ -43,14 +43,27 @@ export default function HistoryScreen() {
   );
   const [showPicker, setShowPicker] = useState(false);
 
-  const months = [generateMonth(selected.year, selected.month)];
+  // Pre-compute all months so users can swipe between them
+  const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
   const scrollRef = useRef(null);
 
+  // Jump to the initially selected month (latest)
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollToEnd({ animated: false });
+      const index = monthOptions.findIndex(
+        opt => opt.year === selected.year && opt.month === selected.month
+      );
+      scrollRef.current.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
     }
   }, []);
+
+  const handleMomentumScrollEnd = e => {
+    const index = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+    const opt = monthOptions[index];
+    if (opt) {
+      setSelected({ year: opt.year, month: opt.month });
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,6 +72,7 @@ export default function HistoryScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         ref={scrollRef}
+        onMomentumScrollEnd={handleMomentumScrollEnd}
         contentContainerStyle={styles.monthScroll}
       >
         {months.map((m, idx) => (
@@ -68,7 +82,7 @@ export default function HistoryScreen() {
               style={styles.monthLabel}
             >
               <Text style={styles.monthLabelText}>
-                {`${MONTH_NAMES[selected.month]} ${selected.year}`}
+                {`${MONTH_NAMES[m.month]} ${m.year}`}
               </Text>
             </TouchableOpacity>
             {showPicker && (
@@ -76,7 +90,16 @@ export default function HistoryScreen() {
                 selectedValue={`${selected.year}-${selected.month}`}
                 onValueChange={value => {
                   const [y, mo] = value.split('-').map(Number);
+                  const idx = monthOptions.findIndex(
+                    opt => opt.year === y && opt.month === mo
+                  );
                   setSelected({ year: y, month: mo });
+                  if (scrollRef.current && idx !== -1) {
+                    scrollRef.current.scrollTo({
+                      x: idx * SCREEN_WIDTH,
+                      animated: true,
+                    });
+                  }
                   setShowPicker(false);
                 }}
                 style={styles.monthPicker}

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, Modal, TouchableOpacity, Dimensions } from 'react-native';
+import AvatarWithLevelBadge from './AvatarWithLevelBadge';
 import { Ionicons } from '@expo/vector-icons';
 
-export default function ProfileModal({ isVisible, onClose }) {
+export default function ProfileModal({ isVisible, onClose, level = 1 }) {
   return (
     <Modal
       visible={isVisible}
@@ -19,7 +20,11 @@ export default function ProfileModal({ isVisible, onClose }) {
 
           {/* Avatar */}
           <View style={styles.avatarContainer}>
-            <Image source={require('../../assets/AppSprite.png')} style={styles.avatarImage} />
+            <AvatarWithLevelBadge
+              source={require('../../assets/AppSprite.png')}
+              size={100}
+              level={level}
+            />
           </View>
 
           {/* User Info */}
@@ -93,10 +98,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
     overflow: 'hidden',
-  },
-  avatarImage: {
-    width: '100%',
-    height: '100%',
   },
   username: {
     fontSize: 24,

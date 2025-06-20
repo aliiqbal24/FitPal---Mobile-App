@@ -123,6 +123,7 @@ export default function GymScreen() {
   const [workoutActive, setWorkoutActive] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [setCounts, setSetCounts] = useState([]);
+  const [workoutHistory, setWorkoutHistory] = useState({});
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -179,12 +180,22 @@ export default function GymScreen() {
           setWorkouts(JSON.parse(stored));
         } catch {}
       }
+      const hist = await AsyncStorage.getItem('workoutHistory');
+      if (hist) {
+        try {
+          setWorkoutHistory(JSON.parse(hist));
+        } catch {}
+      }
     })();
   }, []);
 
   useEffect(() => {
     AsyncStorage.setItem('workouts', JSON.stringify(workouts));
   }, [workouts]);
+
+  useEffect(() => {
+    AsyncStorage.setItem('workoutHistory', JSON.stringify(workoutHistory));
+  }, [workoutHistory]);
 
   // ensure selected workout index stays valid when workouts change
   useEffect(() => {
@@ -380,14 +391,19 @@ export default function GymScreen() {
   const toggleWorkout = useCallback(() => {
     setWorkoutActive(active => {
       const next = !active;
-      if (next) {
-        setSetCounts(currentExercises.map(() => 0));
-      } else {
+      if (active && !next) {
+        const dateStr = new Date().toISOString().split('T')[0];
+        setWorkoutHistory(h => ({
+          ...h,
+          [dateStr]: workouts[selectedWorkoutIdx],
+        }));
         setSetCounts([]);
+      } else if (next) {
+        setSetCounts(currentExercises.map(() => 0));
       }
       return next;
     });
-  }, [currentExercises]);
+  }, [currentExercises, selectedWorkoutIdx, workouts]);
 
   const incrementSet = useCallback(
     idx => {

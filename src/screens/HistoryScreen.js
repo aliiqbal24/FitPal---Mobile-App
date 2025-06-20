@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -42,6 +43,8 @@ export default function HistoryScreen() {
     monthOptions[monthOptions.length - 1]
   );
   const [showPicker, setShowPicker] = useState(false);
+  const [history, setHistory] = useState({});
+  const [selectedEntry, setSelectedEntry] = useState(null);
 
   // Pre-compute all months so users can swipe between them
   const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
@@ -64,6 +67,17 @@ export default function HistoryScreen() {
       setSelected({ year: opt.year, month: opt.month });
     }
   };
+
+  useEffect(() => {
+    (async () => {
+      const stored = await AsyncStorage.getItem('workoutHistory');
+      if (stored) {
+        try {
+          setHistory(JSON.parse(stored));
+        } catch {}
+      }
+    })();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -119,23 +133,55 @@ export default function HistoryScreen() {
               ))}
             </View>
             <View style={styles.grid}>
-              {m.days.map((day, i) => (
-                <View key={i} style={styles.dayCell}>
-                  {day && <Text style={styles.dayText}>{day}</Text>}
-                  {selected.year === today.getFullYear() &&
-                    selected.month === today.getMonth() &&
-                    day === today.getDate() && (
-                      <Image source={SPRITE} style={styles.sprite} />
-                    )}
-                </View>
-              ))}
+              {m.days.map((day, i) => {
+                const dateStr = day
+                  ? `${m.year}-${String(m.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+                  : null;
+                const completed = !!(dateStr && history[dateStr]);
+                return (
+                  <TouchableOpacity
+                    key={i}
+                    style={[styles.dayCell, completed && styles.completedDay]}
+                    onPress={() => completed && setSelectedEntry(history[dateStr])}
+                    disabled={!completed}
+                  >
+                    {day && <Text style={styles.dayText}>{day}</Text>}
+                    {selected.year === today.getFullYear() &&
+                      selected.month === today.getMonth() &&
+                      day === today.getDate() && (
+                        <Image source={SPRITE} style={styles.sprite} />
+                      )}
+                  </TouchableOpacity>
+                );
+              })}
             </View>
           </View>
         ))}
       </ScrollView>
       <View style={styles.placeholder}>
-        <Text style={styles.placeholderText}>History coming soon.</Text>
+        <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
       </View>
+
+      {selectedEntry && (
+        <Modal visible transparent animationType="fade">
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>{selectedEntry.name}</Text>
+              {selectedEntry.exercises?.map((ex, idx) => (
+                <Text key={idx} style={styles.modalText}>
+                  {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}
+                </Text>
+              ))}
+              <TouchableOpacity
+                style={styles.modalButton}
+                onPress={() => setSelectedEntry(null)}
+              >
+                <Text style={styles.modalButtonText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+      )}
     </SafeAreaView>
   );
 }
@@ -189,6 +235,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
   },
+  completedDay: {
+    backgroundColor: '#b3e5c0',
+  },
   dayText: {
     fontSize: 14,
     color: '#222',
@@ -206,5 +255,40 @@ const styles = StyleSheet.create({
   },
   placeholderText: {
     color: '#888',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 12,
+    color: '#222',
+    textAlign: 'center',
+  },
+  modalText: {
+    color: '#222',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+  modalButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 8,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontWeight: '600',
   },
 });

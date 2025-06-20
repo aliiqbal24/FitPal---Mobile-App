@@ -79,6 +79,7 @@ const WiggleItem = React.memo(function WiggleItem({ deleteMode, style, children,
       if (loop.current) {
         loop.current.stop();
       }
+      anim.setValue(0);
     };
   }, [deleteMode, anim]);
 
@@ -90,7 +91,12 @@ const WiggleItem = React.memo(function WiggleItem({ deleteMode, style, children,
   return (
     <AnimatedTouchable
       {...rest}
-      style={[style, deleteMode && { transform: [{ rotate }] }]}
+      style={[
+        style,
+        {
+          transform: [{ rotate: deleteMode ? rotate : '0deg' }],
+        },
+      ]}
     >
       {children}
     </AnimatedTouchable>

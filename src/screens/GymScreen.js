@@ -419,6 +419,26 @@ export default function GymScreen() {
     }
   }, [workouts, selectedWorkoutIdx, workoutActive]);
 
+  const incrementSet = useCallback(
+    idx => {
+      let didIncrement = false;
+      setSetCounts(prev => {
+        const updated = [...prev];
+        const max = parseInt(currentExercises[idx]?.sets, 10) || 0;
+        const current = prev[idx] || 0;
+        if (current < max) {
+          didIncrement = true;
+          updated[idx] = current + 1;
+        }
+        return updated;
+      });
+      if (didIncrement) {
+        setExp(e => e + 1);
+      }
+    },
+    [currentExercises]
+  );
+
   return (
     <ImageBackground
       source={require('../../assets/app_background.png')}

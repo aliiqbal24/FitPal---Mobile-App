@@ -18,13 +18,13 @@ export default function AvatarWithLevelBadge({ source, size = 72, level = 1 }) {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'visible',
     backgroundColor: '#eee',
   },
   badge: {
     position: 'absolute',
-    bottom: -2,
-    right: -2,
+    top: -6,
+    right: -6,
     backgroundColor: '#4CAF50',
     borderRadius: 10,
     paddingHorizontal: 4,

@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const SPRITE = require('../../assets/AppSprite.png');
@@ -13,13 +14,9 @@ const WEEK_DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CELL_SIZE = Math.floor((SCREEN_WIDTH - 32) / 7);
 
-function generateMonth(offset = 0) {
-  const base = new Date();
+function generateMonth(year, month) {
+  const base = new Date(year, month, 1);
   base.setHours(0, 0, 0, 0);
-  base.setDate(1);
-  base.setMonth(base.getMonth() + offset);
-  const year = base.getFullYear();
-  const month = base.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const days = [];
@@ -31,7 +28,21 @@ function generateMonth(offset = 0) {
 
 export default function HistoryScreen() {
   const today = new Date();
-  const months = [generateMonth(-1), generateMonth(0)];
+
+  // Build the list of selectable months from April 2025 to today
+  const earliest = new Date(2025, 3, 1); // April 2025
+  const monthOptions = [];
+  const iter = new Date(earliest.getTime());
+  while (iter <= today) {
+    monthOptions.push({ year: iter.getFullYear(), month: iter.getMonth() });
+    iter.setMonth(iter.getMonth() + 1);
+  }
+
+  const [selected, setSelected] = useState(
+    monthOptions[monthOptions.length - 1]
+  );
+
+  const months = [generateMonth(selected.year, selected.month)];
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -51,9 +62,22 @@ export default function HistoryScreen() {
       >
         {months.map((m, idx) => (
           <View key={idx} style={[styles.monthContainer, { width: SCREEN_WIDTH }]}>
-            <Text style={styles.monthTitle}>
-              {MONTH_NAMES[m.month]} {m.year}
-            </Text>
+            <Picker
+              selectedValue={`${selected.year}-${selected.month}`}
+              onValueChange={value => {
+                const [y, mo] = value.split('-').map(Number);
+                setSelected({ year: y, month: mo });
+              }}
+              style={styles.monthPicker}
+            >
+              {monthOptions.map(opt => (
+                <Picker.Item
+                  label={`${MONTH_NAMES[opt.month]} ${opt.year}`}
+                  value={`${opt.year}-${opt.month}`}
+                  key={`${opt.year}-${opt.month}`}
+                />
+              ))}
+            </Picker>
             <View style={styles.weekHeader}>
               {WEEK_DAYS.map(day => (
                 <Text key={day} style={styles.weekDay}>{day}</Text>
@@ -90,10 +114,9 @@ const styles = StyleSheet.create({
   monthContainer: {
     paddingTop: 8,
   },
-  monthTitle: {
-    textAlign: 'center',
-    fontSize: 18,
-    fontWeight: '700',
+  monthPicker: {
+    alignSelf: 'center',
+    width: SCREEN_WIDTH * 0.6,
     marginBottom: 8,
   },
   weekHeader: {

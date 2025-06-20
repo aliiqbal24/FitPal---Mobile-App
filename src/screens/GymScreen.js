@@ -339,7 +339,13 @@ export default function GymScreen() {
   };
 
   const handleSaveExercise = () => {
-    const ex = { ...exerciseForm };
+    let setsNum = parseInt(exerciseForm.sets, 10);
+    if (Number.isNaN(setsNum)) setsNum = 0;
+    if (setsNum > 12) {
+      setsNum = 12;
+      Alert.alert('Limit Reached', 'Sets cannot exceed 12.');
+    }
+    const ex = { ...exerciseForm, sets: String(setsNum) };
     setWorkouts(w => {
       const updated = [...w];
       const exercises = updated[currentWorkoutIdx].exercises;
@@ -597,7 +603,18 @@ export default function GymScreen() {
               placeholderTextColor="#888"
               keyboardType="numeric"
               value={exerciseForm.sets}
-              onChangeText={t => setExerciseForm({ ...exerciseForm, sets: t })}
+              onChangeText={t => {
+                let num = parseInt(t, 10);
+                if (!Number.isNaN(num)) {
+                  if (num > 12) {
+                    num = 12;
+                    Alert.alert('Limit Reached', 'Sets cannot exceed 12.');
+                  }
+                  setExerciseForm({ ...exerciseForm, sets: String(num) });
+                } else {
+                  setExerciseForm({ ...exerciseForm, sets: t });
+                }
+              }}
             />
             <TextInput
               style={styles.input}

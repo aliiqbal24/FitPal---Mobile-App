@@ -27,6 +27,15 @@ function generateMonth(year, month) {
   return { year, month, days };
 }
 
+function getStartOfWeek(date) {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  d.setDate(diff);
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
 export default function HistoryScreen() {
   const today = new Date();
 
@@ -45,6 +54,9 @@ export default function HistoryScreen() {
   const [showPicker, setShowPicker] = useState(false);
   const [history, setHistory] = useState({});
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const [weekWeight, setWeekWeight] = useState(0);
+  const [yearWeight, setYearWeight] = useState(0);
+  const [liftCount, setLiftCount] = useState(0);
 
   // Pre-compute all months so users can swipe between them
   const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
@@ -78,6 +90,34 @@ export default function HistoryScreen() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const startOfWeek = getStartOfWeek(now);
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    let week = 0;
+    let year = 0;
+    let count = 0;
+    Object.entries(history).forEach(([dateStr, data]) => {
+      const dt = new Date(dateStr);
+      let weight = 0;
+      data.exercises.forEach((ex, idx) => {
+        const setsDone =
+          data.completedSets && data.completedSets[idx] !== undefined
+            ? data.completedSets[idx]
+            : parseInt(ex.sets, 10) || 0;
+        const reps = parseInt(ex.reps, 10) || 0;
+        const w = parseFloat(ex.weight) || 0;
+        weight += setsDone * reps * w;
+      });
+      if (dt >= startOfWeek) week += weight;
+      if (dt >= startOfYear) year += weight;
+      count += 1;
+    });
+    setWeekWeight(week);
+    setYearWeight(year);
+    setLiftCount(count);
+  }, [history]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -146,8 +186,8 @@ export default function HistoryScreen() {
                     disabled={!completed}
                   >
                     {day && <Text style={styles.dayText}>{day}</Text>}
-                    {selected.year === today.getFullYear() &&
-                      selected.month === today.getMonth() &&
+                    {m.year === today.getFullYear() &&
+                      m.month === today.getMonth() &&
                       day === today.getDate() && (
                         <Image source={SPRITE} style={styles.sprite} />
                       )}
@@ -158,6 +198,11 @@ export default function HistoryScreen() {
           </View>
         ))}
       </ScrollView>
+      <View style={styles.statsContainer}>
+        <Text style={styles.statsText}>Weight lifted this week: {weekWeight}</Text>
+        <Text style={styles.statsText}>Weight lifted this year: {yearWeight}</Text>
+        <Text style={styles.statsText}>Lifts since download: {liftCount}</Text>
+      </View>
       <View style={styles.placeholder}>
         <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
       </View>
@@ -226,6 +271,14 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     paddingHorizontal: 16,
     marginBottom: 8,
+  },
+  statsContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 8,
+  },
+  statsText: {
+    fontWeight: '600',
+    color: '#222',
   },
   dayCell: {
     width: CELL_SIZE,

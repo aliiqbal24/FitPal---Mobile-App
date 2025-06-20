@@ -12,7 +12,6 @@ import {
   Image,
   Button,
   Alert,
-  TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
@@ -396,7 +395,10 @@ export default function GymScreen() {
         const dateStr = new Date().toISOString().split('T')[0];
         setWorkoutHistory(h => ({
           ...h,
-          [dateStr]: workouts[selectedWorkoutIdx],
+          [dateStr]: {
+            ...workouts[selectedWorkoutIdx],
+            completedSets: setCounts,
+          },
         }));
         setSetCounts([]);
       } else if (next) {
@@ -404,22 +406,7 @@ export default function GymScreen() {
       }
       return next;
     });
-  }, [workouts, selectedWorkoutIdx]);
-
-  const incrementSet = useCallback(
-    idx => {
-      setSetCounts(prev => {
-        const updated = [...prev];
-        const max = parseInt(currentExercises[idx]?.sets, 10) || 0;
-        if (updated[idx] < max) {
-          updated[idx] += 1;
-          setExp(e => e + 1);
-        }
-        return updated;
-      });
-    },
-    [workouts, selectedWorkoutIdx]
-  );
+  }, [workouts, selectedWorkoutIdx, currentExercises]);
 
   useEffect(() => {
     if (workoutActive) {
@@ -438,7 +425,7 @@ export default function GymScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <TouchableWithoutFeedback onPress={() => deleteMode && setDeleteMode(false)}>
+      <View style={{flex: 1}} pointerEvents="box-none">
       <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
@@ -697,7 +684,7 @@ export default function GymScreen() {
         </View>
       </Modal>
     </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </View>
     </ImageBackground>
   );
 }

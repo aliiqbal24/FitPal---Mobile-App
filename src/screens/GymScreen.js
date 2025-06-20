@@ -249,6 +249,10 @@ export default function GymScreen() {
   );
 
   const openNewWorkout = () => {
+    if (workoutActive) {
+      Alert.alert('Workout Active', 'End the current workout to add a new one.');
+      return;
+    }
     if (workouts.length >= 3) {
       Alert.alert('Upgrade Required', 'Upgrade to pro for more');
       return;
@@ -259,6 +263,10 @@ export default function GymScreen() {
   };
 
   const openEditWorkout = idx => {
+    if (workoutActive) {
+      Alert.alert('Workout Active', 'End the current workout to edit workouts.');
+      return;
+    }
     setWorkoutName(workouts[idx].name);
     setCurrentWorkoutIdx(idx);
     setSelectedWorkoutIdx(idx);
@@ -286,8 +294,26 @@ export default function GymScreen() {
   };
 
   const handleDeleteWorkout = idx => {
-    setWorkouts(w => w.filter((_, i) => i !== idx));
-    setDeleteMode(false);
+    if (workoutActive) {
+      Alert.alert('Workout Active', 'End the current workout to delete a workout.');
+      return;
+    }
+    const name = workouts[idx].name;
+    Alert.alert(
+      'Delete Workout',
+      `Are you sure you want to delete ${name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            setWorkouts(w => w.filter((_, i) => i !== idx));
+            setDeleteMode(false);
+          },
+        },
+      ]
+    );
   };
 
   const openNewExercise = idx => {
@@ -423,6 +449,8 @@ export default function GymScreen() {
               onPress={() => {
                 if (deleteMode) {
                   setDeleteMode(false);
+                } else if (workoutActive) {
+                  Alert.alert('Workout Active', 'End the current workout to switch workouts.');
                 } else {
                   setSelectedWorkoutIdx(idx);
                 }

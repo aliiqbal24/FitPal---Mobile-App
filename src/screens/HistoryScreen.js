@@ -146,8 +146,8 @@ export default function HistoryScreen() {
                     disabled={!completed}
                   >
                     {day && <Text style={styles.dayText}>{day}</Text>}
-                    {selected.year === today.getFullYear() &&
-                      selected.month === today.getMonth() &&
+                    {m.year === today.getFullYear() &&
+                      m.month === today.getMonth() &&
                       day === today.getDate() && (
                         <Image source={SPRITE} style={styles.sprite} />
                       )}

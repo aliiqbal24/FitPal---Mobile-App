@@ -387,6 +387,7 @@ export default function GymScreen() {
     });
     setShowExerciseModal(false);
   };
+  const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
 
   const toggleWorkout = useCallback(() => {
     setWorkoutActive(active => {
@@ -403,7 +404,7 @@ export default function GymScreen() {
       }
       return next;
     });
-  }, [currentExercises, selectedWorkoutIdx, workouts]);
+  }, [workouts, selectedWorkoutIdx]);
 
   const incrementSet = useCallback(
     idx => {
@@ -417,11 +418,8 @@ export default function GymScreen() {
         return updated;
       });
     },
-    [currentExercises]
+    [workouts, selectedWorkoutIdx]
   );
-
-  const currentExercises =
-    workouts[selectedWorkoutIdx]?.exercises ?? [];
 
   useEffect(() => {
     if (workoutActive) {
@@ -432,7 +430,7 @@ export default function GymScreen() {
         })
       );
     }
-  }, [currentExercises, workoutActive]);
+  }, [workouts, selectedWorkoutIdx, workoutActive]);
 
   return (
     <ImageBackground

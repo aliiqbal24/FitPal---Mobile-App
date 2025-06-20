@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -41,6 +41,7 @@ export default function HistoryScreen() {
   const [selected, setSelected] = useState(
     monthOptions[monthOptions.length - 1]
   );
+  const [showPicker, setShowPicker] = useState(false);
 
   const months = [generateMonth(selected.year, selected.month)];
   const scrollRef = useRef(null);
@@ -62,22 +63,33 @@ export default function HistoryScreen() {
       >
         {months.map((m, idx) => (
           <View key={idx} style={[styles.monthContainer, { width: SCREEN_WIDTH }]}>
-            <Picker
-              selectedValue={`${selected.year}-${selected.month}`}
-              onValueChange={value => {
-                const [y, mo] = value.split('-').map(Number);
-                setSelected({ year: y, month: mo });
-              }}
-              style={styles.monthPicker}
+            <TouchableOpacity
+              onPress={() => setShowPicker(prev => !prev)}
+              style={styles.monthLabel}
             >
-              {monthOptions.map(opt => (
-                <Picker.Item
-                  label={`${MONTH_NAMES[opt.month]} ${opt.year}`}
-                  value={`${opt.year}-${opt.month}`}
-                  key={`${opt.year}-${opt.month}`}
-                />
-              ))}
-            </Picker>
+              <Text style={styles.monthLabelText}>
+                {`${MONTH_NAMES[selected.month]} ${selected.year}`}
+              </Text>
+            </TouchableOpacity>
+            {showPicker && (
+              <Picker
+                selectedValue={`${selected.year}-${selected.month}`}
+                onValueChange={value => {
+                  const [y, mo] = value.split('-').map(Number);
+                  setSelected({ year: y, month: mo });
+                  setShowPicker(false);
+                }}
+                style={styles.monthPicker}
+              >
+                {monthOptions.map(opt => (
+                  <Picker.Item
+                    label={`${MONTH_NAMES[opt.month]} ${opt.year}`}
+                    value={`${opt.year}-${opt.month}`}
+                    key={`${opt.year}-${opt.month}`}
+                  />
+                ))}
+              </Picker>
+            )}
             <View style={styles.weekHeader}>
               {WEEK_DAYS.map((day, i) => (
                 <Text key={`${day}-${i}`} style={styles.weekDay}>{day}</Text>
@@ -87,9 +99,11 @@ export default function HistoryScreen() {
               {m.days.map((day, i) => (
                 <View key={i} style={styles.dayCell}>
                   {day && <Text style={styles.dayText}>{day}</Text>}
-                  {idx === months.length - 1 && day === today.getDate() && (
-                    <Image source={SPRITE} style={styles.sprite} />
-                  )}
+                  {selected.year === today.getFullYear() &&
+                    selected.month === today.getMonth() &&
+                    day === today.getDate() && (
+                      <Image source={SPRITE} style={styles.sprite} />
+                    )}
                 </View>
               ))}
             </View>
@@ -113,6 +127,14 @@ const styles = StyleSheet.create({
   },
   monthContainer: {
     paddingTop: 8,
+  },
+  monthLabel: {
+    alignSelf: 'center',
+    marginBottom: 4,
+  },
+  monthLabelText: {
+    fontSize: 16,
+    fontWeight: '600',
   },
   monthPicker: {
     alignSelf: 'center',

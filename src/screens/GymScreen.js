@@ -395,7 +395,10 @@ export default function GymScreen() {
         const dateStr = new Date().toISOString().split('T')[0];
         setWorkoutHistory(h => ({
           ...h,
-          [dateStr]: workouts[selectedWorkoutIdx],
+          [dateStr]: {
+            ...workouts[selectedWorkoutIdx],
+            completedSets: setCounts,
+          },
         }));
         setSetCounts([]);
       } else if (next) {
@@ -403,7 +406,7 @@ export default function GymScreen() {
       }
       return next;
     });
-  }, [currentExercises, selectedWorkoutIdx, workouts]);
+  }, [currentExercises, selectedWorkoutIdx, workouts, setCounts]);
 
   const incrementSet = useCallback(
     idx => {

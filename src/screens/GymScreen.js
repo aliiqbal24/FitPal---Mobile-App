@@ -12,7 +12,6 @@ import {
   Image,
   Button,
   Alert,
-  TouchableWithoutFeedback,
   Animated,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
@@ -440,7 +439,7 @@ export default function GymScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <TouchableWithoutFeedback onPress={() => deleteMode && setDeleteMode(false)}>
+      <View style={{flex: 1}} pointerEvents="box-none">
       <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
@@ -699,7 +698,7 @@ export default function GymScreen() {
         </View>
       </Modal>
     </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </View>
     </ImageBackground>
   );
 }

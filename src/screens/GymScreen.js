@@ -122,6 +122,7 @@ export default function GymScreen() {
   const [weeklySummary, setWeeklySummary] = useState(null);
   const [workoutActive, setWorkoutActive] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
+  const [setCounts, setSetCounts] = useState([]);
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -363,8 +364,30 @@ export default function GymScreen() {
   };
 
   const toggleWorkout = useCallback(() => {
-    setWorkoutActive(active => !active);
-  }, []);
+    setWorkoutActive(active => {
+      const next = !active;
+      if (next) {
+        setSetCounts(currentExercises.map(() => 0));
+      } else {
+        setSetCounts([]);
+      }
+      return next;
+    });
+  }, [currentExercises]);
+
+  const incrementSet = useCallback(
+    idx => {
+      setSetCounts(prev => {
+        const updated = [...prev];
+        const max = parseInt(currentExercises[idx]?.sets, 10) || 0;
+        if (updated[idx] < max) {
+          updated[idx] += 1;
+        }
+        return updated;
+      });
+    },
+    [currentExercises]
+  );
 
   const currentExercises =
     workouts[selectedWorkoutIdx]?.exercises ?? [];
@@ -434,7 +457,13 @@ export default function GymScreen() {
           <Character body={characterBody} />
         </GameEngine>
       </View>
-      {workoutActive && <EquipmentGrid exercises={currentExercises} />}
+      {workoutActive && (
+        <EquipmentGrid
+          exercises={currentExercises}
+          progress={setCounts}
+          onIncrement={incrementSet}
+        />
+      )}
 
       <View style={styles.carouselContainer}>
         <ScrollView

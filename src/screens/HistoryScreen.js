@@ -79,8 +79,8 @@ export default function HistoryScreen() {
               ))}
             </Picker>
             <View style={styles.weekHeader}>
-              {WEEK_DAYS.map(day => (
-                <Text key={day} style={styles.weekDay}>{day}</Text>
+              {WEEK_DAYS.map((day, i) => (
+                <Text key={`${day}-${i}`} style={styles.weekDay}>{day}</Text>
               ))}
             </View>
             <View style={styles.grid}>

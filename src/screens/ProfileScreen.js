@@ -111,11 +111,6 @@ const styles = StyleSheet.create({
   iconBtn: {
     paddingHorizontal: 4,
   },
-  usernameTop: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#222',
-  },
   scrollContent: {
     paddingBottom: 32,
   },

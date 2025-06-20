@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,7 +37,11 @@ export default function ProfileScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Profile Info */}
         <View style={styles.profileInfo}>
-          <Image source={require('../../assets/AppSprite.png')} style={styles.avatar} />
+          <AvatarWithLevelBadge
+            source={require('../../assets/AppSprite.png')}
+            size={72}
+            level={1}
+          />
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>
             <TouchableOpacity style={styles.editBtn}>
@@ -118,14 +123,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 8,
     marginBottom: 16,
-  },
-  avatar: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    marginBottom: 8,
-    backgroundColor: '#eee',
-    overflow: 'hidden',
   },
   username: {
     fontSize: 18,

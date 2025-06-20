@@ -382,6 +382,7 @@ export default function GymScreen() {
         const max = parseInt(currentExercises[idx]?.sets, 10) || 0;
         if (updated[idx] < max) {
           updated[idx] += 1;
+          setExp(e => e + 1);
         }
         return updated;
       });

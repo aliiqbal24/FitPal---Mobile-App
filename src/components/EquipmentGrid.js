@@ -38,6 +38,17 @@ export default function EquipmentGrid({ exercises = [], progress = [], onIncreme
           style={[styles.box, { left: pos.left, top: pos.top, width: cellWidth, height: cellHeight }]}
           onPress={() => onIncrement && onIncrement(idx)}
         >
+          <View style={styles.setRow}>
+            {Array.from({ length: pos.sets }).map((_, sIdx) => (
+              <View
+                key={sIdx}
+                style={[
+                  styles.setDot,
+                  (progress[idx] ?? 0) > sIdx && styles.setDotFilled,
+                ]}
+              />
+            ))}
+          </View>
           <Text style={styles.progress}>{(progress[idx] ?? 0)}/{pos.sets}</Text>
           <Text style={styles.label} numberOfLines={1} adjustsFontSizeToFit>
             {pos.name}
@@ -71,5 +82,20 @@ const styles = StyleSheet.create({
     color: '#007AFF',
     fontWeight: '700',
     marginBottom: 4,
+  },
+  setRow: {
+    flexDirection: 'row',
+    marginBottom: 4,
+  },
+  setDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#007AFF',
+    marginHorizontal: 1,
+  },
+  setDotFilled: {
+    backgroundColor: '#007AFF',
   },
 });

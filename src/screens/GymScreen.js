@@ -324,6 +324,10 @@ export default function GymScreen() {
   };
 
   const openNewExercise = idx => {
+    if (workoutActive) {
+      Alert.alert('Workout Active', 'End the current workout to edit exercises.');
+      return;
+    }
     setCurrentWorkoutIdx(idx);
     setExerciseForm({ name: '', sets: '', reps: '', weight: '' });
     setEditingExerciseIdx(null);
@@ -331,6 +335,10 @@ export default function GymScreen() {
   };
 
   const openEditExercise = (workoutIdx, exerciseIdx) => {
+    if (workoutActive) {
+      Alert.alert('Workout Active', 'End the current workout to edit exercises.');
+      return;
+    }
     const ex = workouts[workoutIdx].exercises[exerciseIdx];
     setCurrentWorkoutIdx(workoutIdx);
     setExerciseForm(ex);
@@ -398,6 +406,17 @@ export default function GymScreen() {
 
   const currentExercises =
     workouts[selectedWorkoutIdx]?.exercises ?? [];
+
+  useEffect(() => {
+    if (workoutActive) {
+      setSetCounts(prev =>
+        currentExercises.map((ex, i) => {
+          const max = parseInt(ex.sets, 10) || 0;
+          return Math.min(prev[i] || 0, max);
+        })
+      );
+    }
+  }, [currentExercises, workoutActive]);
 
   return (
     <ImageBackground

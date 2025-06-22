@@ -191,13 +191,13 @@ export default function HistoryScreen() {
           </View>
         ))}
       </ScrollView>
+      <View style={styles.placeholder}>
+        <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
+      </View>
       <View style={styles.statsContainer}>
         <Text style={styles.statsText}>Weight lifted this week: {weekWeight}</Text>
         <Text style={styles.statsText}>Weight lifted this year: {yearWeight}</Text>
         <Text style={styles.statsText}>Lifts since download: {liftCount}</Text>
-      </View>
-      <View style={styles.placeholder}>
-        <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
       </View>
 
       {selectedEntry && (
@@ -275,10 +275,12 @@ const styles = StyleSheet.create({
   statsContainer: {
     paddingHorizontal: 16,
     marginBottom: 8,
+    alignItems: 'center',
   },
   statsText: {
     fontWeight: '600',
     color: '#222',
+    fontSize: 18,
   },
   dayCell: {
     width: CELL_SIZE,
@@ -302,9 +304,8 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   placeholder: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginBottom: 8,
   },
   placeholderText: {
     color: '#888',

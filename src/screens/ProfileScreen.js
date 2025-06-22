@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image } from 'react-native';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
+import { useCharacter } from '../context/CharacterContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,6 +21,7 @@ const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
   const navigation = useNavigation();
+  const { level } = useCharacter();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -40,7 +42,7 @@ export default function ProfileScreen() {
           <AvatarWithLevelBadge
             source={require('../../assets/AppSprite.png')}
             size={72}
-            level={1}
+            level={level}
           />
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>

@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getLevelInfo } from '../utils/levelUtils';
 
 const CharacterContext = createContext({
   exp: 0,
@@ -20,7 +21,7 @@ export const CharacterProvider = ({ children }) => {
           const val = parseInt(stored, 10);
           if (!Number.isNaN(val)) {
             setExp(val);
-            setLevel(Math.floor(val / 20) + 1);
+            setLevel(getLevelInfo(val).level);
           }
         }
       } catch {}
@@ -30,7 +31,7 @@ export const CharacterProvider = ({ children }) => {
   // Persist experience and update level when EXP changes
   useEffect(() => {
     AsyncStorage.setItem('exp', String(exp));
-    const newLevel = Math.floor(exp / 20) + 1;
+    const newLevel = getLevelInfo(exp).level;
     if (newLevel !== level) {
       setLevel(newLevel);
     }

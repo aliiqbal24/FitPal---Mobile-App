@@ -386,21 +386,24 @@ export default function GymScreen() {
     setWorkoutActive(active => {
       const next = !active;
       if (active && !next) {
-        const dateStr = toDateKey();
-        setWorkoutHistory(h => ({
-          ...h,
-          [dateStr]: {
-            ...workouts[selectedWorkoutIdx],
-            completedSets: setCounts,
-          },
-        }));
+        const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
+        if (totalSets > 0) {
+          const dateStr = toDateKey();
+          setWorkoutHistory(h => ({
+            ...h,
+            [dateStr]: {
+              ...workouts[selectedWorkoutIdx],
+              completedSets: setCounts,
+            },
+          }));
+        }
         setSetCounts([]);
       } else if (next) {
         setSetCounts(currentExercises.map(() => 0));
       }
       return next;
     });
-  }, [workouts, selectedWorkoutIdx, currentExercises]);
+  }, [workouts, selectedWorkoutIdx, currentExercises, setCounts]);
 
   useEffect(() => {
     if (workoutActive) {

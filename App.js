@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import RootNavigator from './src/navigation/RootNavigator';
 import { CharacterProvider } from './src/context/CharacterContext';
 import { HistoryProvider } from './src/context/HistoryContext';
+import { StatsProvider } from './src/context/StatsContext';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -18,11 +19,13 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <HistoryProvider>
-          <CharacterProvider>
-            <NavigationContainer>
-              <RootNavigator />
-            </NavigationContainer>
-          </CharacterProvider>
+          <StatsProvider>
+            <CharacterProvider>
+              <NavigationContainer>
+                <RootNavigator />
+              </NavigationContainer>
+            </CharacterProvider>
+          </StatsProvider>
         </HistoryProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

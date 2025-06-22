@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Image, Alert, Button, Dimensions } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchHandler from '../systems/TouchHandler';
+import { useCharacter } from '../context/CharacterContext';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -44,19 +45,11 @@ export default function GymGameScreen() {
     };
   }, [world, characterBody]);
 
-  const [exp, setExp] = useState(0);
-  const [level, setLevel] = useState(1);
+  const { exp, level, addExp } = useCharacter();
 
   const addSet = useCallback(() => {
-    setExp(e => e + 1);
-  }, []);
-
-  useEffect(() => {
-    const newLevel = Math.floor(exp / 20) + 1;
-    if (newLevel !== level) {
-      setLevel(newLevel);
-    }
-  }, [exp, level]);
+    addExp(1);
+  }, [addExp]);
 
   const stars = Math.min(5, 1 + Math.floor((level - 1) / 5));
 

@@ -24,6 +24,7 @@ import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
+import { useCharacter } from '../context/CharacterContext';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -142,16 +143,8 @@ export default function GymScreen() {
     };
   }, [world, characterBody]);
 
-  const [exp, setExp] = useState(0);
-  const [level, setLevel] = useState(1);
+  const { exp, level, addExp } = useCharacter();
   const [showStatsModal, setShowStatsModal] = useState(false);
-
-  useEffect(() => {
-    const newLevel = Math.floor(exp / 20) + 1;
-    if (newLevel !== level) {
-      setLevel(newLevel);
-    }
-  }, [exp, level]);
 
   const showStats = useCallback(() => {
     setShowStatsModal(true);
@@ -433,7 +426,7 @@ export default function GymScreen() {
         return updated;
       });
       if (didIncrement) {
-        setExp(e => e + 1);
+        addExp(1);
       }
     },
     [currentExercises]

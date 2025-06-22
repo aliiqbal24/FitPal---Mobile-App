@@ -1,8 +1,10 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { EXERCISES } from '../data/exerciseList';
 
 export default function ExerciseSelector({ value, onChange }) {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const query = value.trim().toLowerCase();
   const suggestions = useMemo(() => {
     if (!query) return [];
@@ -16,17 +18,24 @@ export default function ExerciseSelector({ value, onChange }) {
         placeholder="Exercise Name"
         placeholderTextColor="#888"
         value={value}
-        onChangeText={onChange}
+        onChangeText={text => {
+          onChange(text);
+          setShowSuggestions(text.trim().length > 0);
+        }}
       />
-      {suggestions.map(option => (
-        <TouchableOpacity
-          key={option}
-          style={styles.option}
-          onPress={() => onChange(option)}
-        >
-          <Text style={styles.optionText}>{option}</Text>
-        </TouchableOpacity>
-      ))}
+      {showSuggestions &&
+        suggestions.map(option => (
+          <TouchableOpacity
+            key={option}
+            style={styles.option}
+            onPress={() => {
+              onChange(option);
+              setShowSuggestions(false);
+            }}
+          >
+            <Text style={styles.optionText}>{option}</Text>
+          </TouchableOpacity>
+        ))}
     </View>
   );
 }

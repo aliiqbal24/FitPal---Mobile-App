@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
+import ImageViewerModal from '../components/ImageViewerModal';
 import { useCharacter } from '../context/CharacterContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
@@ -20,8 +21,24 @@ export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
   const [galleryItems, setGalleryItems] = useState(INITIAL_GALLERY);
   const [privateItems, setPrivateItems] = useState(INITIAL_PRIVATE);
+  const [viewerVisible, setViewerVisible] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
   const navigation = useNavigation();
   const { level } = useCharacter();
+
+  const openViewer = index => {
+    const items = tab === 'Gallery' ? galleryItems : privateItems;
+    const imageIndexes = items
+      .map((item, i) => (item.type !== 'video' ? i : null))
+      .filter(i => i !== null);
+    const imageIndex = imageIndexes.indexOf(index);
+    setViewerIndex(imageIndex === -1 ? 0 : imageIndex);
+    setViewerVisible(true);
+  };
+
+  const closeViewer = () => {
+    setViewerVisible(false);
+  };
 
   const handleAddMedia = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -109,7 +126,12 @@ export default function ProfileScreen() {
           ) : (
             <View style={styles.galleryGrid}>
               {galleryItems.map((item, idx) => (
-                <View key={idx} style={styles.galleryCard}>
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.galleryCard}
+                  activeOpacity={0.9}
+                  onPress={() => item.type !== 'video' && openViewer(idx)}
+                >
                   {item.type === 'video' ? (
                     <Video
                       source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
@@ -124,7 +146,7 @@ export default function ProfileScreen() {
                       resizeMode="cover"
                     />
                   )}
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )
@@ -136,7 +158,12 @@ export default function ProfileScreen() {
           ) : (
             <View style={styles.galleryGrid}>
               {privateItems.map((item, idx) => (
-                <View key={idx} style={styles.galleryCard}>
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.galleryCard}
+                  activeOpacity={0.9}
+                  onPress={() => item.type !== 'video' && openViewer(idx)}
+                >
                   {item.type === 'video' ? (
                     <Video
                       source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
@@ -151,12 +178,20 @@ export default function ProfileScreen() {
                       resizeMode="cover"
                     />
                   )}
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )
         )}
       </ScrollView>
+      <ImageViewerModal
+        visible={viewerVisible}
+        onClose={closeViewer}
+        images={(tab === 'Gallery' ? galleryItems : privateItems)
+          .filter(item => item.type !== 'video')
+          .map(item => (typeof item.uri === 'number' ? item.uri : item.uri))}
+        index={viewerIndex}
+      />
     </SafeAreaView>
   );
 }

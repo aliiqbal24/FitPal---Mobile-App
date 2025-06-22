@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, Share } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
 import { Picker } from '@react-native-picker/picker';
@@ -68,6 +69,16 @@ export default function HistoryScreen() {
     const opt = monthOptions[index];
     if (opt) {
       setSelected({ year: opt.year, month: opt.month });
+    }
+  };
+
+  const shareStats = async () => {
+    try {
+      await Share.share({
+        message: `I've lifted ${weekWeight} this week and ${yearWeight} this year with ${liftCount} total lifts!`,
+      });
+    } catch (e) {
+      // ignore share errors
     }
   };
 
@@ -152,13 +163,18 @@ export default function HistoryScreen() {
           </View>
         ))}
       </ScrollView>
+      <View style={styles.statsWrapper}>
+        <View style={styles.statsContainer}>
+          <Text style={styles.statsText}>Weight lifted this week: {weekWeight}</Text>
+          <Text style={styles.statsText}>Weight lifted this year: {yearWeight}</Text>
+          <Text style={styles.statsText}>Lifts since download: {liftCount}</Text>
+        </View>
+        <TouchableOpacity style={styles.shareBtn} onPress={shareStats}>
+          <Ionicons name="share-outline" size={24} color="#007AFF" />
+        </TouchableOpacity>
+      </View>
       <View style={styles.placeholder}>
         <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
-      </View>
-      <View style={styles.statsContainer}>
-        <Text style={styles.statsText}>Weight lifted this week: {weekWeight}</Text>
-        <Text style={styles.statsText}>Weight lifted this year: {yearWeight}</Text>
-        <Text style={styles.statsText}>Lifts since download: {liftCount}</Text>
       </View>
 
       {selectedEntry && (
@@ -233,15 +249,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 8,
   },
-  statsContainer: {
+  statsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
     marginBottom: 8,
-    alignItems: 'center',
+  },
+  statsContainer: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   statsText: {
     fontWeight: '600',
     color: '#222',
     fontSize: 18,
+  },
+  shareBtn: {
+    padding: 8,
   },
   dayCell: {
     width: CELL_SIZE,

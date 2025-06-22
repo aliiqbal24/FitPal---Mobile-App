@@ -133,9 +133,15 @@ export default function GymScreen() {
   const { width, height } = Dimensions.get('window');
 
   const characterBody = useRef(
-    Matter.Bodies.rectangle(width / 2, height / 2, SPRITE_SIZE, SPRITE_SIZE, {
-      isStatic: true,
-    })
+    Matter.Bodies.rectangle(
+      width / 2,
+      height / 2 + height * 0.1,
+      SPRITE_SIZE,
+      SPRITE_SIZE,
+      {
+        isStatic: true,
+      }
+    )
   ).current;
 
   useEffect(() => {

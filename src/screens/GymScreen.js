@@ -717,7 +717,8 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
-    paddingBottom: 80,
+    // Reduce bottom padding so the workout card takes less vertical space
+    paddingBottom: 20,
   },
   workoutCard: {
     backgroundColor: '#fff',

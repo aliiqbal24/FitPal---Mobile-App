@@ -372,23 +372,26 @@ export default function GymScreen() {
     setShowExerciseModal(false);
   };
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
-
-  const toggleWorkout = useCallback(() => {
-    setWorkoutActive(active => {
-      const next = !active;
-      if (active && !next) {
+  
+const toggleWorkout = useCallback(() => {
+  setWorkoutActive(active => {
+    const next = !active;
+    if (active && !next) {
+      const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
+      if (totalSets > 0) {
         const dateStr = toDateKey();
         addEntry(dateStr, {
           ...workouts[selectedWorkoutIdx],
           completedSets: setCounts,
         });
-        setSetCounts([]);
-      } else if (next) {
-        setSetCounts(currentExercises.map(() => 0));
       }
-      return next;
-    });
-  }, [workouts, selectedWorkoutIdx, currentExercises, addEntry]);
+      setSetCounts([]);
+    } else if (next) {
+      setSetCounts(currentExercises.map(() => 0));
+    }
+    return next;
+  });
+}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry]);
 
   useEffect(() => {
     if (workoutActive) {

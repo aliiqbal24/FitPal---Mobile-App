@@ -91,15 +91,18 @@ export default function HistoryScreen() {
     Object.entries(history).forEach(([dateStr, data]) => {
       const dt = new Date(dateStr);
       let weight = 0;
+      let setsTotal = 0;
       data.exercises.forEach((ex, idx) => {
         const setsDone =
           data.completedSets && data.completedSets[idx] !== undefined
             ? data.completedSets[idx]
-            : parseInt(ex.sets, 10) || 0;
+            : 0;
+        setsTotal += setsDone;
         const reps = parseInt(ex.reps, 10) || 0;
         const w = parseFloat(ex.weight) || 0;
         weight += setsDone * reps * w;
       });
+      if (setsTotal === 0) return;
       if (dt >= startOfWeek) week += weight;
       if (dt >= startOfYear) year += weight;
       count += 1;
@@ -207,7 +210,7 @@ export default function HistoryScreen() {
                   selectedEntry.completedSets &&
                   selectedEntry.completedSets[idx] !== undefined
                     ? selectedEntry.completedSets[idx]
-                    : ex.sets;
+                    : 0;
                 return (
                   <Text key={idx} style={styles.modalText}>
                     {ex.name} - {setsDone}x{ex.reps} @ {ex.weight}

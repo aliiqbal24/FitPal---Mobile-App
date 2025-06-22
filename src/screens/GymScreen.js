@@ -21,6 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHistory } from '../context/HistoryContext';
+import { useStats } from '../context/StatsContext';
 import { toDateKey } from '../utils/dateUtils';
 import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
@@ -146,6 +147,7 @@ export default function GymScreen() {
   }, [world, characterBody]);
 
   const { exp, level, addExp } = useCharacter();
+  const { addWorkout } = useStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
 
   const showStats = useCallback(() => {
@@ -384,6 +386,15 @@ const toggleWorkout = useCallback(() => {
           ...workouts[selectedWorkoutIdx],
           completedSets: setCounts,
         });
+
+        let weight = 0;
+        workouts[selectedWorkoutIdx].exercises.forEach((ex, idx) => {
+          const setsDone = setCounts[idx] || 0;
+          const reps = parseInt(ex.reps, 10) || 0;
+          const w = parseFloat(ex.weight) || 0;
+          weight += setsDone * reps * w;
+        });
+        addWorkout(weight, true);
       }
       setSetCounts([]);
     } else if (next) {
@@ -391,7 +402,7 @@ const toggleWorkout = useCallback(() => {
     }
     return next;
   });
-}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry]);
+}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout]);
 
   useEffect(() => {
     if (workoutActive) {

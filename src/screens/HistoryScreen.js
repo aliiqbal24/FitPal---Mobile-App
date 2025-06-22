@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal } from 'react-native';
+import { useFocusEffect } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -80,16 +81,22 @@ export default function HistoryScreen() {
     }
   };
 
-  useEffect(() => {
-    (async () => {
-      const stored = await AsyncStorage.getItem('workoutHistory');
-      if (stored) {
-        try {
-          setHistory(JSON.parse(stored));
-        } catch {}
-      }
-    })();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      let mounted = true;
+      (async () => {
+        const stored = await AsyncStorage.getItem("workoutHistory");
+        if (stored && mounted) {
+          try {
+            setHistory(JSON.parse(stored));
+          } catch {}
+        }
+      })();
+      return () => {
+        mounted = false;
+      };
+    }, [])
+  );
 
   useEffect(() => {
     const now = new Date();
@@ -212,11 +219,18 @@ export default function HistoryScreen() {
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
               <Text style={styles.modalTitle}>{selectedEntry.name}</Text>
-              {selectedEntry.exercises?.map((ex, idx) => (
-                <Text key={idx} style={styles.modalText}>
-                  {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}
-                </Text>
-              ))}
+              {selectedEntry.exercises?.map((ex, idx) => {
+                const setsDone =
+                  selectedEntry.completedSets &&
+                  selectedEntry.completedSets[idx] !== undefined
+                    ? selectedEntry.completedSets[idx]
+                    : ex.sets;
+                return (
+                  <Text key={idx} style={styles.modalText}>
+                    {ex.name} - {setsDone}x{ex.reps} @ {ex.weight}
+                  </Text>
+                );
+              })}
               <TouchableOpacity
                 style={styles.modalButton}
                 onPress={() => setSelectedEntry(null)}

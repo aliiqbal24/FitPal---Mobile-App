@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { toDateKey } from '../utils/dateUtils';
 import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
@@ -392,7 +393,7 @@ export default function GymScreen() {
     setWorkoutActive(active => {
       const next = !active;
       if (active && !next) {
-        const dateStr = new Date().toISOString().split('T')[0];
+        const dateStr = toDateKey();
         setWorkoutHistory(h => ({
           ...h,
           [dateStr]: {

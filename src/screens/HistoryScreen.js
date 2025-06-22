@@ -5,6 +5,7 @@ import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { formatWeight } from '../utils/numberUtils';
 
 const SPRITE = require('../../assets/AppSprite.png');
 
@@ -165,8 +166,8 @@ export default function HistoryScreen() {
       </ScrollView>
       <View style={styles.statsWrapper}>
         <View style={styles.statsContainer}>
-          <Text style={styles.statsText}>Weight lifted this week: {weekWeight}</Text>
-          <Text style={styles.statsText}>Weight lifted this year: {yearWeight}</Text>
+          <Text style={styles.statsText}>Weight lifted this week: {formatWeight(weekWeight)}</Text>
+          <Text style={styles.statsText}>Weight lifted this year: {formatWeight(yearWeight)}</Text>
           <Text style={styles.statsText}>Lifts since download: {liftCount}</Text>
         </View>
         <TouchableOpacity style={styles.shareBtn} onPress={shareStats}>

@@ -460,17 +460,19 @@ const toggleWorkout = useCallback(() => {
                 </TouchableOpacity>
               </View>
             </View>
-            {workouts[selectedWorkoutIdx].exercises.map((ex, eIdx) => (
-              <TouchableOpacity
-                key={eIdx}
-                style={styles.exerciseRow}
-                onPress={() => openEditExercise(selectedWorkoutIdx, eIdx)}
-              >
-                <Text style={styles.exerciseText}>
-                  {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <ScrollView style={styles.exerciseList}>
+              {workouts[selectedWorkoutIdx].exercises.map((ex, eIdx) => (
+                <TouchableOpacity
+                  key={eIdx}
+                  style={styles.exerciseRow}
+                  onPress={() => openEditExercise(selectedWorkoutIdx, eIdx)}
+                >
+                  <Text style={styles.exerciseText}>
+                    {ex.name} - {ex.sets}x{ex.reps} @ {ex.weight}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
             <TouchableOpacity
               style={styles.addExerciseBtn}
               onPress={() => openNewExercise(selectedWorkoutIdx)}
@@ -727,6 +729,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     width: '55%',
     alignSelf: 'center',
+    maxHeight: 250,
   },
   workoutHeader: {
     flexDirection: 'row',
@@ -748,6 +751,9 @@ const styles = StyleSheet.create({
   },
   exerciseRow: {
     paddingVertical: 4,
+  },
+  exerciseList: {
+    maxHeight: 180,
   },
   exerciseText: {
     color: '#222',

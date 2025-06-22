@@ -8,16 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
-const GALLERY_IMAGES = [
-  require('../explore_bg.png'),
-  require('../explore_bg.png'),
-  require('../explore_bg.png'),
-  require('../explore_bg.png'),
-  require('../explore_bg.png'),
-  require('../explore_bg.png'),
-];
-
-const INITIAL_GALLERY = GALLERY_IMAGES.map((img) => ({ uri: img, type: 'image' }));
+const INITIAL_GALLERY = [];
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
@@ -41,7 +32,7 @@ export default function ProfileScreen() {
     });
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      setGalleryItems([...galleryItems, { uri: asset.uri, type: asset.type }]);
+      setGalleryItems([{ uri: asset.uri, type: asset.type }, ...galleryItems]);
     }
   };
 
@@ -93,26 +84,34 @@ export default function ProfileScreen() {
         </View>
         {/* Content */}
         {tab === 'Gallery' ? (
-          <View style={styles.galleryGrid}>
-            {galleryItems.map((item, idx) => (
-              <View key={idx} style={styles.galleryCard}>
-                {item.type === 'video' ? (
-                  <Video
-                    source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
-                    style={styles.galleryImg}
-                    resizeMode="cover"
-                    useNativeControls
-                  />
-                ) : (
-                  <Image
-                    source={typeof item.uri === 'number' ? item.uri : { uri: item.uri }}
-                    style={styles.galleryImg}
-                    resizeMode="cover"
-                  />
-                )}
-              </View>
-            ))}
-          </View>
+          galleryItems.length === 0 ? (
+            <View style={styles.emptyCard}>
+              <Text style={styles.emptyText}>
+                Capture your journey with posts, only your friends can see.
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.galleryGrid}>
+              {galleryItems.map((item, idx) => (
+                <View key={idx} style={styles.galleryCard}>
+                  {item.type === 'video' ? (
+                    <Video
+                      source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
+                      style={styles.galleryImg}
+                      resizeMode="cover"
+                      useNativeControls
+                    />
+                  ) : (
+                    <Image
+                      source={typeof item.uri === 'number' ? item.uri : { uri: item.uri }}
+                      style={styles.galleryImg}
+                      resizeMode="cover"
+                    />
+                  )}
+                </View>
+              ))}
+            </View>
+          )
         ) : (
           <View style={styles.collectionContent}>
             {/* Placeholder for collection cards */}
@@ -242,6 +241,20 @@ const styles = StyleSheet.create({
   galleryImg: {
     width: '100%',
     height: '100%',
+  },
+  emptyCard: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 16,
+    marginTop: 16,
+    padding: 24,
+    borderRadius: 12,
+    backgroundColor: '#eee',
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#888',
+    fontSize: 16,
   },
   collectionContent: {
     alignItems: 'center',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Image, Dimensions, Modal, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 const stories = [
@@ -25,6 +25,7 @@ const CARD_HEIGHT = SCREEN_HEIGHT / 2.2; // 2 cards fit at once, with padding
 
 export default function ExploreScreen() {
   const [liked, setLiked] = useState([false, false, false, false]);
+  const [fullImage, setFullImage] = useState(null);
 
   const toggleLike = idx => {
     setLiked(liked => liked.map((v, i) => (i === idx ? !v : v)));
@@ -54,7 +55,9 @@ export default function ExploreScreen() {
         <View style={styles.postsContainer}>
           {posts.map((post, idx) => (
             <View key={idx} style={styles.postCard}>
-              <Image source={post.image} style={styles.postImage} resizeMode="cover" />
+              <TouchableOpacity onPress={() => setFullImage(post.image)}>
+                <Image source={post.image} style={styles.postImage} resizeMode="cover" />
+              </TouchableOpacity>
               <View style={styles.postFooter}>
                 <Text style={styles.postName}>{post.name}</Text>
                 <TouchableOpacity style={styles.heartButton} onPress={() => toggleLike(idx)}>
@@ -65,6 +68,13 @@ export default function ExploreScreen() {
           ))}
         </View>
       </ScrollView>
+      <Modal visible={!!fullImage} transparent onRequestClose={() => setFullImage(null)}>
+        <Pressable style={styles.fullscreenContainer} onPress={() => setFullImage(null)}>
+          {fullImage && (
+            <Image source={fullImage} style={styles.fullscreenImage} resizeMode="contain" />
+          )}
+        </Pressable>
+      </Modal>
     </ImageBackground>
   );
 }
@@ -146,4 +156,14 @@ const styles = StyleSheet.create({
   heartButton: {
     padding: 6,
   },
-}); 
+  fullscreenContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullscreenImage: {
+    width: '100%',
+    height: '100%',
+  },
+});

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image, Modal, Pressable } from 'react-native';
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
@@ -20,6 +20,7 @@ export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
   const [galleryItems, setGalleryItems] = useState(INITIAL_GALLERY);
   const [privateItems, setPrivateItems] = useState(INITIAL_PRIVATE);
+  const [fullscreenItem, setFullscreenItem] = useState(null);
   const navigation = useNavigation();
   const { level } = useCharacter();
 
@@ -109,7 +110,7 @@ export default function ProfileScreen() {
           ) : (
             <View style={styles.galleryGrid}>
               {galleryItems.map((item, idx) => (
-                <View key={idx} style={styles.galleryCard}>
+                <TouchableOpacity key={idx} style={styles.galleryCard} onPress={() => setFullscreenItem(item)}>
                   {item.type === 'video' ? (
                     <Video
                       source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
@@ -124,7 +125,7 @@ export default function ProfileScreen() {
                       resizeMode="cover"
                     />
                   )}
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )
@@ -136,7 +137,7 @@ export default function ProfileScreen() {
           ) : (
             <View style={styles.galleryGrid}>
               {privateItems.map((item, idx) => (
-                <View key={idx} style={styles.galleryCard}>
+                <TouchableOpacity key={idx} style={styles.galleryCard} onPress={() => setFullscreenItem(item)}>
                   {item.type === 'video' ? (
                     <Video
                       source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
@@ -151,12 +152,31 @@ export default function ProfileScreen() {
                       resizeMode="cover"
                     />
                   )}
-                </View>
+                </TouchableOpacity>
               ))}
             </View>
           )
         )}
       </ScrollView>
+      <Modal visible={!!fullscreenItem} transparent onRequestClose={() => setFullscreenItem(null)}>
+        <Pressable style={styles.fullscreenContainer} onPress={() => setFullscreenItem(null)}>
+          {fullscreenItem?.type === 'video' ? (
+            <Video
+              source={{ uri: typeof fullscreenItem.uri === 'number' ? undefined : fullscreenItem.uri }}
+              style={styles.fullscreenMedia}
+              resizeMode="contain"
+              useNativeControls
+              shouldPlay
+            />
+          ) : (
+            <Image
+              source={typeof fullscreenItem?.uri === 'number' ? fullscreenItem.uri : { uri: fullscreenItem?.uri }}
+              style={styles.fullscreenMedia}
+              resizeMode="contain"
+            />
+          )}
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -277,6 +297,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   galleryImg: {
+    width: '100%',
+    height: '100%',
+  },
+  fullscreenContainer: {
+    flex: 1,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullscreenMedia: {
     width: '100%',
     height: '100%',
   },

@@ -9,6 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 
 const INITIAL_GALLERY = [];
+const INITIAL_PRIVATE = [];
+const GALLERY_UPLOAD_LIMIT = 10;
+const PRIVATE_UPLOAD_LIMIT = 50;
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
@@ -16,6 +19,7 @@ const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
   const [galleryItems, setGalleryItems] = useState(INITIAL_GALLERY);
+  const [privateItems, setPrivateItems] = useState(INITIAL_PRIVATE);
   const navigation = useNavigation();
   const { level } = useCharacter();
 
@@ -32,7 +36,19 @@ export default function ProfileScreen() {
     });
     if (!result.canceled && result.assets && result.assets.length > 0) {
       const asset = result.assets[0];
-      setGalleryItems([{ uri: asset.uri, type: asset.type }, ...galleryItems]);
+      if (tab === 'Gallery') {
+        if (galleryItems.length >= GALLERY_UPLOAD_LIMIT) {
+          alert(`Gallery limit of ${GALLERY_UPLOAD_LIMIT} reached`);
+          return;
+        }
+        setGalleryItems([{ uri: asset.uri, type: asset.type }, ...galleryItems]);
+      } else {
+        if (privateItems.length >= PRIVATE_UPLOAD_LIMIT) {
+          alert(`Private limit of ${PRIVATE_UPLOAD_LIMIT} reached`);
+          return;
+        }
+        setPrivateItems([{ uri: asset.uri, type: asset.type }, ...privateItems]);
+      }
     }
   };
 
@@ -75,8 +91,8 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => setTab('Gallery')} style={[styles.tabBtn, tab === 'Gallery' && styles.tabActive]}>
             <Text style={[styles.tabText, tab === 'Gallery' && styles.tabTextActive]}>Gallery</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setTab('Collection')} style={[styles.tabBtn, tab === 'Collection' && styles.tabActive]}>
-            <Text style={[styles.tabText, tab === 'Collection' && styles.tabTextActive]}>Collection</Text>
+          <TouchableOpacity onPress={() => setTab('Private')} style={[styles.tabBtn, tab === 'Private' && styles.tabActive]}>
+            <Text style={[styles.tabText, tab === 'Private' && styles.tabTextActive]}>Private</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.plusBtn} onPress={handleAddMedia}>
             <Ionicons name="add-circle" size={36} color="#007AFF" />
@@ -113,10 +129,32 @@ export default function ProfileScreen() {
             </View>
           )
         ) : (
-          <View style={styles.collectionContent}>
-            {/* Placeholder for collection cards */}
-            <Text style={styles.collectionPlaceholder}>Your collection is empty.</Text>
-          </View>
+          privateItems.length === 0 ? (
+            <View style={styles.emptyCard}>
+              <Text style={styles.emptyText}>Keep track of your progress privately here.</Text>
+            </View>
+          ) : (
+            <View style={styles.galleryGrid}>
+              {privateItems.map((item, idx) => (
+                <View key={idx} style={styles.galleryCard}>
+                  {item.type === 'video' ? (
+                    <Video
+                      source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
+                      style={styles.galleryImg}
+                      resizeMode="cover"
+                      useNativeControls
+                    />
+                  ) : (
+                    <Image
+                      source={typeof item.uri === 'number' ? item.uri : { uri: item.uri }}
+                      style={styles.galleryImg}
+                      resizeMode="cover"
+                    />
+                  )}
+                </View>
+              ))}
+            </View>
+          )
         )}
       </ScrollView>
     </SafeAreaView>
@@ -255,14 +293,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#888',
     fontSize: 16,
-  },
-  collectionContent: {
-    alignItems: 'center',
-    padding: 32,
-  },
-  collectionPlaceholder: {
-    color: '#888',
-    fontSize: 16,
-    marginTop: 24,
   },
 });

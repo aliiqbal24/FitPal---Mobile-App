@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { Video } from 'expo-av';
+import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
 import { useCharacter } from '../context/CharacterContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,13 +17,33 @@ const GALLERY_IMAGES = [
   require('../explore_bg.png'),
 ];
 
+const INITIAL_GALLERY = GALLERY_IMAGES.map((img) => ({ uri: img, type: 'image' }));
+
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
+  const [galleryItems, setGalleryItems] = useState(INITIAL_GALLERY);
   const navigation = useNavigation();
   const { level } = useCharacter();
+
+  const handleAddMedia = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Permission required to access media library');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsMultipleSelection: false,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const asset = result.assets[0];
+      setGalleryItems([...galleryItems, { uri: asset.uri, type: asset.type }]);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -65,18 +87,29 @@ export default function ProfileScreen() {
           <TouchableOpacity onPress={() => setTab('Collection')} style={[styles.tabBtn, tab === 'Collection' && styles.tabActive]}>
             <Text style={[styles.tabText, tab === 'Collection' && styles.tabTextActive]}>Collection</Text>
           </TouchableOpacity>
-          {tab === 'Collection' && (
-            <TouchableOpacity style={styles.plusBtn}>
-              <Ionicons name="add-circle" size={36} color="#007AFF" />
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity style={styles.plusBtn} onPress={handleAddMedia}>
+            <Ionicons name="add-circle" size={36} color="#007AFF" />
+          </TouchableOpacity>
         </View>
         {/* Content */}
         {tab === 'Gallery' ? (
           <View style={styles.galleryGrid}>
-            {GALLERY_IMAGES.map((img, idx) => (
+            {galleryItems.map((item, idx) => (
               <View key={idx} style={styles.galleryCard}>
-                <Image source={img} style={styles.galleryImg} resizeMode="cover" />
+                {item.type === 'video' ? (
+                  <Video
+                    source={{ uri: typeof item.uri === 'number' ? undefined : item.uri }}
+                    style={styles.galleryImg}
+                    resizeMode="cover"
+                    useNativeControls
+                  />
+                ) : (
+                  <Image
+                    source={typeof item.uri === 'number' ? item.uri : { uri: item.uri }}
+                    style={styles.galleryImg}
+                    resizeMode="cover"
+                  />
+                )}
               </View>
             ))}
           </View>

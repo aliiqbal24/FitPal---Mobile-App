@@ -716,7 +716,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   contentContainer: {
-    padding: 16,
+    padding: 10,
     // Reduce bottom padding so the workout card takes less vertical space
     paddingBottom: 20,
   },
@@ -840,7 +840,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   gameContainer: {
-    height: 200,
+    height: 280,
   },
   engine: {
     flex: 1,

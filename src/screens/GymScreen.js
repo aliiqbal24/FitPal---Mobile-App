@@ -20,6 +20,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
+import { useHistory } from '../context/HistoryContext';
 import { toDateKey } from '../utils/dateUtils';
 import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
@@ -124,7 +125,7 @@ export default function GymScreen() {
   const [workoutActive, setWorkoutActive] = useState(false);
   const [deleteMode, setDeleteMode] = useState(false);
   const [setCounts, setSetCounts] = useState([]);
-  const [workoutHistory, setWorkoutHistory] = useState({});
+  const { addEntry } = useHistory();
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -173,22 +174,12 @@ export default function GymScreen() {
           setWorkouts(JSON.parse(stored));
         } catch {}
       }
-      const hist = await AsyncStorage.getItem('workoutHistory');
-      if (hist) {
-        try {
-          setWorkoutHistory(JSON.parse(hist));
-        } catch {}
-      }
     })();
   }, []);
 
   useEffect(() => {
     AsyncStorage.setItem('workouts', JSON.stringify(workouts));
   }, [workouts]);
-
-  useEffect(() => {
-    AsyncStorage.setItem('workoutHistory', JSON.stringify(workoutHistory));
-  }, [workoutHistory]);
 
   // ensure selected workout index stays valid when workouts change
   useEffect(() => {
@@ -381,29 +372,26 @@ export default function GymScreen() {
     setShowExerciseModal(false);
   };
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
-
-  const toggleWorkout = useCallback(() => {
-    setWorkoutActive(active => {
-      const next = !active;
-      if (active && !next) {
-        const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
-        if (totalSets > 0) {
-          const dateStr = toDateKey();
-          setWorkoutHistory(h => ({
-            ...h,
-            [dateStr]: {
-              ...workouts[selectedWorkoutIdx],
-              completedSets: setCounts,
-            },
-          }));
-        }
-        setSetCounts([]);
-      } else if (next) {
-        setSetCounts(currentExercises.map(() => 0));
+  
+const toggleWorkout = useCallback(() => {
+  setWorkoutActive(active => {
+    const next = !active;
+    if (active && !next) {
+      const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
+      if (totalSets > 0) {
+        const dateStr = toDateKey();
+        addEntry(dateStr, {
+          ...workouts[selectedWorkoutIdx],
+          completedSets: setCounts,
+        });
       }
-      return next;
-    });
-  }, [workouts, selectedWorkoutIdx, currentExercises, setCounts]);
+      setSetCounts([]);
+    } else if (next) {
+      setSetCounts(currentExercises.map(() => 0));
+    }
+    return next;
+  });
+}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry]);
 
   useEffect(() => {
     if (workoutActive) {

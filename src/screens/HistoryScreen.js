@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal } from 'react-native';
-import { useFocusEffect } from "@react-navigation/native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useHistory } from '../context/HistoryContext';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -53,7 +52,7 @@ export default function HistoryScreen() {
     monthOptions[monthOptions.length - 1]
   );
   const [showPicker, setShowPicker] = useState(false);
-  const [history, setHistory] = useState({});
+  const { history } = useHistory();
   const [selectedEntry, setSelectedEntry] = useState(null);
   const [weekWeight, setWeekWeight] = useState(0);
   const [yearWeight, setYearWeight] = useState(0);
@@ -81,22 +80,6 @@ export default function HistoryScreen() {
     }
   };
 
-  useFocusEffect(
-    React.useCallback(() => {
-      let mounted = true;
-      (async () => {
-        const stored = await AsyncStorage.getItem("workoutHistory");
-        if (stored && mounted) {
-          try {
-            setHistory(JSON.parse(stored));
-          } catch {}
-        }
-      })();
-      return () => {
-        mounted = false;
-      };
-    }, [])
-  );
 
   useEffect(() => {
     const now = new Date();

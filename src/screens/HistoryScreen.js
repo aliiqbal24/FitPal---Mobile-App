@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   statsWrapper: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingHorizontal: 16,
     marginBottom: 8,
   },
@@ -267,6 +267,7 @@ const styles = StyleSheet.create({
   },
   shareBtn: {
     padding: 8,
+    alignSelf: 'flex-start',
   },
   dayCell: {
     width: CELL_SIZE,

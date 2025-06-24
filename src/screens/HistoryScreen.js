@@ -143,12 +143,15 @@ export default function HistoryScreen() {
                 const dateStr = day
                   ? `${m.year}-${String(m.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
                   : null;
-                const completed = !!(dateStr && history[dateStr]);
+                const completed = !!(dateStr && history[dateStr] && history[dateStr].length);
                 return (
                   <TouchableOpacity
                     key={i}
                     style={[styles.dayCell, completed && styles.completedDay]}
-                    onPress={() => completed && setSelectedEntry(history[dateStr])}
+                    onPress={() =>
+                      completed &&
+                      setSelectedEntry({ workouts: history[dateStr] })
+                    }
                     disabled={!completed}
                   >
                     {day && <Text style={styles.dayText}>{day}</Text>}
@@ -182,25 +185,30 @@ export default function HistoryScreen() {
         <Modal visible transparent animationType="fade">
           <View style={styles.modalOverlay}>
             <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{selectedEntry.name}</Text>
-              {selectedEntry.exercises?.map((ex, idx) => {
-                const setsDone =
-                  selectedEntry.completedSets &&
-                  selectedEntry.completedSets[idx] !== undefined
-                    ? selectedEntry.completedSets[idx]
-                    : 0;
-                return (
-                  <Text key={idx} style={styles.modalText}>
-                    {ex.name} - {setsDone}x{ex.reps} @ {ex.weight}
-                  </Text>
-                );
-              })}
-              <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => setSelectedEntry(null)}
-              >
-                <Text style={styles.modalButtonText}>Close</Text>
-              </TouchableOpacity>
+              <ScrollView>
+                {selectedEntry.workouts.map((w, wi) => (
+                  <View key={wi} style={styles.workoutSection}>
+                    <Text style={styles.modalSubtitle}>{w.name}</Text>
+                    {w.exercises?.map((ex, idx) => {
+                      const setsDone =
+                        w.completedSets && w.completedSets[idx] !== undefined
+                          ? w.completedSets[idx]
+                          : 0;
+                      return (
+                        <Text key={idx} style={styles.modalText}>
+                          {ex.name} - {setsDone}x{ex.reps} @ {ex.weight}
+                        </Text>
+                      );
+                    })}
+                  </View>
+                ))}
+                <TouchableOpacity
+                  style={styles.modalButton}
+                  onPress={() => setSelectedEntry(null)}
+                >
+                  <Text style={styles.modalButtonText}>Close</Text>
+                </TouchableOpacity>
+              </ScrollView>
             </View>
           </View>
         </Modal>
@@ -317,10 +325,21 @@ const styles = StyleSheet.create({
     color: '#222',
     textAlign: 'center',
   },
+  modalSubtitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+    color: '#222',
+    textAlign: 'center',
+  },
   modalText: {
     color: '#222',
     marginBottom: 4,
     textAlign: 'center',
+  },
+  workoutSection: {
+    marginBottom: 12,
+    alignItems: 'center',
   },
   modalButton: {
     backgroundColor: '#007AFF',

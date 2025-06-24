@@ -135,7 +135,8 @@ export default function GymScreen() {
   const characterBody = useRef(
     Matter.Bodies.rectangle(
       width / 2,
-      height / 2 + height * 0.1,
+      // Move the character slightly lower so it's closer to the middle of the screen
+      height / 2 + height * 0.2,
       SPRITE_SIZE,
       SPRITE_SIZE,
       {

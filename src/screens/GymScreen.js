@@ -391,6 +391,7 @@ const toggleWorkout = useCallback(() => {
         addEntry(dateStr, {
           ...workouts[selectedWorkoutIdx],
           completedSets: setCounts,
+          timestamp: Date.now(),
         });
 
         let weight = 0;

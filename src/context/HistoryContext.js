@@ -14,7 +14,14 @@ export const HistoryProvider = ({ children }) => {
       try {
         const stored = await AsyncStorage.getItem('workoutHistory');
         if (stored) {
-          setHistory(JSON.parse(stored));
+          const data = JSON.parse(stored);
+          const normalized = Object.fromEntries(
+            Object.entries(data).map(([date, entry]) => [
+              date,
+              Array.isArray(entry) ? entry : [entry],
+            ])
+          );
+          setHistory(normalized);
         }
       } catch {}
     })();
@@ -25,7 +32,14 @@ export const HistoryProvider = ({ children }) => {
   }, [history]);
 
   const addEntry = useCallback((dateStr, workout) => {
-    setHistory(h => ({ ...h, [dateStr]: workout }));
+    setHistory(h => {
+      const dayEntries = h[dateStr] ? [...h[dateStr]] : [];
+      dayEntries.push(workout);
+      if (dayEntries.length > 3) {
+        dayEntries.shift();
+      }
+      return { ...h, [dateStr]: dayEntries };
+    });
   }, []);
 
   return (

@@ -73,8 +73,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   equipmentImage: {
-    width: '104%',
-    height: '78%',
+    width: '110%',
+    height: '110%',
     marginBottom: 4,
   },
   label: {

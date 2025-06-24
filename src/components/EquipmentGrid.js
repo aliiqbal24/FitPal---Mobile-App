@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
+import { getEquipmentImage } from '../data/exerciseEquipmentMap';
 
 export default function EquipmentGrid({ exercises = [], progress = [], onIncrement }) {
   const { width, height } = Dimensions.get('window');
@@ -38,6 +39,7 @@ export default function EquipmentGrid({ exercises = [], progress = [], onIncreme
           style={[styles.box, { left: pos.left, top: pos.top, width: cellWidth, height: cellHeight }]}
           onPress={() => onIncrement && onIncrement(idx)}
         >
+          <Image source={getEquipmentImage(pos.name)} style={styles.equipmentImage} resizeMode="contain" />
           <View style={styles.setRow}>
             {Array.from({ length: pos.sets }).map((_, sIdx) => (
               <View
@@ -66,12 +68,14 @@ const styles = StyleSheet.create({
   },
   box: {
     position: 'absolute',
-    borderWidth: 1,
-    borderColor: '#007AFF',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.7)',
     borderRadius: 8,
+  },
+  equipmentImage: {
+    width: '80%',
+    height: '60%',
+    marginBottom: 4,
   },
   label: {
     color: '#222',

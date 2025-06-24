@@ -135,8 +135,7 @@ export default function GymScreen() {
   const characterBody = useRef(
     Matter.Bodies.rectangle(
       width / 2,
-      // Move the character slightly lower so it's closer to the middle of the screen
-      height / 2 + height * 0.2,
+      height / 2 + height * 0.1,
       SPRITE_SIZE,
       SPRITE_SIZE,
       {
@@ -848,7 +847,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   gameContainer: {
-    height: 280,
+    height: 190,
   },
   engine: {
     flex: 1,

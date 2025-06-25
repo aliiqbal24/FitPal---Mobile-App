@@ -1,157 +1,79 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import useSwipeTabs from '../navigation/useSwipeTabs';
+import React from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const panHandlers = useSwipeTabs();
-
+const OnboardingScreen = () => {
   return (
-    <ImageBackground
-      source={require('../../assets/loading.png')}
-      style={styles.container}
-      resizeMode="cover"
-      {...panHandlers}
-    >
-      <View style={styles.overlay}>
-        <View style={styles.card}>
-          <TouchableOpacity style={styles.closeButton} onPress={() => {}}>
-            <Ionicons name="close" size={24} color="#888" />
-          </TouchableOpacity>
-          <Text style={styles.title}>Log in or sign up</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#888"
-            value={email}
-            onChangeText={setEmail}
-          />
-          <TouchableOpacity style={styles.continueButton} onPress={() => {}}>
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-          <View style={styles.dividerContainer}>
-            <View style={styles.divider} />
-            <Text style={styles.orText}>OR</Text>
-            <View style={styles.divider} />
-          </View>
-          <TouchableOpacity style={styles.socialButton} onPress={() => {}}>
-            <Ionicons name="logo-facebook" size={20} color="#1877F3" style={styles.socialIcon} />
-            <Text style={styles.socialText}>Continue with Facebook</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton} onPress={() => {}}>
-            <Ionicons name="logo-google" size={20} color="#EA4335" style={styles.socialIcon} />
-            <Text style={styles.socialText}>Continue with Google</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton} onPress={() => {}}>
-            <Ionicons name="logo-apple" size={20} color="#000" style={styles.socialIcon} />
-            <Text style={styles.socialText}>Continue with Apple</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.socialButton} onPress={() => {}}>
-            <Ionicons name="call-outline" size={20} color="#007AFF" style={styles.socialIcon} />
-            <Text style={styles.socialText}>Continue with phone</Text>
-          </TouchableOpacity>
-        </View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.topRightLang}>
+        <Text style={styles.language}>🇺🇸 EN</Text>
       </View>
-    </ImageBackground>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>A stronger you, the fun way</Text>
+      </View>
+      <TouchableOpacity style={styles.getStartedButton}>
+        <Text style={styles.buttonText}>Get Started</Text>
+      </TouchableOpacity>
+      <Text style={styles.signInText}>
+        Already have an account? <Text style={styles.signInLink}>Sign In</Text>
+      </Text>
+    </SafeAreaView>
   );
-}
+};
+
+const DARK_BLUE = '#002F6C';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    width: '100%',
-    height: '100%',
+    paddingBottom: 60,
   },
-  overlay: {
-    width: '100%',
-    paddingBottom: 40,
-    alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.15)',
-  },
-  card: {
-    width: 340,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    elevation: 8,
-    alignItems: 'stretch',
-    position: 'relative',
-  },
-  closeButton: {
+  topRightLang: {
     position: 'absolute',
-    top: 16,
-    right: 16,
-    zIndex: 1,
+    top: 20,
+    right: 20,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  language: {
+    fontSize: 14,
+    color: '#000',
+  },
+  textContainer: {
+    marginBottom: 30,
+    paddingHorizontal: 20,
   },
   title: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: '600',
     textAlign: 'center',
-    marginBottom: 24,
-    marginTop: 8,
-    color: '#222',
+    color: '#000',
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
+  getStartedButton: {
+    backgroundColor: DARK_BLUE,
+    borderRadius: 50,
+    paddingVertical: 18,
+    paddingHorizontal: 80,
+    marginBottom: 15,
+  },
+  buttonText: {
+    color: '#FFF',
     fontSize: 16,
-    marginBottom: 16,
-    backgroundColor: '#fafafa',
-    color: '#222',
+    fontWeight: '500',
+    textAlign: 'center',
   },
-  continueButton: {
-    backgroundColor: '#ddd',
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: 'center',
-    marginBottom: 20,
+  signInText: {
+    fontSize: 14,
+    color: '#000',
   },
-  continueButtonText: {
-    color: '#888',
-    fontSize: 16,
+  signInLink: {
     fontWeight: '600',
+    color: DARK_BLUE,
   },
-  dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  divider: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#eee',
-  },
-  orText: {
-    marginHorizontal: 8,
-    color: '#888',
-    fontWeight: '500',
-  },
-  socialButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-    backgroundColor: '#fafafa',
-  },
-  socialIcon: {
-    marginRight: 12,
-  },
-  socialText: {
-    fontSize: 15,
-    color: '#222',
-    fontWeight: '500',
-  },
-}); 
+});
+
+export default OnboardingScreen;

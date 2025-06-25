@@ -326,9 +326,12 @@ export default function GymScreen() {
     );
   };
 
+  const MAX_EXERCISES = 7;
+
   const openNewExercise = idx => {
-    if (workoutActive) {
-      Alert.alert('Workout Active', 'End the current workout to edit exercises.');
+    const exercises = workouts[idx]?.exercises ?? [];
+    if (exercises.length >= MAX_EXERCISES) {
+      Alert.alert('Limit Reached', `You can only have ${MAX_EXERCISES} exercises per workout.`);
       return;
     }
     setCurrentWorkoutIdx(idx);
@@ -357,16 +360,25 @@ export default function GymScreen() {
       Alert.alert('Limit Reached', 'Sets cannot exceed 12.');
     }
     const ex = { ...exerciseForm, sets: String(setsNum) };
+    let didAdd = false;
     setWorkouts(w => {
       const updated = [...w];
       const exercises = updated[currentWorkoutIdx].exercises;
       if (editingExerciseIdx !== null) {
         exercises[editingExerciseIdx] = ex;
       } else {
+        if (exercises.length >= MAX_EXERCISES) {
+          Alert.alert('Limit Reached', `You can only have ${MAX_EXERCISES} exercises per workout.`);
+          return w;
+        }
         exercises.push(ex);
+        didAdd = true;
       }
       return updated;
     });
+    if (didAdd && workoutActive) {
+      setSetCounts(prev => [...prev, 0]);
+    }
     setShowExerciseModal(false);
   };
 

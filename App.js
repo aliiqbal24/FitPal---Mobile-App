@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
-import { LogBox } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { LogBox, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -7,6 +8,8 @@ import RootNavigator from './src/navigation/RootNavigator';
 import { CharacterProvider } from './src/context/CharacterContext';
 import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
+import { Asset } from 'expo-asset';
+import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -15,6 +18,24 @@ LogBox.ignoreLogs([
 ]);
 
 export default function App() {
+  const [assetsLoaded, setAssetsLoaded] = useState(false);
+
+  useEffect(() => {
+    async function loadAssets() {
+      await Asset.loadAsync(Object.values(EQUIPMENT_IMAGES));
+      setAssetsLoaded(true);
+    }
+    loadAssets();
+  }, []);
+
+  if (!assetsLoaded) {
+    return (
+      <GestureHandlerRootView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </GestureHandlerRootView>
+    );
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

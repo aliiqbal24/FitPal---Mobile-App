@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   equipmentImage: {
     width: '110%',
     height: '110%',
-    marginBottom: 2,
+    marginBottom: -45,   // relationship of text to image 
   },
   label: {
     color: '#222',

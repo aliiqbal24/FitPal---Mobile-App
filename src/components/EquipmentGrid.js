@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
   },
   box: {
     position: 'absolute',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     borderRadius: 8,
   },
   equipmentImage: {
     width: '110%',
     height: '110%',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   label: {
     color: '#222',
@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
   progress: {
     color: '#007AFF',
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   setRow: {
     flexDirection: 'row',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   setDot: {
     width: 8,

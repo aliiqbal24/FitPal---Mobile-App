@@ -34,6 +34,8 @@ export default function Onboarding1Screen({ navigation }) {
         </View>
       </View>
 
+      <Text style={styles.header}>Build your gym buddy</Text>
+
       <Text style={styles.title}>Height & weight</Text>
       <Text style={styles.subtitle}>
         This will be used to calibrate your custom plan.
@@ -158,6 +160,12 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: DARK_BLUE,
     borderRadius: 2,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: '700',
+    marginTop: 20,
+    textAlign: 'center',
   },
   title: {
     fontSize: 28,

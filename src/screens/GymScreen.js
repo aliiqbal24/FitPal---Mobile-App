@@ -29,6 +29,7 @@ import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
 import { useCharacter } from '../context/CharacterContext';
+import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
 
 const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
@@ -39,15 +40,20 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body }) => {
+const Character = React.memo(({ body, level }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
   const y = body.position.y - height / 2;
+  const size = Math.min(width, height);
 
   return (
-    <View style={[styles.character, { left: x, top: y, width, height }]}> 
-      <Image source={SPRITE} style={styles.sprite} resizeMode="contain" />
+    <View style={[styles.character, { left: x, top: y, width, height }]}>
+      <AvatarWithLevelBadge
+        source={SPRITE}
+        size={size}
+        level={level}
+      />
     </View>
   );
 });
@@ -504,10 +510,10 @@ const toggleWorkout = useCallback(() => {
       </ScrollView>
       <View style={styles.expImageWrapper}>
         <TouchableOpacity onPress={showStats}>
-          <Image
+          <AvatarWithLevelBadge
             source={require('../../assets/AppSprite.png')}
-            style={styles.expImage}
-            resizeMode="contain"
+            size={150}
+            level={level}
           />
         </TouchableOpacity>
       </View>
@@ -518,7 +524,7 @@ const toggleWorkout = useCallback(() => {
           style={styles.engine}
           onEvent={onEvent}
         >
-          <Character body={characterBody} />
+          <Character body={characterBody} level={level} />
         </GameEngine>
       </View>
       {workoutActive && (
@@ -878,10 +884,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  sprite: {
-    width: '100%',
-    height: '100%',
-  },
   carouselContainer: {
     paddingBottom: 12,
     paddingTop: 20,
@@ -924,10 +926,6 @@ const styles = StyleSheet.create({
   expImageWrapper: {
     alignItems: 'center',
     marginVertical: 16,
-  },
-  expImage: {
-    width: 150,
-    height: 150,
   },
   workoutToggleBtn: {
     position: 'absolute',

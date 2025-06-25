@@ -515,58 +515,65 @@ const toggleWorkout = useCallback(() => {
         />
       )}
 
-      <View style={styles.carouselContainer}>
-        <ScrollView
-          style={styles.carouselScrollView}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.carouselScroll}
-        >
-          {workouts.map((wk, idx) => (
-            <WiggleItem
-              key={idx}
-              deleteMode={deleteMode}
-              style={[
-                styles.carouselItem,
-                selectedWorkoutIdx === idx && styles.carouselItemSelected,
-              ]}
-              onLongPress={() => setDeleteMode(true)}
-              onPress={() => {
-                if (deleteMode) {
-                  setDeleteMode(false);
-                } else if (workoutActive) {
-                  Alert.alert('Workout Active', 'End the current workout to switch workouts.');
-                } else {
-                  setSelectedWorkoutIdx(idx);
-                }
-              }}
+      {!workoutActive && (
+        <>
+          <View style={styles.carouselContainer}>
+            <ScrollView
+              style={styles.carouselScrollView}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.carouselScroll}
             >
-              <Text
-                style={[
-                  styles.carouselItemText,
-                  selectedWorkoutIdx === idx && styles.carouselItemTextSelected,
-                ]}
-              >
-                {wk.name}
-              </Text>
-              {deleteMode && (
-                <TouchableOpacity
-                  style={styles.carouselDelete}
-                  onPress={() => handleDeleteWorkout(idx)}
+              {workouts.map((wk, idx) => (
+                <WiggleItem
+                  key={idx}
+                  deleteMode={deleteMode}
+                  style={[
+                    styles.carouselItem,
+                    selectedWorkoutIdx === idx && styles.carouselItemSelected,
+                  ]}
+                  onLongPress={() => setDeleteMode(true)}
+                  onPress={() => {
+                    if (deleteMode) {
+                      setDeleteMode(false);
+                    } else if (workoutActive) {
+                      Alert.alert('Workout Active', 'End the current workout to switch workouts.');
+                    } else {
+                      setSelectedWorkoutIdx(idx);
+                    }
+                  }}
                 >
-                  <Ionicons name="close" size={12} color="#fff" />
-                </TouchableOpacity>
-              )}
-            </WiggleItem>
-          ))}
-        </ScrollView>
-      </View>
+                  <Text
+                    style={[
+                      styles.carouselItemText,
+                      selectedWorkoutIdx === idx && styles.carouselItemTextSelected,
+                    ]}
+                  >
+                    {wk.name}
+                  </Text>
+                  {deleteMode && (
+                    <TouchableOpacity
+                      style={styles.carouselDelete}
+                      onPress={() => handleDeleteWorkout(idx)}
+                    >
+                      <Ionicons name="close" size={12} color="#fff" />
+                    </TouchableOpacity>
+                  )}
+                </WiggleItem>
+              ))}
+            </ScrollView>
+          </View>
 
-      <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
-        <Ionicons name="add" size={32} color="#fff" />
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
+            <Ionicons name="add" size={32} color="#fff" />
+          </TouchableOpacity>
+        </>
+      )}
 
-      <TouchableOpacity style={styles.workoutToggleBtn} onPress={toggleWorkout}>
+      <TouchableOpacity
+        style={[styles.workoutToggleBtn, workoutActive && styles.workoutToggleBtnActive]}
+        onPress={toggleWorkout}
+      >
         <Text style={styles.workoutToggleBtnText}>
           {workoutActive ? 'END' : 'LIFT'}
         </Text>
@@ -916,6 +923,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingVertical: 16,
     paddingHorizontal: 26,
+  },
+  workoutToggleBtnActive: {
+    bottom: 24,
   },
   workoutToggleBtnText: {
     color: '#fff',

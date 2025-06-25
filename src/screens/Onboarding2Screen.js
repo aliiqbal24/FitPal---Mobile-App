@@ -17,7 +17,7 @@ export default function Onboarding2Screen({ navigation }) {
 
   const handleContinue = () => {
     const birthdate = `${month} ${day}, ${year}`;
-    navigation.navigate('Onboarding3', { birthdate });
+    navigation.navigate('Onboarding1', { birthdate });
   };
 
   const months = [

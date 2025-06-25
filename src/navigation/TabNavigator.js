@@ -5,6 +5,9 @@ import GymScreen from '../screens/GymScreen';
 import HistoryScreen from '../screens/HistoryScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import Onboarding1Screen from '../screens/Onboarding1Screen';
+import Onboarding2Screen from '../screens/Onboarding2Screen';
+import Onboarding3Screen from '../screens/Onboarding3Screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +26,12 @@ export default function TabNavigator() {
             iconName = focused ? 'calendar' : 'calendar-outline';
           } else if (route.name === 'Login') {
             iconName = focused ? 'log-in' : 'log-in-outline';
+          } else if (
+            route.name === 'Onboarding1' ||
+            route.name === 'Onboarding2' ||
+            route.name === 'Onboarding3'
+          ) {
+            iconName = focused ? 'ellipse' : 'ellipse-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -36,6 +45,9 @@ export default function TabNavigator() {
       <Tab.Screen name="Gym" component={GymScreen} />
       <Tab.Screen name="History" component={HistoryScreen} />
       <Tab.Screen name="Login" component={LoginScreen} />
+      <Tab.Screen name="Onboarding1" component={Onboarding1Screen} />
+      <Tab.Screen name="Onboarding2" component={Onboarding2Screen} />
+      <Tab.Screen name="Onboarding3" component={Onboarding3Screen} />
     </Tab.Navigator>
   );
 }

@@ -4,7 +4,7 @@ import { EXERCISES } from '../data/exerciseList';
 
 export default function ExerciseSelector({ value, onChange }) {
   const [showSuggestions, setShowSuggestions] = useState(false);
-
+      
   const query = value.trim().toLowerCase();
   const suggestions = useMemo(() => {
     if (!query) return [];

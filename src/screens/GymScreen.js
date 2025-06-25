@@ -444,7 +444,7 @@ const toggleWorkout = useCallback(() => {
 
   return (
     <ImageBackground
-      source={require('../../assets/app_background.png')}
+      source={require('../../assets/backgrounds/APP_BG_newschool.png')}
       style={styles.background}
       resizeMode="cover"
     >

@@ -18,6 +18,7 @@ import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import useSwipeTabs from '../navigation/useSwipeTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { useHistory } from '../context/HistoryContext';
@@ -127,6 +128,7 @@ export default function GymScreen() {
   const [deleteMode, setDeleteMode] = useState(false);
   const [setCounts, setSetCounts] = useState([]);
   const { addEntry } = useHistory();
+  const panHandlers = useSwipeTabs();
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -461,7 +463,7 @@ const toggleWorkout = useCallback(() => {
       resizeMode="cover"
     >
       <View style={{flex: 1}} pointerEvents="box-none">
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container} {...panHandlers}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
           <View key={selectedWorkoutIdx} style={styles.workoutCard}>

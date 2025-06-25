@@ -6,6 +6,7 @@ import { useStats } from '../context/StatsContext';
 import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatWeight } from '../utils/numberUtils';
+import useSwipeTabs from '../navigation/useSwipeTabs';
 
 const SPRITE = require('../../assets/AppSprite.png');
 
@@ -50,6 +51,7 @@ export default function HistoryScreen() {
   const { history } = useHistory();
   const { weekWeight, yearWeight, liftCount } = useStats();
   const [selectedEntry, setSelectedEntry] = useState(null);
+  const panHandlers = useSwipeTabs();
 
   // Pre-compute all months so users can swipe between them
   const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
@@ -86,7 +88,7 @@ export default function HistoryScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} {...panHandlers}>
       <ScrollView
         horizontal
         pagingEnabled

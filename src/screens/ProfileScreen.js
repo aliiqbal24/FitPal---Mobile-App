@@ -7,6 +7,7 @@ import ImageViewerModal from '../components/ImageViewerModal';
 import { useCharacter } from '../context/CharacterContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
+import useSwipeTabs from '../navigation/useSwipeTabs';
 import { Ionicons } from '@expo/vector-icons';
 
 const INITIAL_GALLERY = [];
@@ -25,6 +26,7 @@ export default function ProfileScreen() {
   const [viewerIndex, setViewerIndex] = useState(0);
   const navigation = useNavigation();
   const { level } = useCharacter();
+  const panHandlers = useSwipeTabs();
 
   const openViewer = index => {
     const items = tab === 'Gallery' ? galleryItems : privateItems;
@@ -70,7 +72,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} {...panHandlers}>
       {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>

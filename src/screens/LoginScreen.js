@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import useSwipeTabs from '../navigation/useSwipeTabs';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
+  const panHandlers = useSwipeTabs();
 
   return (
     <ImageBackground
       source={require('../../assets/loading.png')}
       style={styles.container}
       resizeMode="cover"
+      {...panHandlers}
     >
       <View style={styles.overlay}>
         <View style={styles.card}>

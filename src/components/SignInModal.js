@@ -1,0 +1,157 @@
+import React from 'react';
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Linking,
+} from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+
+const SignInModal = ({ visible, onClose }) => {
+  return (
+    <Modal visible={visible} animationType="slide" transparent>
+      <View style={styles.overlay}>
+        <View style={styles.modal}>
+          {/* Close Button */}
+          <TouchableOpacity style={styles.closeButton} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close sign in">
+            <Ionicons name="close" size={24} color="black" />
+          </TouchableOpacity>
+
+          {/* Title */}
+          <Text style={styles.title}>Sign In</Text>
+
+          {/* Apple Sign In */}
+          <TouchableOpacity style={styles.appleButton} accessibilityRole="button" accessibilityLabel="Sign in with Apple">
+            <Ionicons name="logo-apple" size={20} color="#fff" />
+            <Text style={styles.appleButtonText}>Sign in with Apple</Text>
+          </TouchableOpacity>
+
+          {/* Google Sign In */}
+          <TouchableOpacity style={styles.googleButton} accessibilityRole="button" accessibilityLabel="Sign in with Google">
+            <Image source={require('../../assets/google-icon.png')} style={styles.icon} />
+            <Text style={styles.googleButtonText}>Sign in with Google</Text>
+          </TouchableOpacity>
+
+          {/* Email Sign In */}
+          <TouchableOpacity style={styles.emailButton} accessibilityRole="button" accessibilityLabel="Continue with email">
+            <Ionicons name="mail-outline" size={20} color="black" />
+            <Text style={styles.emailButtonText}>Continue with email</Text>
+          </TouchableOpacity>
+
+          {/* Terms & Policy */}
+          <Text style={styles.terms}>
+            By continuing you agree to Cal AI's{' '}
+            <Text style={styles.link} onPress={() => Linking.openURL('https://yourapp.com/terms')}>
+              Terms and Conditions
+            </Text>{' '}
+            and{' '}
+            <Text style={styles.link} onPress={() => Linking.openURL('https://yourapp.com/privacy')}>
+              Privacy Policy
+            </Text>
+          </Text>
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+const DARK_BLUE = '#002F6C';
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: '#00000040',
+    justifyContent: 'flex-end',
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: 25,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    alignItems: 'center',
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 16,
+    right: 16,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: '600',
+    marginVertical: 40,
+  },
+  appleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  appleButtonText: {
+    color: 'white',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  googleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: 12,
+  },
+  googleButtonText: {
+    color: '#000',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  emailButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    width: '100%',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  emailButtonText: {
+    color: '#000',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  icon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+  },
+  terms: {
+    fontSize: 12,
+    color: '#555',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    marginBottom: 20,
+  },
+  link: {
+    color: DARK_BLUE,
+    fontWeight: '500',
+    textDecorationLine: 'underline',
+  },
+});
+
+export default React.memo(SignInModal);

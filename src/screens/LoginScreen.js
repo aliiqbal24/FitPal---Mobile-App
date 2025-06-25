@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import SignInModal from '../components/SignInModal';
 
 const OnboardingScreen = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.topRightLang}>
@@ -14,8 +17,15 @@ const OnboardingScreen = () => {
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
       <Text style={styles.signInText}>
-        Already have an account? <Text style={styles.signInLink}>Sign In</Text>
+        Already have an account?{' '}
+        <Text style={styles.signInLink} onPress={() => setModalVisible(true)}>
+          Sign In
+        </Text>
       </Text>
+      <SignInModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
     </SafeAreaView>
   );
 };

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import SignInModal from '../components/SignInModal';
 
-const OnboardingScreen = () => {
+const OnboardingScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -13,7 +13,10 @@ const OnboardingScreen = () => {
       <View style={styles.textContainer}>
         <Text style={styles.title}>A stronger you, the fun way</Text>
       </View>
-      <TouchableOpacity style={styles.getStartedButton}>
+      <TouchableOpacity
+        style={styles.getStartedButton}
+        onPress={() => navigation.navigate('Gender')}
+      >
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>
       <Text style={styles.signInText}>

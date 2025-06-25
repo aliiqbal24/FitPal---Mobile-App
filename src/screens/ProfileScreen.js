@@ -5,6 +5,7 @@ import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
 import ImageViewerModal from '../components/ImageViewerModal';
 import { useCharacter } from '../context/CharacterContext';
+import { CHARACTER_IMAGES } from '../data/characters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import useSwipeTabs from '../navigation/useSwipeTabs';
@@ -25,7 +26,8 @@ export default function ProfileScreen() {
   const [viewerVisible, setViewerVisible] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
   const navigation = useNavigation();
-  const { level } = useCharacter();
+  const { level, characterId } = useCharacter();
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
   const panHandlers = useSwipeTabs();
 
   const openViewer = index => {
@@ -87,11 +89,7 @@ export default function ProfileScreen() {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Profile Info */}
         <View style={styles.profileInfo}>
-          <AvatarWithLevelBadge
-            source={require('../../assets/AppSprite.png')}
-            size={72}
-            level={level}
-          />
+          <AvatarWithLevelBadge source={sprite} size={72} level={level} />
           <Text style={styles.username}>vscotest40</Text>
           <View style={styles.profileActions}>
             <TouchableOpacity style={styles.editBtn}>

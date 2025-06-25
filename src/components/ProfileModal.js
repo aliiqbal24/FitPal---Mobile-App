@@ -2,8 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Dimensions } from 'react-native';
 import AvatarWithLevelBadge from './AvatarWithLevelBadge';
 import { Ionicons } from '@expo/vector-icons';
+import { useCharacter } from '../context/CharacterContext';
+import { CHARACTER_IMAGES } from '../data/characters';
 
 export default function ProfileModal({ isVisible, onClose, level = 1 }) {
+  const { characterId } = useCharacter();
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
   return (
     <Modal
       visible={isVisible}
@@ -20,11 +24,7 @@ export default function ProfileModal({ isVisible, onClose, level = 1 }) {
 
           {/* Avatar */}
           <View style={styles.avatarContainer}>
-            <AvatarWithLevelBadge
-              source={require('../../assets/AppSprite.png')}
-              size={100}
-              level={level}
-            />
+            <AvatarWithLevelBadge source={sprite} size={100} level={level} />
           </View>
 
           {/* User Info */}

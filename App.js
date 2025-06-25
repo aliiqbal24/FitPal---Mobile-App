@@ -10,6 +10,7 @@ import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { Asset } from 'expo-asset';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
+import { CHARACTER_IMAGES } from './src/data/characters';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -22,7 +23,10 @@ export default function App() {
 
   useEffect(() => {
     async function loadAssets() {
-      await Asset.loadAsync(Object.values(EQUIPMENT_IMAGES));
+      await Asset.loadAsync([
+        ...Object.values(EQUIPMENT_IMAGES),
+        ...Object.values(CHARACTER_IMAGES),
+      ]);
       setAssetsLoaded(true);
     }
     loadAssets();

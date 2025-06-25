@@ -5,14 +5,17 @@ import { getLevelInfo } from '../utils/levelUtils';
 const CharacterContext = createContext({
   exp: 0,
   level: 1,
+  characterId: 'GiraffeF',
+  setCharacterId: () => {},
   addExp: () => {},
 });
 
 export const CharacterProvider = ({ children }) => {
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
+  const [characterId, setCharacterId] = useState('GiraffeF');
 
-  // Load saved experience on mount
+  // Load saved experience and character on mount
   useEffect(() => {
     (async () => {
       try {
@@ -23,6 +26,10 @@ export const CharacterProvider = ({ children }) => {
             setExp(val);
             setLevel(getLevelInfo(val).level);
           }
+        }
+        const char = await AsyncStorage.getItem('characterId');
+        if (char) {
+          setCharacterId(char);
         }
       } catch {}
     })();
@@ -37,12 +44,19 @@ export const CharacterProvider = ({ children }) => {
     }
   }, [exp, level]);
 
+  // Persist character selection
+  useEffect(() => {
+    AsyncStorage.setItem('characterId', characterId);
+  }, [characterId]);
+
   const addExp = useCallback(amount => {
     setExp(e => e + amount);
   }, []);
 
   return (
-    <CharacterContext.Provider value={{ exp, level, addExp }}>
+    <CharacterContext.Provider
+      value={{ exp, level, characterId, setCharacterId, addExp }}
+    >
       {children}
     </CharacterContext.Provider>
   );

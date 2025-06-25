@@ -5,8 +5,8 @@ import Matter from 'matter-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TouchHandler from '../systems/TouchHandler';
 import { useCharacter } from '../context/CharacterContext';
+import { CHARACTER_IMAGES } from '../data/characters';
 
-const SPRITE = require('../../assets/AppSprite.png');
 const SPRITE_SIZE = 120;
 
 const Physics = (entities, { time }) => {
@@ -15,7 +15,7 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body }) => {
+const Character = React.memo(({ body, sprite }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
@@ -23,7 +23,7 @@ const Character = React.memo(({ body }) => {
 
   return (
     <View style={[styles.character, { left: x, top: y, width, height }]}>
-      <Image source={SPRITE} style={styles.sprite} resizeMode="contain" />
+      <Image source={sprite} style={styles.sprite} resizeMode="contain" />
     </View>
   );
 });
@@ -45,7 +45,8 @@ export default function GymGameScreen() {
     };
   }, [world, characterBody]);
 
-  const { exp, level, addExp } = useCharacter();
+  const { exp, level, addExp, characterId } = useCharacter();
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
 
   const addSet = useCallback(() => {
     addExp(1);
@@ -79,7 +80,7 @@ export default function GymGameScreen() {
         entities={entities}
         onEvent={onEvent}
       >
-        <Character body={characterBody} />
+        <Character body={characterBody} sprite={sprite} />
       </GameEngine>
       <View style={styles.buttonContainer}>
         <Button title="+ Set" onPress={addSet} />

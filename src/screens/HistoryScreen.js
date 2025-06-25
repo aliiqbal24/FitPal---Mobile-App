@@ -7,8 +7,8 @@ import { Picker } from '@react-native-picker/picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatWeight } from '../utils/numberUtils';
 import useSwipeTabs from '../navigation/useSwipeTabs';
-
-const SPRITE = require('../../assets/AppSprite.png');
+import { useCharacter } from '../context/CharacterContext';
+import { CHARACTER_IMAGES } from '../data/characters';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -34,6 +34,9 @@ function generateMonth(year, month) {
 
 export default function HistoryScreen() {
   const today = new Date();
+
+  const { characterId } = useCharacter();
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
 
   // Build the list of selectable months from April 2025 to today
   const earliest = new Date(2025, 3, 1); // April 2025
@@ -160,7 +163,7 @@ export default function HistoryScreen() {
                     {m.year === today.getFullYear() &&
                       m.month === today.getMonth() &&
                       day === today.getDate() && (
-                        <Image source={SPRITE} style={styles.sprite} />
+                        <Image source={sprite} style={styles.sprite} />
                       )}
                   </TouchableOpacity>
                 );

@@ -9,7 +9,8 @@ export default function Onboarding4Screen({ navigation }) {
 
   const handleContinue = () => {
     setBackground(selected);
-    navigation.navigate('Gym');
+    // Navigate to the Gym tab inside the Tab navigator
+    navigation.navigate('Tabs', { screen: 'Gym' });
   };
 
   return (

@@ -28,6 +28,7 @@ import ExpCircle from '../components/ExpCircle';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
+import LevelUpModal from '../components/LevelUpModal';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useBackground } from '../context/BackgroundContext';
@@ -162,6 +163,8 @@ export default function GymScreen() {
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
   const { addWorkout } = useStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [showLevelUpModal, setShowLevelUpModal] = useState(false);
+  const [startLevel, setStartLevel] = useState(level);
 
   const showStats = useCallback(() => {
     setShowStatsModal(true);
@@ -423,12 +426,16 @@ const toggleWorkout = useCallback(() => {
         addWorkout(weight, true);
       }
       setSetCounts([]);
+      if (level > startLevel) {
+        setShowLevelUpModal(true);
+      }
     } else if (next) {
       setSetCounts(currentExercises.map(() => 0));
+      setStartLevel(level);
     }
     return next;
   });
-}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout]);
+}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout, level, startLevel]);
 
   useEffect(() => {
     if (workoutActive) {
@@ -711,6 +718,11 @@ const toggleWorkout = useCallback(() => {
           </View>
         </View>
       </Modal>
+
+      <LevelUpModal
+        visible={showLevelUpModal}
+        onClose={() => setShowLevelUpModal(false)}
+      />
 
       {/* Stats Modal */}
       <Modal visible={showStatsModal} transparent animationType="fade">

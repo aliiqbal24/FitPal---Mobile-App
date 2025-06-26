@@ -45,14 +45,15 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body, sprite }) => {
+const Character = React.memo(({ body, sprite, petName }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
   const y = body.position.y - height / 2;
 
   return (
-    <View style={[styles.character, { left: x, top: y, width, height }]}> 
+    <View style={[styles.character, { left: x, top: y, width, height }]}>
+      {petName ? <Text style={styles.petName}>{petName}</Text> : null}
       <Image source={sprite} style={styles.sprite} resizeMode="contain" />
     </View>
   );
@@ -160,7 +161,7 @@ export default function GymScreen() {
     };
   }, [world, characterBody]);
 
-  const { exp, level, addExp, characterId } = useCharacter();
+  const { exp, level, addExp, characterId, petName } = useCharacter();
   const { background } = useBackground();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
   const { addWorkout } = useStats();
@@ -539,7 +540,7 @@ const toggleWorkout = useCallback(() => {
           style={styles.engine}
           onEvent={onEvent}
         >
-          <Character body={characterBody} sprite={sprite} />
+          <Character body={characterBody} sprite={sprite} petName={petName} />
         </GameEngine>
       </View>
       {workoutActive && (
@@ -733,6 +734,7 @@ const toggleWorkout = useCallback(() => {
       <LevelUpModal
         visible={showLevelUpModal}
         onClose={() => setShowLevelUpModal(false)}
+        petName={petName}
       />
 
       {/* Stats Modal */}
@@ -903,6 +905,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  petName: {
+    position: 'absolute',
+    top: -20,
+    fontWeight: '700',
+    color: '#222',
   },
   sprite: {
     width: '100%',

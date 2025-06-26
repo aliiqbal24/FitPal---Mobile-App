@@ -4,7 +4,7 @@ import * as Progress from 'react-native-progress';
 
 const AnimatedBar = Animated.createAnimatedComponent(Progress.Bar);
 
-export default function LevelUpModal({ visible, onClose }) {
+export default function LevelUpModal({ visible, onClose, petName }) {
   const progress = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -33,7 +33,9 @@ export default function LevelUpModal({ visible, onClose }) {
     <Modal transparent visible={visible} animationType="fade">
       <View style={styles.overlay}>
         <View style={styles.box}>
-          <Text style={styles.text}>Good Work!!!</Text>
+          <Text style={styles.text}>
+            {`Good Luck, ${petName || 'your pet'} is getting stronger!`}
+          </Text>
           <AnimatedBar
             progress={progress}
             width={200}

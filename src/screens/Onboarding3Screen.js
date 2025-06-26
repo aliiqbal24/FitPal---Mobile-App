@@ -30,7 +30,6 @@ export default function Onboarding3Screen({ navigation }) {
           <View style={styles.progress} />
         </View>
       </View>
-      <Text style={styles.title}>Choose your gym buddy:</Text>
       <View style={styles.options}>
         {CHARACTER_OPTIONS.map(opt => (
           <TouchableOpacity

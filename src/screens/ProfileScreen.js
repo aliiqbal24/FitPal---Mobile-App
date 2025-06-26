@@ -8,7 +8,6 @@ import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
-import useSwipeTabs from '../navigation/useSwipeTabs';
 import { Ionicons } from '@expo/vector-icons';
 
 const INITIAL_GALLERY = [];
@@ -28,7 +27,6 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { level, characterId } = useCharacter();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
-  const panHandlers = useSwipeTabs();
 
   const openViewer = index => {
     const items = tab === 'Gallery' ? galleryItems : privateItems;
@@ -74,7 +72,7 @@ export default function ProfileScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.container} {...panHandlers}>
+    <SafeAreaView style={styles.container}>
       {/* Top Bar */}
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.navigate('Settings')}>

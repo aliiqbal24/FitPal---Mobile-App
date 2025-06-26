@@ -6,7 +6,9 @@ const CharacterContext = createContext({
   exp: 0,
   level: 1,
   characterId: 'GiraffeF',
+  petName: '',
   setCharacterId: () => {},
+  setPetName: () => {},
   addExp: () => {},
 });
 
@@ -14,8 +16,9 @@ export const CharacterProvider = ({ children }) => {
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
   const [characterId, setCharacterId] = useState('GiraffeF');
+  const [petName, setPetName] = useState('');
 
-  // Load saved experience and character on mount
+  // Load saved experience, character and pet name on mount
   useEffect(() => {
     (async () => {
       try {
@@ -30,6 +33,10 @@ export const CharacterProvider = ({ children }) => {
         const char = await AsyncStorage.getItem('characterId');
         if (char) {
           setCharacterId(char);
+        }
+        const name = await AsyncStorage.getItem('petName');
+        if (name) {
+          setPetName(name);
         }
       } catch {}
     })();
@@ -49,13 +56,18 @@ export const CharacterProvider = ({ children }) => {
     AsyncStorage.setItem('characterId', characterId);
   }, [characterId]);
 
+  // Persist pet name
+  useEffect(() => {
+    AsyncStorage.setItem('petName', petName);
+  }, [petName]);
+
   const addExp = useCallback(amount => {
     setExp(e => e + amount);
   }, []);
 
   return (
     <CharacterContext.Provider
-      value={{ exp, level, characterId, setCharacterId, addExp }}
+      value={{ exp, level, characterId, petName, setCharacterId, setPetName, addExp }}
     >
       {children}
     </CharacterContext.Provider>

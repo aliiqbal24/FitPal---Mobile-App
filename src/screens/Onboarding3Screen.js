@@ -12,7 +12,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_OPTIONS } from '../data/characters';
-import Filter from 'bad-words';
+import { Filter } from 'bad-words';
 
 export default function Onboarding3Screen({ navigation }) {
   const { characterId, petName, setCharacterId, setPetName } = useCharacter();
@@ -44,7 +44,10 @@ export default function Onboarding3Screen({ navigation }) {
         {CHARACTER_OPTIONS.map(opt => (
           <TouchableOpacity
             key={opt.id}
-            style={[styles.option, selected === opt.id && styles.optionSelected]}
+            style={[
+              styles.option,
+              selected === opt.id && styles.optionSelected,
+            ]}
             onPress={() => setSelected(opt.id)}
           >
             <Image source={opt.image} style={styles.avatar} />

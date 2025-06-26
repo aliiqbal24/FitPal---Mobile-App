@@ -38,7 +38,7 @@ export default function Onboarding1Screen({ navigation }) {
 
       <Text style={styles.title}>Height & weight</Text>
       <Text style={styles.subtitle}>
-        This will be used to calibrate your custom plan.
+        This will help us track your bodyweight lifts.
       </Text>
 
       <View style={styles.unitToggle}>

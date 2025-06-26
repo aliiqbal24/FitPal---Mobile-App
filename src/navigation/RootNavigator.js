@@ -7,6 +7,7 @@ import FriendsScreen from '../screens/FriendsScreen';
 import Onboarding1Screen from '../screens/Onboarding1Screen';
 import Onboarding2Screen from '../screens/Onboarding2Screen';
 import Onboarding3Screen from '../screens/Onboarding3Screen';
+import Onboarding4Screen from '../screens/Onboarding4Screen';
 import GenderScreen from '../screens/GenderScreen';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Onboarding1" component={Onboarding1Screen} />
       <Stack.Screen name="Onboarding2" component={Onboarding2Screen} />
       <Stack.Screen name="Onboarding3" component={Onboarding3Screen} />
+      <Stack.Screen name="Onboarding4" component={Onboarding4Screen} />
     </Stack.Navigator>
   );
 }

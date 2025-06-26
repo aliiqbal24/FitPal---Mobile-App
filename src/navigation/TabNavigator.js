@@ -8,6 +8,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import Onboarding1Screen from '../screens/Onboarding1Screen';
 import Onboarding2Screen from '../screens/Onboarding2Screen';
 import Onboarding3Screen from '../screens/Onboarding3Screen';
+import Onboarding4Screen from '../screens/Onboarding4Screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -29,7 +30,8 @@ export default function TabNavigator() {
           } else if (
             route.name === 'Onboarding1' ||
             route.name === 'Onboarding2' ||
-            route.name === 'Onboarding3'
+            route.name === 'Onboarding3' ||
+            route.name === 'Onboarding4'
           ) {
             iconName = focused ? 'ellipse' : 'ellipse-outline';
           }
@@ -48,6 +50,7 @@ export default function TabNavigator() {
       <Tab.Screen name="Onboarding1" component={Onboarding1Screen} />
       <Tab.Screen name="Onboarding2" component={Onboarding2Screen} />
       <Tab.Screen name="Onboarding3" component={Onboarding3Screen} />
+      <Tab.Screen name="Onboarding4" component={Onboarding4Screen} />
     </Tab.Navigator>
   );
 }

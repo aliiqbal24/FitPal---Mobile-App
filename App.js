@@ -8,6 +8,7 @@ import RootNavigator from './src/navigation/RootNavigator';
 import { CharacterProvider } from './src/context/CharacterContext';
 import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
+import { BackgroundProvider } from './src/context/BackgroundContext';
 import { Asset } from 'expo-asset';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
@@ -46,9 +47,11 @@ export default function App() {
         <HistoryProvider>
           <StatsProvider>
             <CharacterProvider>
-              <NavigationContainer>
-                <RootNavigator />
-              </NavigationContainer>
+              <BackgroundProvider>
+                <NavigationContainer>
+                  <RootNavigator />
+                </NavigationContainer>
+              </BackgroundProvider>
             </CharacterProvider>
           </StatsProvider>
         </HistoryProvider>

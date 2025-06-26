@@ -30,6 +30,9 @@ import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
+import { useBackground } from '../context/BackgroundContext';
+import oldBG from '../../assets/backgrounds/APP_BG_oldschool.png';
+import newBG from '../../assets/backgrounds/APP_BG_newschool.png';
 
 const SPRITE_SIZE = 120;
 
@@ -155,6 +158,7 @@ export default function GymScreen() {
   }, [world, characterBody]);
 
   const { exp, level, addExp, characterId } = useCharacter();
+  const { background } = useBackground();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
   const { addWorkout } = useStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
@@ -457,9 +461,11 @@ const toggleWorkout = useCallback(() => {
     [currentExercises]
   );
 
+  const bgSource = background === 'oldschool' ? oldBG : newBG;
+
   return (
     <ImageBackground
-      source={require('../../assets/backgrounds/APP_BG_newschool.png')}
+      source={bgSource}
       style={styles.background}
       resizeMode="cover"
     >

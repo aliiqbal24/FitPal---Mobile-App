@@ -6,17 +6,27 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  TextInput,
+  Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_OPTIONS } from '../data/characters';
+import Filter from 'bad-words';
 
 export default function Onboarding3Screen({ navigation }) {
-  const { characterId, setCharacterId } = useCharacter();
+  const { characterId, petName, setCharacterId, setPetName } = useCharacter();
   const [selected, setSelected] = useState(characterId);
+  const [name, setName] = useState(petName);
+  const filter = new Filter();
 
   const handleContinue = () => {
+    if (!name || filter.isProfane(name)) {
+      Alert.alert('Invalid Name', 'Please choose an appropriate pet name.');
+      return;
+    }
     setCharacterId(selected);
+    setPetName(name.trim());
     navigation.navigate('Onboarding4');
   };
 
@@ -41,6 +51,13 @@ export default function Onboarding3Screen({ navigation }) {
           </TouchableOpacity>
         ))}
       </View>
+      <TextInput
+        style={styles.input}
+        placeholder="Pet Name"
+        placeholderTextColor="#888"
+        value={name}
+        onChangeText={setName}
+      />
       <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
         <Text style={styles.continueText}>Continue</Text>
       </TouchableOpacity>
@@ -100,6 +117,14 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     resizeMode: 'contain',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 8,
+    marginBottom: 12,
+    color: '#222',
   },
   continueButton: {
     backgroundColor: DARK,

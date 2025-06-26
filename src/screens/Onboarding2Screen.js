@@ -5,20 +5,14 @@ import {
   SafeAreaView,
   TouchableOpacity,
   StyleSheet,
-  Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import WheelPickerExpo from 'react-native-wheel-picker-expo';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Onboarding2Screen({ navigation }) {
-  const [month, setMonth] = useState('January');
-  const [day, setDay] = useState('1');
-  const [year, setYear] = useState('2000');
-
-  const handleContinue = () => {
-    const birthdate = `${month} ${day}, ${year}`;
-    navigation.navigate('Onboarding3', { birthdate });
-  };
+  const [monthIndex, setMonthIndex] = useState(0);
+  const [dayIndex, setDayIndex] = useState(0);
+  const [yearIndex, setYearIndex] = useState(24);
 
   const months = [
     'January',
@@ -37,6 +31,15 @@ export default function Onboarding2Screen({ navigation }) {
 
   const days = Array.from({ length: 31 }, (_, i) => `${i + 1}`);
   const years = Array.from({ length: 100 }, (_, i) => `${2024 - i}`);
+
+  const month = months[monthIndex];
+  const day = days[dayIndex];
+  const year = years[yearIndex];
+
+  const handleContinue = () => {
+    const birthdate = `${month} ${day}, ${year}`;
+    navigation.navigate('Onboarding3', { birthdate });
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,39 +62,33 @@ export default function Onboarding2Screen({ navigation }) {
       {/* Pickers */}
       <View style={styles.pickerRow}>
         <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={month}
-            onValueChange={(value) => setMonth(value)}
-            style={styles.picker}
-          >
-            {months.map((m) => (
-              <Picker.Item label={m} value={m} key={m} />
-            ))}
-          </Picker>
+          <WheelPickerExpo
+            height={140}
+            width={80}
+            items={months.map((m, i) => ({ label: m, value: i }))}
+            initialSelectedIndex={monthIndex}
+            onChange={({ index }) => setMonthIndex(index)}
+          />
         </View>
 
         <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={day}
-            onValueChange={(value) => setDay(value)}
-            style={styles.picker}
-          >
-            {days.map((d) => (
-              <Picker.Item label={d} value={d} key={d} />
-            ))}
-          </Picker>
+          <WheelPickerExpo
+            height={140}
+            width={80}
+            items={days.map((d, i) => ({ label: d, value: i }))}
+            initialSelectedIndex={dayIndex}
+            onChange={({ index }) => setDayIndex(index)}
+          />
         </View>
 
         <View style={styles.pickerContainer}>
-          <Picker
-            selectedValue={year}
-            onValueChange={(value) => setYear(value)}
-            style={styles.picker}
-          >
-            {years.map((y) => (
-              <Picker.Item label={y} value={y} key={y} />
-            ))}
-          </Picker>
+          <WheelPickerExpo
+            height={140}
+            width={80}
+            items={years.map((y, i) => ({ label: y, value: i }))}
+            initialSelectedIndex={yearIndex}
+            onChange={({ index }) => setYearIndex(index)}
+          />
         </View>
       </View>
 
@@ -145,10 +142,6 @@ const styles = StyleSheet.create({
   pickerContainer: {
     flex: 1,
     alignItems: 'center',
-  },
-  picker: {
-    width: Platform.OS === 'ios' ? undefined : 120,
-    height: 140,
   },
   continueButton: {
     backgroundColor: '#1C1B1F',

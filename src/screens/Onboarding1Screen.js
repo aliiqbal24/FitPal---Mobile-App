@@ -6,19 +6,24 @@ import {
   TouchableOpacity,
   StyleSheet,
   Switch,
-  Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import WheelPickerExpo from 'react-native-wheel-picker-expo';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function Onboarding1Screen({ navigation }) {
   const [useMetric, setUseMetric] = useState(false);
-  const [feet, setFeet] = useState('5');
-  const [inches, setInches] = useState('6');
-  const [weight, setWeight] = useState('120');
+  const [feetIndex, setFeetIndex] = useState(1);
+  const [inchIndex, setInchIndex] = useState(6);
+  const [cmIndex, setCmIndex] = useState(0);
+  const [weightIndex, setWeightIndex] = useState(30);
+
+  const feet = feetIndex + 4;
+  const inches = inchIndex;
+  const centimeters = cmIndex + 100;
+  const weight = weightIndex + 100;
 
   const handleContinue = () => {
-    const height = useMetric ? `${feet} cm` : `${feet}ft ${inches}in`;
+    const height = useMetric ? `${centimeters} cm` : `${feet}ft ${inches}in`;
     const weightFormatted = useMetric ? `${weight} kg` : `${weight} lb`;
     navigation.navigate('Onboarding2', { height, weight: weightFormatted });
   };
@@ -57,74 +62,59 @@ export default function Onboarding1Screen({ navigation }) {
           <>
             <View style={styles.pickerContainer}>
               <Text style={styles.pickerLabel}>Height</Text>
-              <Picker
-                selectedValue={feet}
-                onValueChange={(itemValue) => setFeet(itemValue)}
-                style={styles.picker}
-              >
-                {Array.from({ length: 5 }, (_, i) => (
-                  <Picker.Item
-                    label={`${i + 4} ft`}
-                    value={`${i + 4}`}
-                    key={`ft-${i}`}
-                  />
-                ))}
-              </Picker>
+              <WheelPickerExpo
+                height={120}
+                width={80}
+                items={Array.from({ length: 5 }, (_, i) => ({
+                  label: `${i + 4} ft`,
+                  value: i,
+                }))}
+                initialSelectedIndex={feetIndex}
+                onChange={({ index }) => setFeetIndex(index)}
+              />
             </View>
             <View style={styles.pickerContainer}>
               <Text style={styles.pickerLabel}></Text>
-              <Picker
-                selectedValue={inches}
-                onValueChange={(itemValue) => setInches(itemValue)}
-                style={styles.picker}
-              >
-                {Array.from({ length: 12 }, (_, i) => (
-                  <Picker.Item
-                    label={`${i} in`}
-                    value={`${i}`}
-                    key={`in-${i}`}
-                  />
-                ))}
-              </Picker>
+              <WheelPickerExpo
+                height={120}
+                width={80}
+                items={Array.from({ length: 12 }, (_, i) => ({
+                  label: `${i} in`,
+                  value: i,
+                }))}
+                initialSelectedIndex={inchIndex}
+                onChange={({ index }) => setInchIndex(index)}
+              />
             </View>
           </>
         ) : (
           <View style={styles.pickerContainer}>
             <Text style={styles.pickerLabel}>Height</Text>
-            <Picker
-              selectedValue={feet}
-              onValueChange={(itemValue) => setFeet(itemValue)}
-              style={styles.picker}
-            >
-              {Array.from({ length: 100 }, (_, i) => (
-                <Picker.Item
-                  label={`${i + 100} cm`}
-                  value={`${i + 100}`}
-                  key={`cm-${i}`}
-                />
-              ))}
-            </Picker>
+            <WheelPickerExpo
+              height={120}
+              width={80}
+              items={Array.from({ length: 100 }, (_, i) => ({
+                label: `${i + 100} cm`,
+                value: i,
+              }))}
+              initialSelectedIndex={cmIndex}
+              onChange={({ index }) => setCmIndex(index)}
+            />
           </View>
         )}
 
         <View style={styles.pickerContainer}>
           <Text style={styles.pickerLabel}>Weight</Text>
-          <Picker
-            selectedValue={weight}
-            onValueChange={(itemValue) => setWeight(itemValue)}
-            style={styles.picker}
-          >
-            {Array.from({ length: 100 }, (_, i) => {
+          <WheelPickerExpo
+            height={120}
+            width={80}
+            items={Array.from({ length: 100 }, (_, i) => {
               const w = i + 100;
-              return (
-                <Picker.Item
-                  label={useMetric ? `${w} kg` : `${w} lb`}
-                  value={`${w}`}
-                  key={`wt-${w}`}
-                />
-              );
+              return { label: useMetric ? `${w} kg` : `${w} lb`, value: i };
             })}
-          </Picker>
+            initialSelectedIndex={weightIndex}
+            onChange={({ index }) => setWeightIndex(index)}
+          />
         </View>
       </View>
 
@@ -208,10 +198,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 8,
-  },
-  picker: {
-    width: Platform.OS === 'ios' ? undefined : 120,
-    height: 120,
   },
   continueButton: {
     backgroundColor: DARK_BLUE,

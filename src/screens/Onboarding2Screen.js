@@ -63,31 +63,40 @@ export default function Onboarding2Screen({ navigation }) {
       <View style={styles.pickerRow}>
         <View style={styles.pickerContainer}>
           <WheelPickerExpo
-            height={140}
-            width={80}
+            height={180}
+            width={100}
             items={months.map((m, i) => ({ label: m, value: i }))}
             initialSelectedIndex={monthIndex}
             onChange={({ index }) => setMonthIndex(index)}
+            renderItem={({ item }) => (
+              <Text style={styles.pickerItem}>{item.label}</Text>
+            )}
           />
         </View>
 
         <View style={styles.pickerContainer}>
           <WheelPickerExpo
-            height={140}
-            width={80}
+            height={180}
+            width={100}
             items={days.map((d, i) => ({ label: d, value: i }))}
             initialSelectedIndex={dayIndex}
             onChange={({ index }) => setDayIndex(index)}
+            renderItem={({ item }) => (
+              <Text style={styles.pickerItem}>{item.label}</Text>
+            )}
           />
         </View>
 
         <View style={styles.pickerContainer}>
           <WheelPickerExpo
-            height={140}
-            width={80}
+            height={180}
+            width={100}
             items={years.map((y, i) => ({ label: y, value: i }))}
             initialSelectedIndex={yearIndex}
             onChange={({ index }) => setYearIndex(index)}
+            renderItem={({ item }) => (
+              <Text style={styles.pickerItem}>{item.label}</Text>
+            )}
           />
         </View>
       </View>
@@ -105,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 24,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   topBar: {
     flexDirection: 'row',
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '600',
-    marginTop: 30,
+    marginTop: 20,
   },
   subtitle: {
     fontSize: 14,
@@ -137,7 +146,7 @@ const styles = StyleSheet.create({
   pickerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 40,
+    marginTop: 30,
   },
   pickerContainer: {
     flex: 1,
@@ -148,11 +157,16 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     paddingVertical: 16,
     alignItems: 'center',
+    marginTop: 'auto',
     marginBottom: 30,
   },
   continueText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
+  },
+  pickerItem: {
+    fontSize: 24,
+    textAlign: 'center',
   },
 });

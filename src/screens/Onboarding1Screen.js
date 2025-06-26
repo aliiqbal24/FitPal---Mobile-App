@@ -63,27 +63,33 @@ export default function Onboarding1Screen({ navigation }) {
             <View style={styles.pickerContainer}>
               <Text style={styles.pickerLabel}>Height</Text>
               <WheelPickerExpo
-                height={120}
-                width={80}
+                height={180}
+                width={100}
                 items={Array.from({ length: 5 }, (_, i) => ({
                   label: `${i + 4} ft`,
                   value: i,
                 }))}
                 initialSelectedIndex={feetIndex}
                 onChange={({ index }) => setFeetIndex(index)}
+                renderItem={({ item }) => (
+                  <Text style={styles.pickerItem}>{item.label}</Text>
+                )}
               />
             </View>
             <View style={styles.pickerContainer}>
               <Text style={styles.pickerLabel}></Text>
               <WheelPickerExpo
-                height={120}
-                width={80}
+                height={180}
+                width={100}
                 items={Array.from({ length: 12 }, (_, i) => ({
                   label: `${i} in`,
                   value: i,
                 }))}
                 initialSelectedIndex={inchIndex}
                 onChange={({ index }) => setInchIndex(index)}
+                renderItem={({ item }) => (
+                  <Text style={styles.pickerItem}>{item.label}</Text>
+                )}
               />
             </View>
           </>
@@ -91,14 +97,17 @@ export default function Onboarding1Screen({ navigation }) {
           <View style={styles.pickerContainer}>
             <Text style={styles.pickerLabel}>Height</Text>
             <WheelPickerExpo
-              height={120}
-              width={80}
+              height={180}
+              width={100}
               items={Array.from({ length: 100 }, (_, i) => ({
                 label: `${i + 100} cm`,
                 value: i,
               }))}
               initialSelectedIndex={cmIndex}
               onChange={({ index }) => setCmIndex(index)}
+              renderItem={({ item }) => (
+                <Text style={styles.pickerItem}>{item.label}</Text>
+              )}
             />
           </View>
         )}
@@ -106,14 +115,17 @@ export default function Onboarding1Screen({ navigation }) {
         <View style={styles.pickerContainer}>
           <Text style={styles.pickerLabel}>Weight</Text>
           <WheelPickerExpo
-            height={120}
-            width={80}
+            height={180}
+            width={100}
             items={Array.from({ length: 100 }, (_, i) => {
               const w = i + 100;
               return { label: useMetric ? `${w} kg` : `${w} lb`, value: i };
             })}
             initialSelectedIndex={weightIndex}
             onChange={({ index }) => setWeightIndex(index)}
+            renderItem={({ item }) => (
+              <Text style={styles.pickerItem}>{item.label}</Text>
+            )}
           />
         </View>
       </View>
@@ -132,7 +144,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 24,
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
   },
   topBar: {
     flexDirection: 'row',
@@ -154,13 +166,13 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 24,
     fontWeight: '700',
-    marginTop: 20,
+    marginTop: 10,
     textAlign: 'center',
   },
   title: {
     fontSize: 28,
     fontWeight: '600',
-    marginTop: 30,
+    marginTop: 20,
   },
   subtitle: {
     fontSize: 14,
@@ -171,7 +183,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30,
+    marginTop: 20,
   },
   unitActive: {
     fontWeight: '600',
@@ -195,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   pickerLabel: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '500',
     marginBottom: 8,
   },
@@ -204,11 +216,16 @@ const styles = StyleSheet.create({
     borderRadius: 32,
     paddingVertical: 16,
     alignItems: 'center',
+    marginTop: 'auto',
     marginBottom: 30,
   },
   continueText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
+  },
+  pickerItem: {
+    fontSize: 24,
+    textAlign: 'center',
   },
 });

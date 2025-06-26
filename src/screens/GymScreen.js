@@ -25,6 +25,8 @@ import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
 import { toDateKey } from '../utils/dateUtils';
 import ExpCircle from '../components/ExpCircle';
+import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
+import ExpBar from '../components/ExpBar';
 import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
@@ -511,8 +513,17 @@ const toggleWorkout = useCallback(() => {
       </ScrollView>
       <View style={styles.expImageWrapper}>
         <TouchableOpacity onPress={showStats}>
-          <Image source={sprite} style={styles.expImage} resizeMode="contain" />
+          <AvatarWithLevelBadge
+            source={sprite}
+            size={150}
+            level={workoutActive ? null : level}
+          />
         </TouchableOpacity>
+        {!workoutActive && (
+          <View style={styles.expBar}>
+            <ExpBar exp={exp} />
+          </View>
+        )}
       </View>
       <View style={styles.gameContainer}>
         <GameEngine
@@ -931,6 +942,9 @@ const styles = StyleSheet.create({
   expImage: {
     width: 150,
     height: 150,
+  },
+  expBar: {
+    marginTop: 8,
   },
   workoutToggleBtn: {
     position: 'absolute',

@@ -68,8 +68,8 @@ export default function Onboarding2Screen({ navigation }) {
             items={months.map((m, i) => ({ label: m, value: i }))}
             initialSelectedIndex={monthIndex}
             onChange={({ index }) => setMonthIndex(index)}
-            renderItem={({ item }) => (
-              <Text style={styles.pickerItem}>{item.label}</Text>
+            renderItem={({ label }) => (
+              <Text style={styles.pickerItem}>{label}</Text>
             )}
           />
         </View>
@@ -81,8 +81,8 @@ export default function Onboarding2Screen({ navigation }) {
             items={days.map((d, i) => ({ label: d, value: i }))}
             initialSelectedIndex={dayIndex}
             onChange={({ index }) => setDayIndex(index)}
-            renderItem={({ item }) => (
-              <Text style={styles.pickerItem}>{item.label}</Text>
+            renderItem={({ label }) => (
+              <Text style={styles.pickerItem}>{label}</Text>
             )}
           />
         </View>
@@ -94,8 +94,8 @@ export default function Onboarding2Screen({ navigation }) {
             items={years.map((y, i) => ({ label: y, value: i }))}
             initialSelectedIndex={yearIndex}
             onChange={({ index }) => setYearIndex(index)}
-            renderItem={({ item }) => (
-              <Text style={styles.pickerItem}>{item.label}</Text>
+            renderItem={({ label }) => (
+              <Text style={styles.pickerItem}>{label}</Text>
             )}
           />
         </View>

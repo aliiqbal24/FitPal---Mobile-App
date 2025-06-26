@@ -71,8 +71,8 @@ export default function Onboarding1Screen({ navigation }) {
                 }))}
                 initialSelectedIndex={feetIndex}
                 onChange={({ index }) => setFeetIndex(index)}
-                renderItem={({ item }) => (
-                  <Text style={styles.pickerItem}>{item.label}</Text>
+                renderItem={({ label }) => (
+                  <Text style={styles.pickerItem}>{label}</Text>
                 )}
               />
             </View>
@@ -87,8 +87,8 @@ export default function Onboarding1Screen({ navigation }) {
                 }))}
                 initialSelectedIndex={inchIndex}
                 onChange={({ index }) => setInchIndex(index)}
-                renderItem={({ item }) => (
-                  <Text style={styles.pickerItem}>{item.label}</Text>
+                renderItem={({ label }) => (
+                  <Text style={styles.pickerItem}>{label}</Text>
                 )}
               />
             </View>
@@ -105,8 +105,8 @@ export default function Onboarding1Screen({ navigation }) {
               }))}
               initialSelectedIndex={cmIndex}
               onChange={({ index }) => setCmIndex(index)}
-              renderItem={({ item }) => (
-                <Text style={styles.pickerItem}>{item.label}</Text>
+              renderItem={({ label }) => (
+                <Text style={styles.pickerItem}>{label}</Text>
               )}
             />
           </View>
@@ -123,8 +123,8 @@ export default function Onboarding1Screen({ navigation }) {
             })}
             initialSelectedIndex={weightIndex}
             onChange={({ index }) => setWeightIndex(index)}
-            renderItem={({ item }) => (
-              <Text style={styles.pickerItem}>{item.label}</Text>
+            renderItem={({ label }) => (
+              <Text style={styles.pickerItem}>{label}</Text>
             )}
           />
         </View>

@@ -340,6 +340,8 @@ export default function GymScreen() {
   };
 
   const MAX_EXERCISES = 7;
+  const MAX_REPS = 100;
+  const MAX_WEIGHT = 2000;
 
   const openNewExercise = idx => {
     const exercises = workouts[idx]?.exercises ?? [];
@@ -372,7 +374,24 @@ export default function GymScreen() {
       setsNum = 12;
       Alert.alert('Limit Reached', 'Sets cannot exceed 12.');
     }
-    const ex = { ...exerciseForm, sets: String(setsNum) };
+    let repsNum = parseInt(exerciseForm.reps, 10);
+    if (Number.isNaN(repsNum)) repsNum = 0;
+    if (repsNum > MAX_REPS) {
+      repsNum = MAX_REPS;
+      Alert.alert('Limit Reached', `Reps cannot exceed ${MAX_REPS}.`);
+    }
+    let weightNum = parseFloat(exerciseForm.weight);
+    if (Number.isNaN(weightNum)) weightNum = 0;
+    if (weightNum > MAX_WEIGHT) {
+      weightNum = MAX_WEIGHT;
+      Alert.alert('Limit Reached', `Weight cannot exceed ${MAX_WEIGHT}.`);
+    }
+    const ex = {
+      ...exerciseForm,
+      sets: String(setsNum),
+      reps: String(repsNum),
+      weight: String(weightNum),
+    };
     let didAdd = false;
     setWorkouts(w => {
       const updated = [...w];
@@ -709,7 +728,18 @@ const toggleWorkout = useCallback(() => {
               placeholderTextColor="#888"
               keyboardType="numeric"
               value={exerciseForm.reps}
-              onChangeText={t => setExerciseForm({ ...exerciseForm, reps: t })}
+              onChangeText={t => {
+                let num = parseInt(t, 10);
+                if (!Number.isNaN(num)) {
+                  if (num > MAX_REPS) {
+                    num = MAX_REPS;
+                    Alert.alert('Limit Reached', `Reps cannot exceed ${MAX_REPS}.`);
+                  }
+                  setExerciseForm({ ...exerciseForm, reps: String(num) });
+                } else {
+                  setExerciseForm({ ...exerciseForm, reps: t });
+                }
+              }}
             />
             <TextInput
               style={styles.input}
@@ -717,7 +747,18 @@ const toggleWorkout = useCallback(() => {
               placeholderTextColor="#888"
               keyboardType="numeric"
               value={exerciseForm.weight}
-              onChangeText={t => setExerciseForm({ ...exerciseForm, weight: t })}
+              onChangeText={t => {
+                let num = parseFloat(t);
+                if (!Number.isNaN(num)) {
+                  if (num > MAX_WEIGHT) {
+                    num = MAX_WEIGHT;
+                    Alert.alert('Limit Reached', `Weight cannot exceed ${MAX_WEIGHT}.`);
+                  }
+                  setExerciseForm({ ...exerciseForm, weight: String(num) });
+                } else {
+                  setExerciseForm({ ...exerciseForm, weight: t });
+                }
+              }}
             />
             <TouchableOpacity style={styles.modalButton} onPress={handleSaveExercise}>
               <Text style={styles.modalButtonText}>Save</Text>

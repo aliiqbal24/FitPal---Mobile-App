@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback } from 'react';
-import { StyleSheet, View, Image, Alert, Button, Dimensions } from 'react-native';
+import { StyleSheet, View, Image, Alert, Button, Dimensions, Text } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,7 +15,7 @@ const Physics = (entities, { time }) => {
   return entities;
 };
 
-const Character = React.memo(({ body, sprite }) => {
+const Character = React.memo(({ body, sprite, petName }) => {
   const width = body.bounds.max.x - body.bounds.min.x;
   const height = body.bounds.max.y - body.bounds.min.y;
   const x = body.position.x - width / 2;
@@ -23,6 +23,7 @@ const Character = React.memo(({ body, sprite }) => {
 
   return (
     <View style={[styles.character, { left: x, top: y, width, height }]}>
+      {petName ? <Text style={styles.petName}>{petName}</Text> : null}
       <Image source={sprite} style={styles.sprite} resizeMode="contain" />
     </View>
   );
@@ -45,7 +46,7 @@ export default function GymGameScreen() {
     };
   }, [world, characterBody]);
 
-  const { exp, level, addExp, characterId } = useCharacter();
+  const { exp, level, addExp, characterId, petName } = useCharacter();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
 
   const addSet = useCallback(() => {
@@ -80,7 +81,7 @@ export default function GymGameScreen() {
         entities={entities}
         onEvent={onEvent}
       >
-        <Character body={characterBody} sprite={sprite} />
+        <Character body={characterBody} sprite={sprite} petName={petName} />
       </GameEngine>
       <View style={styles.buttonContainer}>
         <Button title="+ Set" onPress={addSet} />
@@ -101,6 +102,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  petName: {
+    position: 'absolute',
+    top: -20,
+    fontWeight: '700',
+    color: '#222',
   },
   sprite: {
     width: '100%',

@@ -1,11 +1,22 @@
 import React from 'react';
 import { View, Image, Text, StyleSheet } from 'react-native';
 
-export default function AvatarWithLevelBadge({ source, size = 72, level = 1 }) {
-  const borderRadius = size / 2;
+export default function AvatarWithLevelBadge({
+  source,
+  size = 72,
+  level = 1,
+  rounded = true,
+}) {
+  const borderRadius = rounded ? size / 2 : 0;
   return (
-    <View style={[styles.container, { width: size, height: size, borderRadius }]}>
-      <Image source={source} style={{ width: size, height: size, borderRadius }} />
+    <View
+      style={[styles.container, { width: size, height: size, borderRadius }]}
+    >
+      <Image
+        source={source}
+        style={{ width: size, height: size, borderRadius }}
+        resizeMode="contain"
+      />
       {level != null && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{level}</Text>

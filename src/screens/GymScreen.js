@@ -524,6 +524,7 @@ const toggleWorkout = useCallback(() => {
             source={sprite}
             size={150}
             level={workoutActive ? null : level}
+            rounded={false}
           />
         </TouchableOpacity>
         {!workoutActive && (

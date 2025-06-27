@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,9 +14,22 @@ const routes = [
   { key: 'History', icon: 'calendar' },
 ];
 
-export default function TabNavigator() {
+export default function TabNavigator({ route }) {
   const layout = useWindowDimensions();
-  const [index, setIndex] = useState(0);
+  const initialRoute = route?.params?.screen;
+  const initialIndex = initialRoute === 'Gym' ? 1 : initialRoute === 'History' ? 2 : 0;
+  const [index, setIndex] = useState(initialIndex);
+
+  useEffect(() => {
+    const newRoute = route?.params?.screen;
+    if (newRoute === 'Gym') {
+      setIndex(1);
+    } else if (newRoute === 'History') {
+      setIndex(2);
+    } else if (newRoute === 'Profile') {
+      setIndex(0);
+    }
+  }, [route?.params?.screen]);
 
   const renderScene = SceneMap({
     Profile: ProfileScreen,

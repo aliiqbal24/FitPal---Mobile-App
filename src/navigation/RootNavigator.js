@@ -4,12 +4,17 @@ import TabNavigator from './TabNavigator';
 import SettingsScreen from '../screens/SettingsScreen';
 import ActivityScreen from '../screens/ActivityScreen';
 import FriendsScreen from '../screens/FriendsScreen';
+import ComicScreen from '../screens/ComicScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false }}
+      initialRouteName="Comic"
+    >
+      <Stack.Screen name="Comic" component={ComicScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Activity" component={ActivityScreen} />

@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   Image,
   StyleSheet,
   TextInput,
   Alert,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_OPTIONS } from '../data/characters';
 import { Filter } from 'bad-words';
@@ -31,7 +30,7 @@ export default function Onboarding3Screen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
       <View style={styles.options}>
         {CHARACTER_OPTIONS.map(opt => (
           <TouchableOpacity

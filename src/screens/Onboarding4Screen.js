@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useBackground } from '../context/BackgroundContext';
 
 export default function Onboarding4Screen({ navigation }) {
@@ -14,7 +14,7 @@ export default function Onboarding4Screen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
 
       <View style={styles.options}>
         <TouchableOpacity

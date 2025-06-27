@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
   Switch,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WheelPickerExpo from 'react-native-wheel-picker-expo';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function Onboarding1Screen({ navigation }) {
   const [useMetric, setUseMetric] = useState(false);
@@ -29,7 +28,7 @@ export default function Onboarding1Screen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
 
       <Text style={styles.header}>Build your gym buddy</Text>
 

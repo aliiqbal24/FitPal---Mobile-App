@@ -7,7 +7,7 @@ import { CHARACTER_IMAGES } from '../data/characters';
 
 export default function ProfileModal({ isVisible, onClose, level = 1 }) {
   const { characterId } = useCharacter();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
   return (
     <Modal
       visible={isVisible}

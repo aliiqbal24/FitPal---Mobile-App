@@ -5,7 +5,7 @@ import { getLevelInfo } from '../utils/levelUtils';
 const CharacterContext = createContext({
   exp: 0,
   level: 1,
-  characterId: 'GiraffeF',
+  characterId: 'GorillaM',
   petName: '',
   setCharacterId: () => {},
   setPetName: () => {},
@@ -15,7 +15,7 @@ const CharacterContext = createContext({
 export const CharacterProvider = ({ children }) => {
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
-  const [characterId, setCharacterId] = useState('GiraffeF');
+  const [characterId, setCharacterId] = useState('GorillaM');
   const [petName, setPetName] = useState('');
 
   // Load saved experience, character and pet name on mount

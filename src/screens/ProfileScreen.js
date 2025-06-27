@@ -26,7 +26,7 @@ export default function ProfileScreen() {
   const [viewerIndex, setViewerIndex] = useState(0);
   const navigation = useNavigation();
   const { level, characterId } = useCharacter();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
   const openViewer = index => {
     const items = tab === 'Gallery' ? galleryItems : privateItems;

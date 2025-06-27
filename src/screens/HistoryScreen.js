@@ -35,7 +35,7 @@ export default function HistoryScreen() {
   const today = new Date();
 
   const { characterId } = useCharacter();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
   // Build the list of selectable months from April 2025 to today
   const earliest = new Date(2025, 3, 1); // April 2025

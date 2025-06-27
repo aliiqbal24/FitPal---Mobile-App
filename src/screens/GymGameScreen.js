@@ -47,7 +47,7 @@ export default function GymGameScreen() {
   }, [world, characterBody]);
 
   const { exp, level, addExp, characterId, petName } = useCharacter();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
   const addSet = useCallback(() => {
     addExp(1);

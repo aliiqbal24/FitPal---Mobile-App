@@ -161,7 +161,7 @@ export default function GymScreen() {
 
   const { exp, level, addExp, characterId, petName } = useCharacter();
   const { background } = useBackground();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GiraffeF;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
   const { addWorkout } = useStats();
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);

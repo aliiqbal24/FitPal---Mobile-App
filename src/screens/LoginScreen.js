@@ -15,7 +15,7 @@ const OnboardingScreen = ({ navigation }) => {
       </View>
       <TouchableOpacity
         style={styles.getStartedButton}
-        onPress={() => navigation.navigate('Gender')}
+        onPress={() => {}}
       >
         <Text style={styles.buttonText}>Get Started</Text>
       </TouchableOpacity>

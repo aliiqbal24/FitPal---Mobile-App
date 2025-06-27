@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 import GymScreen from '../screens/GymScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import LoginScreen from '../screens/LoginScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 const routes = [
   { key: 'Profile', icon: 'person' },
   { key: 'Gym', icon: 'barbell' },
   { key: 'History', icon: 'calendar' },
-  { key: 'Login', icon: 'log-in' },
 ];
 
 export default function TabNavigator() {
@@ -23,7 +22,6 @@ export default function TabNavigator() {
     Profile: ProfileScreen,
     Gym: GymScreen,
     History: HistoryScreen,
-    Login: LoginScreen,
   });
 
   const renderTabBar = () => (
@@ -49,14 +47,17 @@ export default function TabNavigator() {
   );
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={renderTabBar}
-      swipeEnabled
-    />
+    <SafeAreaView style={{ flex: 1 }}>
+      <TabView
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+        renderTabBar={() => null}
+        swipeEnabled
+      />
+      {renderTabBar()}
+    </SafeAreaView>
   );
 }
 

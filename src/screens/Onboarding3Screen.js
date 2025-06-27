@@ -32,14 +32,6 @@ export default function Onboarding3Screen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <View style={styles.progressBar}>
-          <View style={styles.progress} />
-        </View>
-      </View>
       <View style={styles.options}>
         {CHARACTER_OPTIONS.map(opt => (
           <TouchableOpacity
@@ -76,23 +68,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 24,
     justifyContent: 'space-between',
-  },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    backgroundColor: '#eee',
-    marginHorizontal: 12,
-    borderRadius: 2,
-  },
-  progress: {
-    width: '40%',
-    height: '100%',
-    backgroundColor: DARK,
-    borderRadius: 2,
   },
   title: {
     fontSize: 28,

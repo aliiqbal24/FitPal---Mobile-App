@@ -43,15 +43,6 @@ export default function Onboarding2Screen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <View style={styles.progressBar}>
-          <View style={styles.progress} />
-        </View>
-      </View>
 
       {/* Header */}
       <Text style={styles.title}>When were you born?</Text>
@@ -115,23 +106,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 24,
     justifyContent: 'flex-start',
-  },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    backgroundColor: '#eee',
-    marginHorizontal: 12,
-    borderRadius: 2,
-  },
-  progress: {
-    width: '30%',
-    height: '100%',
-    backgroundColor: '#1C1B1F',
-    borderRadius: 2,
   },
   title: {
     fontSize: 28,

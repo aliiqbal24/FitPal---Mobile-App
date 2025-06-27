@@ -30,14 +30,6 @@ export default function Onboarding1Screen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Ionicons name="arrow-back" size={24} color="black" />
-        </TouchableOpacity>
-        <View style={styles.progressBar}>
-          <View style={styles.progress} />
-        </View>
-      </View>
 
       <Text style={styles.header}>Build your gym buddy</Text>
 
@@ -145,23 +137,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 24,
     justifyContent: 'flex-start',
-  },
-  topBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  progressBar: {
-    flex: 1,
-    height: 4,
-    backgroundColor: '#eee',
-    marginHorizontal: 12,
-    borderRadius: 2,
-  },
-  progress: {
-    width: '20%',
-    height: '100%',
-    backgroundColor: DARK_BLUE,
-    borderRadius: 2,
   },
   header: {
     fontSize: 24,

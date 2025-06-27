@@ -42,7 +42,7 @@ export default function TabNavigator() {
             />
           </TouchableOpacity>
         );
-      })
+      })}
     </View>
   );
 

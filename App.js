@@ -12,6 +12,7 @@ import { BackgroundProvider } from './src/context/BackgroundContext';
 import { Asset } from 'expo-asset';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
+import { COMIC_IMAGES } from './src/data/comicPages';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -27,6 +28,7 @@ export default function App() {
       await Asset.loadAsync([
         ...Object.values(EQUIPMENT_IMAGES),
         ...Object.values(CHARACTER_IMAGES),
+        ...COMIC_IMAGES,
       ]);
       setAssetsLoaded(true);
     }

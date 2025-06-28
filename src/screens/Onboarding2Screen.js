@@ -2,12 +2,11 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WheelPickerExpo from 'react-native-wheel-picker-expo';
-import { Ionicons } from '@expo/vector-icons';
 
 export default function Onboarding2Screen({ navigation }) {
   const [monthIndex, setMonthIndex] = useState(0);
@@ -42,7 +41,7 @@ export default function Onboarding2Screen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['left', 'right', 'bottom']}>
 
       {/* Header */}
       <Text style={styles.title}>When were you born?</Text>

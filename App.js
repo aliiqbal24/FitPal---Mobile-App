@@ -10,6 +10,7 @@ import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { BackgroundProvider } from './src/context/BackgroundContext';
 import { Asset } from 'expo-asset';
+import { StatusBar } from 'expo-status-bar';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
 import { COMIC_IMAGES } from './src/data/comicPages';
@@ -45,6 +46,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <StatusBar style="light" backgroundColor="black" />
       <SafeAreaProvider>
         <HistoryProvider>
           <StatsProvider>

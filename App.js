@@ -14,6 +14,7 @@ import { StatusBar } from 'expo-status-bar';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
 import { COMIC_IMAGES } from './src/data/comicPages';
+import { BACKGROUND_IMAGES } from './src/data/backgroundImages';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -30,6 +31,7 @@ export default function App() {
         ...Object.values(EQUIPMENT_IMAGES),
         ...Object.values(CHARACTER_IMAGES),
         ...COMIC_IMAGES,
+        ...Object.values(BACKGROUND_IMAGES),
       ]);
       setAssetsLoaded(true);
     }

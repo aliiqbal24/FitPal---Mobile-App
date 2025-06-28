@@ -35,7 +35,7 @@ export const HistoryProvider = ({ children }) => {
     setHistory(h => {
       const dayEntries = h[dateStr] ? [...h[dateStr]] : [];
       dayEntries.push(workout);
-      if (dayEntries.length > 3) {
+      if (dayEntries.length > 2) {
         dayEntries.shift();
       }
       return { ...h, [dateStr]: dayEntries };

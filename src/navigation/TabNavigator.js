@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { TabView, SceneMap } from 'react-native-tab-view';
+import { TabView } from 'react-native-tab-view';
+
+import { SwipeProvider } from '../context/SwipeContext';
 
 import GymScreen from '../screens/GymScreen';
 import HistoryScreen from '../screens/HistoryScreen';
@@ -31,11 +33,20 @@ export default function TabNavigator({ route }) {
     }
   }, [route?.params?.screen]);
 
-  const renderScene = SceneMap({
-    Profile: ProfileScreen,
-    Gym: GymScreen,
-    History: HistoryScreen,
-  });
+  const [swipeEnabled, setSwipeEnabled] = useState(true);
+
+  const renderScene = ({ route }) => {
+    switch (route.key) {
+      case 'Profile':
+        return <ProfileScreen />;
+      case 'Gym':
+        return <GymScreen />;
+      case 'History':
+        return <HistoryScreen setSwipeEnabled={setSwipeEnabled} />;
+      default:
+        return null;
+    }
+  };
 
   const renderTabBar = () => (
     <View style={styles.tabBar}>
@@ -60,17 +71,19 @@ export default function TabNavigator({ route }) {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={setIndex}
-        initialLayout={{ width: layout.width }}
-        renderTabBar={() => null}
-        swipeEnabled
-      />
-      {renderTabBar()}
-    </SafeAreaView>
+    <SwipeProvider value={{ setSwipeEnabled }}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <TabView
+          navigationState={{ index, routes }}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+          initialLayout={{ width: layout.width }}
+          renderTabBar={() => null}
+          swipeEnabled={swipeEnabled}
+        />
+        {renderTabBar()}
+      </SafeAreaView>
+    </SwipeProvider>
   );
 }
 

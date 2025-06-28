@@ -31,7 +31,7 @@ function generateMonth(year, month) {
 }
 
 
-export default function HistoryScreen() {
+export default function HistoryScreen({ setSwipeEnabled }) {
   const today = new Date();
 
   const { characterId } = useCharacter();
@@ -86,6 +86,10 @@ export default function HistoryScreen() {
     }
   };
 
+  useEffect(() => {
+    return () => setSwipeEnabled(true);
+  }, [setSwipeEnabled]);
+
 
 
   return (
@@ -95,7 +99,11 @@ export default function HistoryScreen() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         ref={scrollRef}
-        onMomentumScrollEnd={handleMomentumScrollEnd}
+        onScrollBeginDrag={() => setSwipeEnabled(false)}
+        onMomentumScrollEnd={e => {
+          handleMomentumScrollEnd(e);
+          setSwipeEnabled(true);
+        }}
         contentContainerStyle={styles.monthScroll}
       >
         {months.map((m, idx) => (

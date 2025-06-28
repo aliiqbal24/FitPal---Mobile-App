@@ -22,6 +22,11 @@
       },
       "edgeToEdgeEnabled": true
     },
+    "androidStatusBar": {
+      "backgroundColor": "#000000",
+      "barStyle": "light-content",
+      "translucent": false
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }

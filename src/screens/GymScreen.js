@@ -138,6 +138,7 @@ export default function GymScreen() {
   const [setCounts, setSetCounts] = useState([]);
   const { addEntry } = useHistory();
   const [showNameModal, setShowNameModal] = useState(false);
+  const [nameModalShown, setNameModalShown] = useState(false);
   const [showQuickWorkoutModal, setShowQuickWorkoutModal] = useState(false);
   const [showArrow, setShowArrow] = useState(false);
   const arrowAnim = useRef(new Animated.Value(0)).current;
@@ -176,10 +177,10 @@ export default function GymScreen() {
   const [startLevel, setStartLevel] = useState(level);
 
   useEffect(() => {
-    if ((TEST_MODE || !petName) && !showNameModal) {
+    if (!nameModalShown && (TEST_MODE || !petName) && !showNameModal) {
       setShowNameModal(true);
     }
-  }, [petName, showNameModal]);
+  }, [petName, showNameModal, nameModalShown]);
 
   useEffect(() => {
     if (showArrow) {
@@ -205,6 +206,11 @@ export default function GymScreen() {
 
   const showStats = useCallback(() => {
     setShowStatsModal(true);
+  }, []);
+
+  const handleNameModalClose = useCallback(() => {
+    setShowNameModal(false);
+    setNameModalShown(true);
   }, []);
 
   const handleQuickWorkoutContinue = useCallback(() => {
@@ -831,7 +837,7 @@ const toggleWorkout = useCallback(() => {
 
       <NamePetModal
         visible={showNameModal}
-        onClose={() => setShowNameModal(false)}
+        onClose={handleNameModalClose}
       />
 
       <LevelUpModal

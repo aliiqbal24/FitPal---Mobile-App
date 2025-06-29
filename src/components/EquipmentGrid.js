@@ -5,8 +5,10 @@ import { getEquipmentImage } from '../data/exerciseEquipmentMap';
 export default function EquipmentGrid({ exercises = [], progress = [], onIncrement }) {
   const { width, height } = Dimensions.get('window');
 
-  const zoneTop = height * 0.3;
-  const zoneBottom = height * 0.15;
+  // Shift the entire grid up by five percent of the screen height
+  // while keeping the grid's height the same.
+  const zoneTop = height * 0.25;
+  const zoneBottom = height * 0.20;
   const zoneHeight = height - zoneTop - zoneBottom;
   const zoneWidth = width;
 

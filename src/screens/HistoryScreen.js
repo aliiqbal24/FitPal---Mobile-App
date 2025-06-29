@@ -15,7 +15,8 @@ const MONTH_NAMES = [
 ];
 const WEEK_DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const CALENDAR_OFFSET = SCREEN_HEIGHT * 0.05;
 const CELL_SIZE = Math.floor((SCREEN_WIDTH - 32) / 7);
 
 function generateMonth(year, month) {
@@ -95,6 +96,7 @@ export default function HistoryScreen({ setSwipeEnabled }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
+        style={styles.calendarWrapper}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
@@ -232,6 +234,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  calendarWrapper: {
+    marginTop: -CALENDAR_OFFSET,
   },
   monthScroll: {
     alignItems: 'flex-start',

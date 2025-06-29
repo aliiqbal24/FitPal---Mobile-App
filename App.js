@@ -30,6 +30,7 @@ export default function App() {
       await Asset.loadAsync([
         ...Object.values(EQUIPMENT_IMAGES),
         ...Object.values(CHARACTER_IMAGES),
+        ...COMIC_IMAGES,
         ...Object.values(COMIC_IMAGE_MAP),
         ...Object.values(BACKGROUND_IMAGES),
       ]);

@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatWeight } from '../utils/numberUtils';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
+import { useInstallDate } from '../context/InstallDateContext';
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -38,17 +39,25 @@ export default function HistoryScreen({ setSwipeEnabled }) {
   const { characterId } = useCharacter();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
-  // Build the list of selectable months from April 2025 to today
-  const earliest = new Date(2025, 3, 1); // April 2025
-  const monthOptions = [];
-  const iter = new Date(earliest.getTime());
-  while (iter <= today) {
-    monthOptions.push({ year: iter.getFullYear(), month: iter.getMonth() });
-    iter.setMonth(iter.getMonth() + 1);
-  }
+  const installDate = useInstallDate();
+
+  const monthOptions = React.useMemo(() => {
+    const start = new Date(
+      installDate.getFullYear(),
+      installDate.getMonth(),
+      1
+    );
+    const opts = [];
+    const iter = new Date(start.getTime());
+    while (iter <= today) {
+      opts.push({ year: iter.getFullYear(), month: iter.getMonth() });
+      iter.setMonth(iter.getMonth() + 1);
+    }
+    return opts;
+  }, [installDate, today]);
 
   const [selected, setSelected] = useState(
-    monthOptions[monthOptions.length - 1]
+    () => monthOptions[monthOptions.length - 1]
   );
   const [showPicker, setShowPicker] = useState(false);
   const { history } = useHistory();
@@ -56,8 +65,15 @@ export default function HistoryScreen({ setSwipeEnabled }) {
   const [selectedEntry, setSelectedEntry] = useState(null);
 
   // Pre-compute all months so users can swipe between them
-  const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
+  const months = React.useMemo(
+    () => monthOptions.map(opt => generateMonth(opt.year, opt.month)),
+    [monthOptions]
+  );
   const scrollRef = useRef(null);
+
+  useEffect(() => {
+    setSelected(monthOptions[monthOptions.length - 1]);
+  }, [monthOptions]);
 
   // Jump to the initially selected month (latest)
   useEffect(() => {
@@ -65,9 +81,11 @@ export default function HistoryScreen({ setSwipeEnabled }) {
       const index = monthOptions.findIndex(
         opt => opt.year === selected.year && opt.month === selected.month
       );
-      scrollRef.current.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+      if (index !== -1) {
+        scrollRef.current.scrollTo({ x: index * SCREEN_WIDTH, animated: false });
+      }
     }
-  }, []);
+  }, [monthOptions, selected]);
 
   const handleMomentumScrollEnd = e => {
     const index = Math.round(e.nativeEvent.contentOffset.x / SCREEN_WIDTH);

@@ -1,4 +1,7 @@
 export function getNextLevelExp(level) {
+  if (level === 1) {
+    return 1;
+  }
   return 10 + 3 * (level - 1);
 }
 

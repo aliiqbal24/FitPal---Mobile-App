@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TEST_MODE } from "../utils/config";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
 import SettingsScreen from "../screens/SettingsScreen";
@@ -13,9 +14,13 @@ export default function RootNavigator() {
   const [initialRoute, setInitialRoute] = useState(null);
 
   useEffect(() => {
-    AsyncStorage.getItem("hasSeenComic").then((value) => {
-      setInitialRoute(value ? "Tabs" : "Comic");
-    });
+    if (TEST_MODE) {
+      setInitialRoute("Comic");
+    } else {
+      AsyncStorage.getItem("hasSeenComic").then((value) => {
+        setInitialRoute(value ? "Tabs" : "Comic");
+      });
+    }
   }, []);
 
   if (!initialRoute) {

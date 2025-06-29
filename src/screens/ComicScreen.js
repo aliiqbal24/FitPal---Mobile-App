@@ -3,6 +3,8 @@ import { TouchableWithoutFeedback, ImageBackground, StyleSheet } from "react-nat
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COMIC_IMAGES } from "../data/comicPages";
+import { COMIC_NARRATIONS } from "../data/comicNarrations";
+import NarrationBox from "../components/NarrationBox";
 
 export default function ComicScreen({ navigation }) {
   const [page, setPage] = useState(0);
@@ -23,7 +25,14 @@ export default function ComicScreen({ navigation }) {
           source={COMIC_IMAGES[page]}
           style={styles.image}
           resizeMode="cover"
-        />
+        >
+          {COMIC_NARRATIONS[page] && (
+            <NarrationBox
+              text={COMIC_NARRATIONS[page].text}
+              style={[styles.narration, COMIC_NARRATIONS[page].style]}
+            />
+          )}
+        </ImageBackground>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
@@ -37,5 +46,8 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+  },
+  narration: {
+    position: "absolute",
   },
 });

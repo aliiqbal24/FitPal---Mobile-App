@@ -497,7 +497,7 @@ const toggleWorkout = useCallback(() => {
       resizeMode="cover"
     >
       <View style={{flex: 1}} pointerEvents="box-none">
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
         {workouts[selectedWorkoutIdx] && (
           <View key={selectedWorkoutIdx} style={styles.workoutCard}>

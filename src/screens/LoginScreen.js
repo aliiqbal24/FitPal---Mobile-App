@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import SignInModal from '../components/SignInModal';
 
 const OnboardingScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <View style={styles.topRightLang}>
         <Text style={styles.language}>🇺🇸 EN</Text>
       </View>

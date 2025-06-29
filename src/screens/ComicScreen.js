@@ -15,7 +15,7 @@ export default function ComicScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container} onTouchEnd={handlePress}>
+    <SafeAreaView edges={['left','right','bottom']} style={styles.container} onTouchEnd={handlePress}>
       <TouchableOpacity style={styles.container} activeOpacity={1} onPress={handlePress}>
         <Image source={COMIC_IMAGES[page]} style={styles.image} resizeMode="contain" />
       </TouchableOpacity>

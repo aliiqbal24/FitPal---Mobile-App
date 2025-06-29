@@ -74,7 +74,7 @@ export default function GymGameScreen() {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <GameEngine
         style={styles.engine}
         systems={[Physics, TouchHandler]}

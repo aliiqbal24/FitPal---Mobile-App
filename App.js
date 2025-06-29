@@ -27,13 +27,18 @@ export default function App() {
 
   useEffect(() => {
     async function loadAssets() {
-      await Asset.loadAsync([
-        ...Object.values(EQUIPMENT_IMAGES),
-        ...Object.values(CHARACTER_IMAGES),
-        ...COMIC_IMAGES,
-        ...Object.values(BACKGROUND_IMAGES),
-      ]);
-      setAssetsLoaded(true);
+      try {
+        const assets = await Asset.loadAsync([
+          ...Object.values(EQUIPMENT_IMAGES),
+          ...Object.values(CHARACTER_IMAGES),
+          ...COMIC_IMAGES,
+          ...Object.values(BACKGROUND_IMAGES),
+        ]);
+        console.log('Assets loaded:', assets.length);
+        setAssetsLoaded(true);
+      } catch (e) {
+        console.error('Failed to load assets', e);
+      }
     }
     loadAssets();
   }, []);

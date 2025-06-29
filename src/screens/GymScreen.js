@@ -31,6 +31,7 @@ import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
 import LevelUpModal from '../components/LevelUpModal';
 import NamePetModal from '../components/NamePetModal';
+import QuickWorkoutModal from '../components/QuickWorkoutModal';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useBackground } from '../context/BackgroundContext';
@@ -137,6 +138,10 @@ export default function GymScreen() {
   const [setCounts, setSetCounts] = useState([]);
   const { addEntry } = useHistory();
   const [showNameModal, setShowNameModal] = useState(false);
+  const [showQuickWorkoutModal, setShowQuickWorkoutModal] = useState(false);
+  const [showArrow, setShowArrow] = useState(false);
+  const arrowAnim = useRef(new Animated.Value(0)).current;
+  const arrowLoop = useRef();
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -176,8 +181,35 @@ export default function GymScreen() {
     }
   }, [petName, showNameModal]);
 
+  useEffect(() => {
+    if (showArrow) {
+      arrowAnim.setValue(0);
+      arrowLoop.current = Animated.loop(
+        Animated.sequence([
+          Animated.timing(arrowAnim, { toValue: -10, duration: 500, useNativeDriver: true }),
+          Animated.timing(arrowAnim, { toValue: 0, duration: 500, useNativeDriver: true }),
+        ])
+      );
+      arrowLoop.current.start();
+    } else if (arrowLoop.current) {
+      arrowLoop.current.stop();
+    }
+  }, [showArrow, arrowAnim]);
+
+  useEffect(() => {
+    if (!showNameModal && (TEST_MODE || !petName) && !showQuickWorkoutModal && !showArrow) {
+      const timer = setTimeout(() => setShowQuickWorkoutModal(true), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [showNameModal, petName, showQuickWorkoutModal, showArrow]);
+
   const showStats = useCallback(() => {
     setShowStatsModal(true);
+  }, []);
+
+  const handleQuickWorkoutContinue = useCallback(() => {
+    setShowQuickWorkoutModal(false);
+    setShowArrow(true);
   }, []);
 
   const entities = {
@@ -433,6 +465,7 @@ export default function GymScreen() {
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
   
 const toggleWorkout = useCallback(() => {
+  setShowArrow(false);
   setWorkoutActive(active => {
     const next = !active;
     if (active && !next) {
@@ -667,6 +700,18 @@ const toggleWorkout = useCallback(() => {
           </View>
         </View>
       </Modal>
+
+      {showArrow && (
+        <Animated.View style={[styles.arrow, { transform: [{ translateY: arrowAnim }] }]}>
+          <Ionicons name="arrow-down" size={48} color="#fff" />
+        </Animated.View>
+      )}
+
+      <QuickWorkoutModal
+        visible={showQuickWorkoutModal}
+        petName={petName}
+        onClose={handleQuickWorkoutContinue}
+      />
 
       {/* Workout Modal */}
       <Modal visible={showWorkoutModal} transparent animationType="fade">
@@ -1040,5 +1085,10 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
     fontSize: 21,
+  },
+  arrow: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 150,
   },
 });

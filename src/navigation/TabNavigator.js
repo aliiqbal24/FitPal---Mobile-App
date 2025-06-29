@@ -72,7 +72,7 @@ export default function TabNavigator({ route }) {
 
   return (
     <SwipeProvider value={{ setSwipeEnabled }}>
-      <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1 }}>
+      <SafeAreaView edges={["left", "right", "bottom"]} style={{ flex: 1 }}>
         <TabView
           navigationState={{ index, routes }}
           renderScene={renderScene}
@@ -81,8 +81,8 @@ export default function TabNavigator({ route }) {
           renderTabBar={() => null}
           swipeEnabled={swipeEnabled}
         />
-        {renderTabBar()}
       </SafeAreaView>
+      {renderTabBar()}
     </SwipeProvider>
   );
 }

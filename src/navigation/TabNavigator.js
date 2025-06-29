@@ -81,8 +81,8 @@ export default function TabNavigator({ route }) {
           renderTabBar={() => null}
           swipeEnabled={swipeEnabled}
         />
+        {renderTabBar()}
       </SafeAreaView>
-      {renderTabBar()}
     </SwipeProvider>
   );
 }
@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
   tabItem: {
     flex: 1,
     alignItems: 'center',
-    padding: 10,
+    justifyContent: 'center',
+    paddingVertical: 10,
   },
 });

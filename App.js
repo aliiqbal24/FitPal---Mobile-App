@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
 import { LogBox, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import RootNavigator from './src/navigation/RootNavigator';
 import { CharacterProvider } from './src/context/CharacterContext';
@@ -46,6 +46,7 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaView edges={['top']} style={{ flex: 0, backgroundColor: 'black' }} />
       <StatusBar style="light" backgroundColor="black" translucent={false} />
       <SafeAreaProvider>
         <HistoryProvider>

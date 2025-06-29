@@ -10,7 +10,7 @@ import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { BackgroundProvider } from './src/context/BackgroundContext';
 import { Asset } from 'expo-asset';
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from 'react-native';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
 import { COMIC_IMAGES } from './src/data/comicPages';
@@ -49,7 +49,7 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView edges={['top']} style={{ flex: 0, backgroundColor: 'black' }} />
-      <StatusBar style="light" backgroundColor="black" translucent={false} />
+      <StatusBar barStyle="light-content" backgroundColor="black" translucent />
       <SafeAreaProvider>
         <HistoryProvider>
           <StatsProvider>

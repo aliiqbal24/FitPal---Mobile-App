@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   calendarWrapper: {
-    marginTop: -CALENDAR_OFFSET,
+    marginTop: 0.2 * CALENDAR_OFFSET,
   },
   monthScroll: {
     alignItems: 'flex-start',
@@ -246,10 +246,10 @@ const styles = StyleSheet.create({
   },
   monthLabel: {
     alignSelf: 'center',
-    marginBottom: 4,
+    marginBottom: 12,
   },
   monthLabelText: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
   },
   monthPicker: {

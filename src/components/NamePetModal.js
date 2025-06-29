@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Modal, StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Modal,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Alert,
+} from 'react-native';
+import { Filter } from 'bad-words';
 import AvatarWithLevelBadge from './AvatarWithLevelBadge';
 import ExpBar from './ExpBar';
 import { useCharacter } from '../context/CharacterContext';
@@ -12,8 +22,13 @@ export default function NamePetModal({ visible, onClose }) {
   const [showExp, setShowExp] = useState(false);
 
   const handleSave = () => {
+    const filter = new Filter();
     const trimmed = name.trim();
     if (!trimmed) return;
+    if (filter.isProfane(trimmed)) {
+      Alert.alert('Inappropriate Name', 'Please choose a different name.');
+      return;
+    }
     setPetName(trimmed);
     setShowExp(true);
   };

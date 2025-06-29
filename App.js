@@ -9,6 +9,7 @@ import { CharacterProvider } from './src/context/CharacterContext';
 import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { BackgroundProvider } from './src/context/BackgroundContext';
+import { InstallDateProvider } from './src/context/InstallDateContext';
 import { Asset } from 'expo-asset';
 import { StatusBar } from 'expo-status-bar';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
@@ -51,17 +52,19 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} style={{ flex: 0, backgroundColor: 'black' }} />
         <StatusBar style="light" backgroundColor="black" />
-        <HistoryProvider>
-          <StatsProvider>
-            <CharacterProvider>
-              <BackgroundProvider>
-                <NavigationContainer>
-                  <RootNavigator />
-                </NavigationContainer>
-              </BackgroundProvider>
-            </CharacterProvider>
-          </StatsProvider>
-        </HistoryProvider>
+        <InstallDateProvider>
+          <HistoryProvider>
+            <StatsProvider>
+              <CharacterProvider>
+                <BackgroundProvider>
+                  <NavigationContainer>
+                    <RootNavigator />
+                  </NavigationContainer>
+                </BackgroundProvider>
+              </CharacterProvider>
+            </StatsProvider>
+          </HistoryProvider>
+        </InstallDateProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

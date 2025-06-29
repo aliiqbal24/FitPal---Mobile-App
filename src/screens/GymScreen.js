@@ -39,6 +39,8 @@ import oldBG from '../../assets/backgrounds/APP_BG_oldschool.png';
 import newBG from '../../assets/backgrounds/APP_BG_newschool.png';
 import { TEST_MODE } from '../utils/config';
 
+const TUTORIAL_KEY = 'tutorialCompleted';
+
 const SPRITE_SIZE = 120;
 
 const Physics = (entities, { time }) => {
@@ -140,9 +142,34 @@ export default function GymScreen() {
   const [showNameModal, setShowNameModal] = useState(false);
   const [nameModalShown, setNameModalShown] = useState(false);
   const [showQuickWorkoutModal, setShowQuickWorkoutModal] = useState(false);
-  const [showArrow, setShowArrow] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
+  const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const arrowAnim = useRef(new Animated.Value(0)).current;
   const arrowLoop = useRef();
+
+  const arrowStyle = React.useMemo(() => {
+    switch (tutorialStep) {
+      case 1:
+        return { right: 40, bottom: 80 };
+      case 2:
+        return { alignSelf: 'center', bottom: 320 };
+      case 3:
+        return { alignSelf: 'center', bottom: 250 };
+      case 4:
+        return { alignSelf: 'center', bottom: 150 };
+      default:
+        return {};
+    }
+  }, [tutorialStep]);
+
+  useEffect(() => {
+    (async () => {
+      const done = await AsyncStorage.getItem(TUTORIAL_KEY);
+      if (done === 'true') {
+        setTutorialCompleted(true);
+      }
+    })();
+  }, []);
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -183,7 +210,7 @@ export default function GymScreen() {
   }, [petName, showNameModal, nameModalShown]);
 
   useEffect(() => {
-    if (showArrow) {
+    if (tutorialStep > 0) {
       arrowAnim.setValue(0);
       arrowLoop.current = Animated.loop(
         Animated.sequence([
@@ -195,14 +222,14 @@ export default function GymScreen() {
     } else if (arrowLoop.current) {
       arrowLoop.current.stop();
     }
-  }, [showArrow, arrowAnim]);
+  }, [tutorialStep, arrowAnim]);
 
   useEffect(() => {
-    if (!showNameModal && (TEST_MODE || !petName) && !showQuickWorkoutModal && !showArrow) {
+    if (!tutorialCompleted && !showNameModal && (TEST_MODE || !petName) && !showQuickWorkoutModal && tutorialStep === 0) {
       const timer = setTimeout(() => setShowQuickWorkoutModal(true), 1000);
       return () => clearTimeout(timer);
     }
-  }, [showNameModal, petName, showQuickWorkoutModal, showArrow]);
+  }, [showNameModal, petName, showQuickWorkoutModal, tutorialStep, tutorialCompleted]);
 
   const showStats = useCallback(() => {
     setShowStatsModal(true);
@@ -215,7 +242,7 @@ export default function GymScreen() {
 
   const handleQuickWorkoutContinue = useCallback(() => {
     setShowQuickWorkoutModal(false);
-    setShowArrow(true);
+    setTutorialStep(1);
   }, []);
 
   const entities = {
@@ -325,7 +352,11 @@ export default function GymScreen() {
       Alert.alert('Upgrade Required', 'Upgrade to pro for more');
       return;
     }
-    setWorkoutName('');
+    if (tutorialStep === 1) {
+      setWorkoutName(`${petName}'s first lift!`);
+    } else {
+      setWorkoutName('');
+    }
     setCurrentWorkoutIdx(null);
     setShowWorkoutModal(true);
   };
@@ -359,6 +390,9 @@ export default function GymScreen() {
       setSelectedWorkoutIdx(workouts.length);
     }
     setShowWorkoutModal(false);
+    if (tutorialStep === 1) {
+      setTutorialStep(2);
+    }
   };
 
   const handleDeleteWorkout = idx => {
@@ -395,7 +429,12 @@ export default function GymScreen() {
       return;
     }
     setCurrentWorkoutIdx(idx);
-    setExerciseForm({ name: '', sets: '', reps: '', weight: '' });
+    if (tutorialStep === 2) {
+      setExerciseForm({ name: 'Bodyweight Pushups', sets: '1', reps: '5', weight: '0' });
+      setTutorialStep(3);
+    } else {
+      setExerciseForm({ name: '', sets: '', reps: '', weight: '' });
+    }
     setEditingExerciseIdx(null);
     setShowExerciseModal(true);
   };
@@ -457,6 +496,9 @@ export default function GymScreen() {
       setSetCounts(prev => [...prev, 0]);
     }
     setShowExerciseModal(false);
+    if (tutorialStep === 3) {
+      setTutorialStep(4);
+    }
   };
 
   const handleDeleteExercise = () => {
@@ -471,7 +513,11 @@ export default function GymScreen() {
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
   
 const toggleWorkout = useCallback(() => {
-  setShowArrow(false);
+  if (tutorialStep === 4) {
+    AsyncStorage.setItem(TUTORIAL_KEY, 'true');
+    setTutorialCompleted(true);
+  }
+  setTutorialStep(0);
   setWorkoutActive(active => {
     const next = !active;
     if (active && !next) {
@@ -707,9 +753,9 @@ const toggleWorkout = useCallback(() => {
         </View>
       </Modal>
 
-      {showArrow && (
-        <Animated.View style={[styles.arrow, { transform: [{ translateY: arrowAnim }] }]}>
-          <Ionicons name="arrow-down" size={48} color="#fff" />
+      {tutorialStep > 0 && (
+        <Animated.View style={[styles.arrow, arrowStyle, { transform: [{ translateY: arrowAnim }] }]}>
+          <Ionicons name="arrow-down" size={tutorialStep === 3 ? 32 : 48} color="#fff" />
         </Animated.View>
       )}
 
@@ -1095,6 +1141,5 @@ const styles = StyleSheet.create({
   arrow: {
     position: 'absolute',
     alignSelf: 'center',
-    bottom: 150,
   },
 });

@@ -30,11 +30,13 @@ import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
 import LevelUpModal from '../components/LevelUpModal';
+import NamePetModal from '../components/NamePetModal';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useBackground } from '../context/BackgroundContext';
 import oldBG from '../../assets/backgrounds/APP_BG_oldschool.png';
 import newBG from '../../assets/backgrounds/APP_BG_newschool.png';
+import { TEST_MODE } from '../utils/config';
 
 const SPRITE_SIZE = 120;
 
@@ -134,6 +136,7 @@ export default function GymScreen() {
   const [deleteMode, setDeleteMode] = useState(false);
   const [setCounts, setSetCounts] = useState([]);
   const { addEntry } = useHistory();
+  const [showNameModal, setShowNameModal] = useState(false);
 
   const engine = useRef(Matter.Engine.create({ enableSleeping: false }));
   const world = engine.current.world;
@@ -166,6 +169,12 @@ export default function GymScreen() {
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
   const [startLevel, setStartLevel] = useState(level);
+
+  useEffect(() => {
+    if ((TEST_MODE || !petName) && !showNameModal) {
+      setShowNameModal(true);
+    }
+  }, [petName, showNameModal]);
 
   const showStats = useCallback(() => {
     setShowStatsModal(true);
@@ -558,7 +567,11 @@ const toggleWorkout = useCallback(() => {
           style={styles.engine}
           onEvent={onEvent}
         >
-          <Character body={characterBody} sprite={sprite} petName={petName} />
+          <Character
+            body={characterBody}
+            sprite={sprite}
+            petName={!workoutActive ? petName : ''}
+          />
         </GameEngine>
       </View>
       {workoutActive && (
@@ -770,6 +783,11 @@ const toggleWorkout = useCallback(() => {
           </View>
         </View>
       </Modal>
+
+      <NamePetModal
+        visible={showNameModal}
+        onClose={() => setShowNameModal(false)}
+      />
 
       <LevelUpModal
         visible={showLevelUpModal}

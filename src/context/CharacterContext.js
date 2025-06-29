@@ -1,6 +1,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getLevelInfo } from '../utils/levelUtils';
+import { TEST_MODE } from '../utils/config';
 
 const CharacterContext = createContext({
   exp: 0,
@@ -22,14 +23,22 @@ export const CharacterProvider = ({ children }) => {
   useEffect(() => {
     (async () => {
       try {
-        const stored = await AsyncStorage.getItem('exp');
-        if (stored != null) {
-          const val = parseInt(stored, 10);
-          if (!Number.isNaN(val)) {
-            setExp(val);
-            setLevel(getLevelInfo(val).level);
+        const hasSeenComic = await AsyncStorage.getItem('hasSeenComic');
+        if (TEST_MODE || !hasSeenComic) {
+          await AsyncStorage.setItem('exp', '0');
+          setExp(0);
+          setLevel(1);
+        } else {
+          const stored = await AsyncStorage.getItem('exp');
+          if (stored != null) {
+            const val = parseInt(stored, 10);
+            if (!Number.isNaN(val)) {
+              setExp(val);
+              setLevel(getLevelInfo(val).level);
+            }
           }
         }
+
         const char = await AsyncStorage.getItem('characterId');
         if (char) {
           setCharacterId(char);

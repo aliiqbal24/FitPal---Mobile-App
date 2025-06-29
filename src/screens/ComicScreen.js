@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TouchableOpacity, Image, StyleSheet } from "react-native";
+import { TouchableWithoutFeedback, ImageBackground, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COMIC_IMAGES } from "../data/comicPages";
@@ -17,22 +17,14 @@ export default function ComicScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView
-      edges={["left", "right", "bottom"]}
-      style={styles.container}
-      onTouchEnd={handlePress}
-    >
-      <TouchableOpacity
-        style={styles.container}
-        activeOpacity={1}
-        onPress={handlePress}
-      >
-        <Image
+    <SafeAreaView edges={["left", "right", "bottom"]} style={styles.container}>
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <ImageBackground
           source={COMIC_IMAGES[page]}
           style={styles.image}
-          resizeMode="contain"
+          resizeMode="cover"
         />
-      </TouchableOpacity>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
@@ -41,8 +33,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000",
-    justifyContent: "center",
-    alignItems: "center",
   },
   image: {
     width: "100%",

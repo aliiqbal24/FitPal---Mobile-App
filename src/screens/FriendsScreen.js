@@ -7,7 +7,7 @@ export default function FriendsScreen({ navigation }) {
   const friends = ['MegMx', 'malak', 'DorothyDark'];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="#222" />

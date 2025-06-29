@@ -94,7 +94,7 @@ export default function HistoryScreen({ setSwipeEnabled }) {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <ScrollView
         style={styles.calendarWrapper}
         horizontal

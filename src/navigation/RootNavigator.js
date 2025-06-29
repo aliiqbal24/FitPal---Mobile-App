@@ -1,18 +1,31 @@
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabNavigator from './TabNavigator';
-import SettingsScreen from '../screens/SettingsScreen';
-import ActivityScreen from '../screens/ActivityScreen';
-import FriendsScreen from '../screens/FriendsScreen';
-import ComicScreen from '../screens/ComicScreen';
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import TabNavigator from "./TabNavigator";
+import SettingsScreen from "../screens/SettingsScreen";
+import ActivityScreen from "../screens/ActivityScreen";
+import FriendsScreen from "../screens/FriendsScreen";
+import ComicScreen from "../screens/ComicScreen";
 
 const Stack = createNativeStackNavigator();
 
 export default function RootNavigator() {
+  const [initialRoute, setInitialRoute] = useState(null);
+
+  useEffect(() => {
+    AsyncStorage.getItem("hasSeenComic").then((value) => {
+      setInitialRoute(value ? "Tabs" : "Comic");
+    });
+  }, []);
+
+  if (!initialRoute) {
+    return null;
+  }
+
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName="Comic"
+      initialRouteName={initialRoute}
     >
       <Stack.Screen name="Comic" component={ComicScreen} />
       <Stack.Screen name="Tabs" component={TabNavigator} />

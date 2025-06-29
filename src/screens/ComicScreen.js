@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TouchableOpacity, ImageBackground, StyleSheet } from "react-native";
+import { TouchableOpacity, Image, StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COMIC_IMAGES } from "../data/comicPages";
@@ -27,10 +27,10 @@ export default function ComicScreen({ navigation }) {
         activeOpacity={1}
         onPress={handlePress}
       >
-        <ImageBackground
+        <Image
           source={COMIC_IMAGES[page]}
           style={styles.image}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       </TouchableOpacity>
     </SafeAreaView>

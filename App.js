@@ -10,6 +10,8 @@ import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { BackgroundProvider } from './src/context/BackgroundContext';
 import { NotificationProvider } from './src/context/NotificationContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TEST_MODE } from './src/utils/config';
 import { Asset } from 'expo-asset';
 import { StatusBar } from 'expo-status-bar';
 import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
@@ -25,6 +27,13 @@ LogBox.ignoreLogs([
 
 export default function App() {
   const [assetsLoaded, setAssetsLoaded] = useState(false);
+  const [resetDone, setResetDone] = useState(!TEST_MODE);
+
+  useEffect(() => {
+    if (TEST_MODE) {
+      AsyncStorage.clear().finally(() => setResetDone(true));
+    }
+  }, []);
 
   useEffect(() => {
     async function loadAssets() {
@@ -36,10 +45,12 @@ export default function App() {
       ]);
       setAssetsLoaded(true);
     }
-    loadAssets();
-  }, []);
+    if (resetDone) {
+      loadAssets();
+    }
+  }, [resetDone]);
 
-  if (!assetsLoaded) {
+  if (!resetDone || !assetsLoaded) {
     return (
       <GestureHandlerRootView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ActivityIndicator size="large" />

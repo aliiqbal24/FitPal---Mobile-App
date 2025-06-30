@@ -9,6 +9,7 @@ import { CharacterProvider } from './src/context/CharacterContext';
 import { HistoryProvider } from './src/context/HistoryContext';
 import { StatsProvider } from './src/context/StatsContext';
 import { BackgroundProvider } from './src/context/BackgroundContext';
+import { NotificationProvider } from './src/context/NotificationContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { TEST_MODE } from './src/utils/config';
 import { Asset } from 'expo-asset';
@@ -65,11 +66,13 @@ export default function App() {
         <HistoryProvider>
           <StatsProvider>
             <CharacterProvider>
-              <BackgroundProvider>
-                <NavigationContainer>
-                  <RootNavigator />
-                </NavigationContainer>
-              </BackgroundProvider>
+              <NotificationProvider>
+                <BackgroundProvider>
+                  <NavigationContainer>
+                    <RootNavigator />
+                  </NavigationContainer>
+                </BackgroundProvider>
+              </NotificationProvider>
             </CharacterProvider>
           </StatsProvider>
         </HistoryProvider>

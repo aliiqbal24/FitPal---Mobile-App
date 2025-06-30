@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useNotifications } from '../context/NotificationContext';
 
 export default function SettingsScreen({ navigation }) {
+  const { enabled, setEnabled } = useNotifications();
   return (
     <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <View style={styles.header}>
@@ -26,7 +28,10 @@ export default function SettingsScreen({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={styles.placeholder}>
-          <Text style={styles.placeholderText}>Select an option</Text>
+          <View style={styles.row}>
+            <Text style={styles.optionText}>Workout Reminders</Text>
+            <Switch value={enabled} onValueChange={setEnabled} />
+          </View>
         </View>
       </View>
     </SafeAreaView>
@@ -75,6 +80,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '80%',
   },
   placeholderText: {
     fontSize: 16,

@@ -35,6 +35,8 @@ import QuickWorkoutModal from '../components/QuickWorkoutModal';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useBackground } from '../context/BackgroundContext';
+import { useNotifications } from '../context/NotificationContext';
+import { useNavigation } from '@react-navigation/native';
 import oldBG from '../../assets/backgrounds/APP_BG_oldschool.png';
 import newBG from '../../assets/backgrounds/APP_BG_newschool.png';
 import { TEST_MODE } from '../utils/config';
@@ -198,7 +200,9 @@ export default function GymScreen() {
   const { exp, level, addExp, characterId, petName } = useCharacter();
   const { background } = useBackground();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
-  const { addWorkout } = useStats();
+  const { addWorkout, liftCount } = useStats();
+  const { enabled: notificationsEnabled, recordLiftTime } = useNotifications();
+  const navigation = useNavigation();
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
   const [startLevel, setStartLevel] = useState(level);
@@ -524,10 +528,11 @@ const toggleWorkout = useCallback(() => {
       const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
       if (totalSets > 0) {
         const dateStr = toDateKey();
+        const now = Date.now();
         addEntry(dateStr, {
           ...workouts[selectedWorkoutIdx],
           completedSets: setCounts,
-          timestamp: Date.now(),
+          timestamp: now,
         });
 
         let weight = 0;
@@ -537,7 +542,19 @@ const toggleWorkout = useCallback(() => {
           const w = parseFloat(ex.weight) || 0;
           weight += setsDone * reps * w;
         });
+        const firstLift = liftCount === 0;
         addWorkout(weight, true);
+        recordLiftTime(now);
+        if (firstLift && !notificationsEnabled) {
+          Alert.alert(
+            'Enable Notifications',
+            `Turn on workout reminders in Settings so ${petName || 'your buddy'} can cheer you on.`,
+            [
+              { text: 'Later', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
+            ]
+          );
+        }
       }
       setSetCounts([]);
       if (level > startLevel) {

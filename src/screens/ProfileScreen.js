@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { useNotifications } from '../context/NotificationContext';
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
@@ -17,6 +20,7 @@ const PRIVATE_UPLOAD_LIMIT = 50;
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const CARD_SIZE = (SCREEN_WIDTH - 48) / 2;
+const NOTIF_PROMPT_KEY = 'notificationPromptShown';
 
 export default function ProfileScreen() {
   const [tab, setTab] = useState('Gallery');
@@ -25,7 +29,8 @@ export default function ProfileScreen() {
   const [viewerVisible, setViewerVisible] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
   const navigation = useNavigation();
-  const { level, characterId } = useCharacter();
+  const { level, characterId, petName } = useCharacter();
+  const { enabled: notificationsEnabled } = useNotifications();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
   const openViewer = index => {
@@ -70,6 +75,29 @@ export default function ProfileScreen() {
       }
     }
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      let isActive = true;
+      (async () => {
+        const shown = await AsyncStorage.getItem(NOTIF_PROMPT_KEY);
+        if (isActive && !shown && !notificationsEnabled) {
+          Alert.alert(
+            'Enable Notifications',
+            `Turn on workout reminders in Settings so ${petName || 'your buddy'} can cheer you on.`,
+            [
+              { text: 'Later', style: 'cancel' },
+              { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
+            ]
+          );
+          await AsyncStorage.setItem(NOTIF_PROMPT_KEY, 'true');
+        }
+      })();
+      return () => {
+        isActive = false;
+      };
+    }, [notificationsEnabled, navigation, petName])
+  );
 
   return (
     <SafeAreaView edges={['left','right','bottom']} style={styles.container}>

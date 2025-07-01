@@ -537,6 +537,7 @@ const toggleWorkout = useCallback(() => {
   setTutorialStep(0);
   setWorkoutActive(active => {
     const next = !active;
+    let shouldPromptAuth = false;
     if (active && !next) {
       let shouldPromptAuth = false;
       const totalSets = setCounts.reduce((sum, c) => sum + c, 0);

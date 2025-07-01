@@ -32,6 +32,8 @@ import EquipmentGrid from '../components/EquipmentGrid';
 import LevelUpModal from '../components/LevelUpModal';
 import NamePetModal from '../components/NamePetModal';
 import QuickWorkoutModal from '../components/QuickWorkoutModal';
+import SignInModal from '../components/SignInModal';
+import { useAuth } from '../context/AuthContext';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useBackground } from '../context/BackgroundContext';
@@ -146,6 +148,7 @@ export default function GymScreen() {
   const [showQuickWorkoutModal, setShowQuickWorkoutModal] = useState(false);
   const [tutorialStep, setTutorialStep] = useState(0);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const arrowAnim = useRef(new Animated.Value(0)).current;
   const arrowLoop = useRef();
 
@@ -202,6 +205,7 @@ export default function GymScreen() {
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
   const { addWorkout, liftCount } = useStats();
   const { enabled: notificationsEnabled, recordLiftTime } = useNotifications();
+  const { user } = useAuth();
   const navigation = useNavigation();
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
@@ -545,15 +549,20 @@ const toggleWorkout = useCallback(() => {
         const firstLift = liftCount === 0;
         addWorkout(weight, true);
         recordLiftTime(now);
-        if (firstLift && !notificationsEnabled) {
-          Alert.alert(
-            'Enable Notifications',
-            `Turn on workout reminders in Settings so ${petName || 'your buddy'} can cheer you on.`,
-            [
-              { text: 'Later', style: 'cancel' },
-              { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
-            ]
-          );
+        if (firstLift) {
+          if (!notificationsEnabled) {
+            Alert.alert(
+              'Enable Notifications',
+              `Turn on workout reminders in Settings so ${petName || 'your buddy'} can cheer you on.`,
+              [
+                { text: 'Later', style: 'cancel' },
+                { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
+              ]
+            );
+          }
+          if (!user) {
+            setShowAuthModal(true);
+          }
         }
       }
       setSetCounts([]);
@@ -927,6 +936,7 @@ const toggleWorkout = useCallback(() => {
           </View>
         </View>
       </Modal>
+      <SignInModal visible={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </SafeAreaView>
     </View>
     </ImageBackground>

@@ -18,6 +18,7 @@ import { EQUIPMENT_IMAGES } from './src/data/exerciseEquipmentMap';
 import { CHARACTER_IMAGES } from './src/data/characters';
 import { COMIC_IMAGES } from './src/data/comicPages';
 import { BACKGROUND_IMAGES } from './src/data/backgroundImages';
+import { AuthProvider } from './src/context/AuthContext';
 
 // Ignore specific warnings
 LogBox.ignoreLogs([
@@ -63,19 +64,21 @@ export default function App() {
       <SafeAreaProvider>
         <SafeAreaView edges={['top']} style={{ flex: 0, backgroundColor: 'black' }} />
         <StatusBar style="light" backgroundColor="black" />
-        <HistoryProvider>
-          <StatsProvider>
-            <CharacterProvider>
-              <NotificationProvider>
-                <BackgroundProvider>
-                  <NavigationContainer>
-                    <RootNavigator />
-                  </NavigationContainer>
-                </BackgroundProvider>
-              </NotificationProvider>
-            </CharacterProvider>
-          </StatsProvider>
-        </HistoryProvider>
+        <AuthProvider>
+          <HistoryProvider>
+            <StatsProvider>
+              <CharacterProvider>
+                <NotificationProvider>
+                  <BackgroundProvider>
+                    <NavigationContainer>
+                      <RootNavigator />
+                    </NavigationContainer>
+                  </BackgroundProvider>
+                </NotificationProvider>
+              </CharacterProvider>
+            </StatsProvider>
+          </HistoryProvider>
+        </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

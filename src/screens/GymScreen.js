@@ -579,7 +579,7 @@ setWorkoutActive(active => {
   return next;
 });
 
-
+  if (workoutActive) {
     setSetCounts([]);
     setWorkoutActive(false);
 

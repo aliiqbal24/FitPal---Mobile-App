@@ -34,14 +34,14 @@ const SignInModal = ({ visible, onClose }) => {
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent
+      onRequestClose={() => {}}
+    >
       <View style={styles.overlay}>
         <View style={styles.modal}>
-          {/* Close Button */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close sign in">
-            <Ionicons name="close" size={24} color="black" />
-          </TouchableOpacity>
-
           {/* Title */}
           <Text style={styles.title}>Sign In</Text>
 
@@ -120,11 +120,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     alignItems: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
   },
   title: {
     fontSize: 22,

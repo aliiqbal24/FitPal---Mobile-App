@@ -537,6 +537,7 @@ const toggleWorkout = useCallback(() => {
   setTutorialStep(0);
   setWorkoutActive(active => {
     const next = !active;
+    let shouldPromptAuth = false;
     if (active && !next) {
       const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
       if (totalSets > 0) {
@@ -558,7 +559,7 @@ const toggleWorkout = useCallback(() => {
         const firstLift = liftCount === 0;
         addWorkout(weight, true);
         recordLiftTime(now);
-        const shouldPromptAuth = firstLift && !user;
+        shouldPromptAuth = firstLift && !user;
         if (shouldPromptAuth) {
           setPendingAuthPrompt(true);
         }

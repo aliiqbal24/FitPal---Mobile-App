@@ -535,6 +535,7 @@ const toggleWorkout = useCallback(() => {
     setTutorialCompleted(true);
   }
   setTutorialStep(0);
+  const shouldPromptAuth = liftCount === 0 && !user;
 setWorkoutActive(active => {
   const next = !active;
   if (active && !next) {
@@ -555,9 +556,6 @@ setWorkoutActive(active => {
         const w = parseFloat(ex.weight) || 0;
         weight += setsDone * reps * w;
       });
-
-      const firstLift = liftCount === 0;
-      const shouldPromptAuth = firstLift && !user;
 
       addWorkout(weight, true);
       recordLiftTime(now);

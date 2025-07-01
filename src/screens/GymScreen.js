@@ -149,6 +149,7 @@ export default function GymScreen() {
   const [tutorialStep, setTutorialStep] = useState(0);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [pendingAuthPrompt, setPendingAuthPrompt] = useState(false);
   const arrowAnim = useRef(new Animated.Value(0)).current;
   const arrowLoop = useRef();
 
@@ -247,6 +248,14 @@ export default function GymScreen() {
     setShowNameModal(false);
     setNameModalShown(true);
   }, []);
+
+  const handleLevelUpClose = useCallback(() => {
+    setShowLevelUpModal(false);
+    if (pendingAuthPrompt) {
+      setShowAuthModal(true);
+      setPendingAuthPrompt(false);
+    }
+  }, [pendingAuthPrompt]);
 
   const handleQuickWorkoutContinue = useCallback(() => {
     setShowQuickWorkoutModal(false);
@@ -549,25 +558,17 @@ const toggleWorkout = useCallback(() => {
         const firstLift = liftCount === 0;
         addWorkout(weight, true);
         recordLiftTime(now);
-        if (firstLift) {
-          if (!notificationsEnabled) {
-            Alert.alert(
-              'Enable Notifications',
-              `Turn on workout reminders in Settings so ${petName || 'your buddy'} can cheer you on.`,
-              [
-                { text: 'Later', style: 'cancel' },
-                { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
-              ]
-            );
-          }
-          if (!user) {
-            setShowAuthModal(true);
-          }
+        const shouldPromptAuth = firstLift && !user;
+        if (shouldPromptAuth) {
+          setPendingAuthPrompt(true);
         }
       }
       setSetCounts([]);
       if (level > startLevel) {
         setShowLevelUpModal(true);
+      } else if (shouldPromptAuth) {
+        setShowAuthModal(true);
+        setPendingAuthPrompt(false);
       }
     } else if (next) {
       setSetCounts(currentExercises.map(() => 0));
@@ -575,7 +576,7 @@ const toggleWorkout = useCallback(() => {
     }
     return next;
   });
-}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout, level, startLevel]);
+}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout, level, startLevel, user]);
 
   useEffect(() => {
     if (workoutActive) {
@@ -914,7 +915,7 @@ const toggleWorkout = useCallback(() => {
 
       <LevelUpModal
         visible={showLevelUpModal}
-        onClose={() => setShowLevelUpModal(false)}
+        onClose={handleLevelUpClose}
         petName={petName}
       />
 

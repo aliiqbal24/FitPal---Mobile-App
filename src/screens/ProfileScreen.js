@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Image
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import { useNotifications } from '../context/NotificationContext';
+import { useAuth } from '../context/AuthContext';
 import { Video } from 'expo-av';
 import * as ImagePicker from 'expo-image-picker';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
@@ -31,6 +32,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { level, characterId, petName } = useCharacter();
   const { enabled: notificationsEnabled } = useNotifications();
+  const { user } = useAuth();
   const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
 
   const openViewer = index => {
@@ -80,7 +82,9 @@ export default function ProfileScreen() {
     React.useCallback(() => {
       let isActive = true;
       (async () => {
-        const shown = await AsyncStorage.getItem(NOTIF_PROMPT_KEY);
+        if (!user) return;
+        const key = `${NOTIF_PROMPT_KEY}_${user.uid}`;
+        const shown = await AsyncStorage.getItem(key);
         if (isActive && !shown && !notificationsEnabled) {
           Alert.alert(
             'Enable Notifications',
@@ -90,13 +94,13 @@ export default function ProfileScreen() {
               { text: 'Open Settings', onPress: () => navigation.navigate('Settings') },
             ]
           );
-          await AsyncStorage.setItem(NOTIF_PROMPT_KEY, 'true');
+          await AsyncStorage.setItem(key, 'true');
         }
       })();
       return () => {
         isActive = false;
       };
-    }, [notificationsEnabled, navigation, petName])
+    }, [notificationsEnabled, navigation, petName, user])
   );
 
   return (

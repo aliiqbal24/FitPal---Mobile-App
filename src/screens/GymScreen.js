@@ -535,48 +535,65 @@ const toggleWorkout = useCallback(() => {
     setTutorialCompleted(true);
   }
   setTutorialStep(0);
-  setWorkoutActive(active => {
-    const next = !active;
-    if (active && !next) {
-      const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
-      if (totalSets > 0) {
-        const dateStr = toDateKey();
-        const now = Date.now();
-        addEntry(dateStr, {
-          ...workouts[selectedWorkoutIdx],
-          completedSets: setCounts,
-          timestamp: now,
-        });
 
-        let weight = 0;
-        workouts[selectedWorkoutIdx].exercises.forEach((ex, idx) => {
-          const setsDone = setCounts[idx] || 0;
-          const reps = parseInt(ex.reps, 10) || 0;
-          const w = parseFloat(ex.weight) || 0;
-          weight += setsDone * reps * w;
-        });
-        const firstLift = liftCount === 0;
-        addWorkout(weight, true);
-        recordLiftTime(now);
-        const shouldPromptAuth = firstLift && !user;
-        if (shouldPromptAuth) {
-          setPendingAuthPrompt(true);
-        }
+  if (workoutActive) {
+    const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
+    let shouldPromptAuth = false;
+
+    if (totalSets > 0) {
+      const dateStr = toDateKey();
+      const now = Date.now();
+      addEntry(dateStr, {
+        ...workouts[selectedWorkoutIdx],
+        completedSets: setCounts,
+        timestamp: now,
+      });
+
+      let weight = 0;
+      workouts[selectedWorkoutIdx].exercises.forEach((ex, idx) => {
+        const setsDone = setCounts[idx] || 0;
+        const reps = parseInt(ex.reps, 10) || 0;
+        const w = parseFloat(ex.weight) || 0;
+        weight += setsDone * reps * w;
+      });
+
+      const firstLift = liftCount === 0;
+      addWorkout(weight, true);
+      recordLiftTime(now);
+      shouldPromptAuth = firstLift && !user;
+      if (shouldPromptAuth) {
+        setPendingAuthPrompt(true);
       }
-      setSetCounts([]);
-      if (level > startLevel) {
-        setShowLevelUpModal(true);
-      } else if (shouldPromptAuth) {
-        setShowAuthModal(true);
-        setPendingAuthPrompt(false);
-      }
-    } else if (next) {
-      setSetCounts(currentExercises.map(() => 0));
-      setStartLevel(level);
     }
-    return next;
-  });
-}, [workouts, selectedWorkoutIdx, currentExercises, setCounts, addEntry, addWorkout, level, startLevel, user]);
+
+    setSetCounts([]);
+    setWorkoutActive(false);
+
+    if (level > startLevel) {
+      setShowLevelUpModal(true);
+    } else if (shouldPromptAuth) {
+      setShowAuthModal(true);
+      setPendingAuthPrompt(false);
+    }
+  } else {
+    setSetCounts(currentExercises.map(() => 0));
+    setStartLevel(level);
+    setWorkoutActive(true);
+  }
+}, [
+  workoutActive,
+  workouts,
+  selectedWorkoutIdx,
+  currentExercises,
+  setCounts,
+  addEntry,
+  addWorkout,
+  level,
+  startLevel,
+  user,
+  liftCount,
+  recordLiftTime,
+]);
 
   useEffect(() => {
     if (workoutActive) {

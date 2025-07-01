@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
 
 const SignInModal = ({ visible, onClose }) => {
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
   const [showEmail, setShowEmail] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -48,13 +48,23 @@ const SignInModal = ({ visible, onClose }) => {
           {!showEmail ? (
             <>
               {/* Apple Sign In */}
-              <TouchableOpacity style={styles.appleButton} accessibilityRole="button" accessibilityLabel="Sign in with Apple">
+              <TouchableOpacity
+                style={styles.appleButton}
+                accessibilityRole="button"
+                accessibilityLabel="Sign in with Apple"
+                onPress={signInWithApple}
+              >
                 <Ionicons name="logo-apple" size={20} color="#fff" />
                 <Text style={styles.appleButtonText}>Sign in with Apple</Text>
               </TouchableOpacity>
 
               {/* Google Sign In */}
-              <TouchableOpacity style={styles.googleButton} accessibilityRole="button" accessibilityLabel="Sign in with Google">
+              <TouchableOpacity
+                style={styles.googleButton}
+                accessibilityRole="button"
+                accessibilityLabel="Sign in with Google"
+                onPress={signInWithGoogle}
+              >
                 <Image source={require('../../assets/google-icon.png')} style={styles.icon} />
                 <Text style={styles.googleButtonText}>Sign in with Google</Text>
               </TouchableOpacity>

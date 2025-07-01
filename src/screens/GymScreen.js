@@ -535,11 +535,10 @@ const toggleWorkout = useCallback(() => {
     setTutorialCompleted(true);
   }
   setTutorialStep(0);
-
-  if (workoutActive) {
+setWorkoutActive(active => {
+  const next = !active;
+  if (active && !next) {
     const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
-    let shouldPromptAuth = false;
-
     if (totalSets > 0) {
       const dateStr = toDateKey();
       const now = Date.now();
@@ -558,13 +557,28 @@ const toggleWorkout = useCallback(() => {
       });
 
       const firstLift = liftCount === 0;
+      const shouldPromptAuth = firstLift && !user;
+
       addWorkout(weight, true);
       recordLiftTime(now);
-      shouldPromptAuth = firstLift && !user;
+
       if (shouldPromptAuth) {
         setPendingAuthPrompt(true);
       }
+
+      if (level > startLevel) {
+        setShowLevelUpModal(true);
+      } else if (shouldPromptAuth) {
+        setShowAuthModal(true);
+        setPendingAuthPrompt(false);
+      }
+
+      setSetCounts([]);
     }
+  }
+  return next;
+});
+
 
     setSetCounts([]);
     setWorkoutActive(false);

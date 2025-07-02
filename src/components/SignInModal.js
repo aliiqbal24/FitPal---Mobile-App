@@ -9,9 +9,11 @@ import {
   Linking,
   TextInput,
   Alert,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
+import { TEST_MODE } from '../utils/config';
 
 const SignInModal = ({ visible, onClose }) => {
   const { signIn, signUp, signInWithGoogle, signInWithApple } = useAuth();
@@ -40,8 +42,9 @@ const SignInModal = ({ visible, onClose }) => {
       transparent
       onRequestClose={() => {}}
     >
-      <View style={styles.overlay}>
-        <View style={styles.modal}>
+      <TouchableWithoutFeedback onPress={TEST_MODE ? onClose : undefined}>
+        <View style={styles.overlay}>
+          <View style={styles.modal}>
           {/* Title */}
           <Text style={styles.title}>Sign In</Text>
 
@@ -111,7 +114,8 @@ const SignInModal = ({ visible, onClose }) => {
             </>
           )}
         </View>
-      </View>
+        </View>
+      </TouchableWithoutFeedback>
     </Modal>
   );
 };

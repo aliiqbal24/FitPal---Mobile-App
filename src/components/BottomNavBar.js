@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-// keep the bar fairly short so the active icon can rise above it
-const BAR_HEIGHT = 36;
-const ITEM_WIDTH = 50;
-const ITEM_WIDTH_ACTIVE = 80;
+// keep the bar short so the active icon slightly overhangs it
+const BAR_HEIGHT = 40;
+const ITEM_SIZE = 48;
+const ITEM_SIZE_ACTIVE = 64;
+const ACTIVE_OVERFLOW = 8; // how far the active icon rises above the bar
 
 export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
   const [index, setIndex] = useState(activeIndex);
@@ -44,12 +45,12 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
                 style={[
                   styles.item,
                   {
-                    width: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
-                    height: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
+                    width: isActive ? ITEM_SIZE_ACTIVE : ITEM_SIZE,
+                    height: isActive ? ITEM_SIZE_ACTIVE : ITEM_SIZE,
                     backgroundColor: isActive ? '#ddd' : 'transparent',
                     borderRadius: 16,
                     // allow the active icon to rise above the bar
-                    marginTop: isActive ? (BAR_HEIGHT - ITEM_WIDTH_ACTIVE) / 2 : 0,
+                    marginTop: isActive ? (BAR_HEIGHT - ITEM_SIZE_ACTIVE) / 2 - ACTIVE_OVERFLOW : 0,
                     zIndex: isActive ? 2 : 0,
                   },
                 ]}
@@ -57,7 +58,7 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
               >
                 <Ionicons
                   name={iconName}
-                  size={isActive ? 48 : 24}
+                  size={isActive ? ITEM_SIZE_ACTIVE * 0.8 : ITEM_SIZE * 0.5}
                   color="#333"
                 />
               </TouchableOpacity>
@@ -87,22 +88,22 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   arrow: {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     position: 'absolute',
     zIndex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
   leftArrow: {
-    left: -25,
+    left: -20,
     top: '50%',
-    marginTop: -10,
+    marginTop: -8,
   },
   rightArrow: {
-    right: -25,
+    right: -20,
     top: '50%',
-    marginTop: -10,
+    marginTop: -8,
   },
   arrowLeft: {
     width: 0,

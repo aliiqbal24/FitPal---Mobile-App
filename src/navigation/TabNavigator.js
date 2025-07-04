@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import BottomNavBar from '../components/BottomNavBar';
 import { TabView } from 'react-native-tab-view';
@@ -60,7 +60,13 @@ export default function TabNavigator({ route }) {
           renderTabBar={() => null}
           swipeEnabled={swipeEnabled}
         />
-        <BottomNavBar items={routes} activeIndex={index} onSelect={setIndex} />
+        <View style={styles.bottomNavWrapper}>
+          <BottomNavBar
+            items={routes}
+            activeIndex={index}
+            onSelect={setIndex}
+          />
+        </View>
       </SafeAreaView>
     </SwipeProvider>
   );
@@ -68,4 +74,13 @@ export default function TabNavigator({ route }) {
 
 const styles = StyleSheet.create({
   // styles kept for potential future use
+  bottomNavWrapper: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 80,
+    overflow: 'visible',
+    zIndex: 100,
+  },
 });

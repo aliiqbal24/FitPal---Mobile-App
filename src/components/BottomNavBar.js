@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ITEM_WIDTH = 60;
-const ITEM_WIDTH_ACTIVE = 100;
+const ITEM_WIDTH = 36;         // or keep as before if you want
+const ITEM_WIDTH_ACTIVE = 60;  // or keep as before if you want
 
 export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
   const [index, setIndex] = useState(activeIndex);
@@ -46,7 +46,7 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
             >
               <Ionicons
                 name={iconName}
-                size={isActive ? 40 : 24}
+                size={isActive ? 40 : 24} // <-- restore to original sizes
                 color="#333"
               />
             </TouchableOpacity>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 100,
+    height: 60, // shorter bar
     backgroundColor: '#f3f3f3',
     paddingHorizontal: 10,
   },

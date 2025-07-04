@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, useWindowDimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons } from '@expo/vector-icons';
+import BottomNavBar from '../components/BottomNavBar';
 import { TabView } from 'react-native-tab-view';
 
 import { SwipeProvider } from '../context/SwipeContext';
@@ -48,27 +48,6 @@ export default function TabNavigator({ route }) {
     }
   };
 
-  const renderTabBar = () => (
-    <View style={styles.tabBar}>
-      {routes.map((route, i) => {
-        const focused = index === i;
-        const iconName = focused ? route.icon : `${route.icon}-outline`;
-        return (
-          <TouchableOpacity
-            key={route.key}
-            style={styles.tabItem}
-            onPress={() => setIndex(i)}
-          >
-            <Ionicons
-              name={iconName}
-              size={24}
-              color={focused ? '#007AFF' : 'gray'}
-            />
-          </TouchableOpacity>
-        );
-      })}
-    </View>
-  );
 
   return (
     <SwipeProvider value={{ setSwipeEnabled }}>
@@ -81,22 +60,12 @@ export default function TabNavigator({ route }) {
           renderTabBar={() => null}
           swipeEnabled={swipeEnabled}
         />
-        {renderTabBar()}
+        <BottomNavBar items={routes} activeIndex={index} onSelect={setIndex} />
       </SafeAreaView>
     </SwipeProvider>
   );
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: 'row',
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderColor: '#ccc',
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
+  // styles kept for potential future use
 });

@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const BAR_HEIGHT = 60;
+// keep the bar fairly short so the active icon can rise above it
+const BAR_HEIGHT = 36;
 const ITEM_WIDTH = 50;
 const ITEM_WIDTH_ACTIVE = 80;
 
@@ -47,7 +48,9 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
                     height: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
                     backgroundColor: isActive ? '#ddd' : 'transparent',
                     borderRadius: 16,
+                    // allow the active icon to rise above the bar
                     marginTop: isActive ? (BAR_HEIGHT - ITEM_WIDTH_ACTIVE) / 2 : 0,
+                    zIndex: isActive ? 2 : 0,
                   },
                 ]}
                 onPress={() => handleSelect(i)}
@@ -125,10 +128,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
+    overflow: 'visible',
   },
   item: {
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 5,
+    overflow: 'visible',
   },
 });

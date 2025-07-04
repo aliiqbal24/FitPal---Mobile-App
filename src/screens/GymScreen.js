@@ -122,6 +122,15 @@ const WiggleItem = React.memo(function WiggleItem({ deleteMode, style, children,
   );
 });
 
+const FunButton = React.memo(function FunButton({ style, children, ...rest }) {
+  return (
+    <TouchableOpacity {...rest} style={[styles.funButton, style]}>
+      <View style={styles.funButtonTopLight} pointerEvents="none" />
+      {children}
+    </TouchableOpacity>
+  );
+});
+
 export default function GymScreen() {
   const [workouts, setWorkouts] = useState([]);
   const [showWorkoutModal, setShowWorkoutModal] = useState(false);
@@ -772,20 +781,20 @@ setWorkoutActive(active => {
             </ScrollView>
           </View>
 
-          <TouchableOpacity style={styles.addWorkoutBtn} onPress={openNewWorkout}>
+          <FunButton style={styles.addWorkoutBtn} onPress={openNewWorkout}>
             <Ionicons name="add" size={32} color="#fff" />
-          </TouchableOpacity>
+          </FunButton>
         </>
       )}
 
-      <TouchableOpacity
+      <FunButton
         style={[styles.workoutToggleBtn, workoutActive && styles.workoutToggleBtnActive]}
         onPress={toggleWorkout}
       >
         <Text style={styles.workoutToggleBtnText}>
           {workoutActive ? 'END' : 'LIFT'}
         </Text>
-      </TouchableOpacity>
+      </FunButton>
 
       {/* Summary Modal */}
       <Modal visible={showSummaryModal} transparent animationType="fade">
@@ -799,12 +808,12 @@ setWorkoutActive(active => {
                 <Text style={styles.summaryText}>Favorite Exercise: {weeklySummary.favoriteExercise}</Text>
               </>
             )}
-            <TouchableOpacity
+            <FunButton
               style={styles.modalButton}
               onPress={() => setShowSummaryModal(false)}
             >
               <Text style={styles.modalButtonText}>Close</Text>
-            </TouchableOpacity>
+            </FunButton>
           </View>
         </View>
       </Modal>
@@ -835,9 +844,9 @@ setWorkoutActive(active => {
               value={workoutName}
               onChangeText={setWorkoutName}
             />
-            <TouchableOpacity style={styles.modalButton} onPress={handleSaveWorkout}>
+            <FunButton style={styles.modalButton} onPress={handleSaveWorkout}>
               <Text style={styles.modalButtonText}>Save</Text>
-            </TouchableOpacity>
+            </FunButton>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setShowWorkoutModal(false)}
@@ -924,9 +933,9 @@ setWorkoutActive(active => {
                 }
               }}
             />
-            <TouchableOpacity style={styles.modalButton} onPress={handleSaveExercise}>
+            <FunButton style={styles.modalButton} onPress={handleSaveExercise}>
               <Text style={styles.modalButtonText}>Save</Text>
-            </TouchableOpacity>
+            </FunButton>
             <TouchableOpacity
               style={styles.modalCancel}
               onPress={() => setShowExerciseModal(false)}
@@ -957,12 +966,12 @@ setWorkoutActive(active => {
             <View style={styles.circleWrapper}>
               <ExpCircle exp={exp} />
             </View>
-            <TouchableOpacity
+            <FunButton
               style={styles.modalButton}
               onPress={() => setShowStatsModal(false)}
             >
               <Text style={styles.modalButtonText}>Close</Text>
-            </TouchableOpacity>
+            </FunButton>
           </View>
         </View>
       </Modal>
@@ -1034,12 +1043,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 24,
     right: 24,
-    backgroundColor: '#007AFF',
-    borderRadius: 24,
     width: 48,
     height: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   modalOverlay: {
     flex: 1,
@@ -1074,15 +1079,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalButton: {
-    backgroundColor: '#007AFF',
     paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: 'center',
     marginBottom: 8,
   },
   modalButtonText: {
     color: '#fff',
-    fontWeight: '600',
+    fontWeight: '700',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
   modalCancel: {
     alignItems: 'center',
@@ -1182,8 +1187,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     bottom: 100,
-    backgroundColor: '#000',
-    borderRadius: 8,
     paddingVertical: 16,
     paddingHorizontal: 26,
   },
@@ -1194,9 +1197,41 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: '700',
     fontSize: 21,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
   arrow: {
     position: 'absolute',
     alignSelf: 'center',
+  },
+  funButton: {
+    backgroundColor: '#FF6B6B',
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
+  },
+  funButtonTopLight: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '50%',
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  funButtonText: {
+    color: '#fff',
+    fontWeight: '700',
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 1,
   },
 });

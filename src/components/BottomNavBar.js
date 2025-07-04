@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const ITEM_WIDTH = 60;
-const ITEM_WIDTH_ACTIVE = 100;
+const ITEM_WIDTH = 50;
+const ITEM_WIDTH_ACTIVE = 70;
 
 export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
   const [index, setIndex] = useState(activeIndex);
@@ -19,9 +19,6 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => scrollTo('left')} style={styles.arrow}>
-        <View style={styles.arrowLeft} />
-      </TouchableOpacity>
       <FlatList
         data={items}
         horizontal
@@ -32,30 +29,46 @@ export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
           const isActive = i === index;
           const iconName = isActive ? item.icon : `${item.icon}-outline`;
           return (
-            <TouchableOpacity
-              style={[
-                styles.item,
-                {
-                  width: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
-                  height: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
-                  backgroundColor: isActive ? '#ddd' : 'transparent',
-                  borderRadius: 16,
-                },
-              ]}
-              onPress={() => handleSelect(i)}
-            >
-              <Ionicons
-                name={iconName}
-                size={isActive ? 40 : 24}
-                color="#333"
-              />
-            </TouchableOpacity>
+            <View style={{ alignItems: 'center' }}>
+              {isActive && i > 0 && (
+                <TouchableOpacity
+                  onPress={() => scrollTo('left')}
+                  style={[styles.arrow, styles.leftArrow]}
+                >
+                  <View style={styles.arrowLeft} />
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity
+                style={[
+                  styles.item,
+                  {
+                    width: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
+                    height: isActive ? ITEM_WIDTH_ACTIVE : ITEM_WIDTH,
+                    backgroundColor: isActive ? '#ddd' : 'transparent',
+                    borderRadius: 16,
+                    marginTop: isActive ? -10 : 0,
+                  },
+                ]}
+                onPress={() => handleSelect(i)}
+              >
+                <Ionicons
+                  name={iconName}
+                  size={isActive ? 40 : 24}
+                  color="#333"
+                />
+              </TouchableOpacity>
+              {isActive && i < items.length - 1 && (
+                <TouchableOpacity
+                  onPress={() => scrollTo('right')}
+                  style={[styles.arrow, styles.rightArrow]}
+                >
+                  <View style={styles.arrowRight} />
+                </TouchableOpacity>
+              )}
+            </View>
           );
         }}
       />
-      <TouchableOpacity onPress={() => scrollTo('right')} style={styles.arrow}>
-        <View style={styles.arrowRight} />
-      </TouchableOpacity>
     </View>
   );
 }
@@ -64,16 +77,27 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 100,
+    height: 60,
     backgroundColor: '#f3f3f3',
     paddingHorizontal: 10,
   },
   arrow: {
     width: 20,
     height: 20,
-    marginHorizontal: 5,
+    position: 'absolute',
+    zIndex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  leftArrow: {
+    left: -25,
+    top: '50%',
+    marginTop: -10,
+  },
+  rightArrow: {
+    right: -25,
+    top: '50%',
+    marginTop: -10,
   },
   arrowLeft: {
     width: 0,

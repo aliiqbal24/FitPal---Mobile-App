@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const DATA = {
   Hats: ['🎩', '🎓', '👑', '🧢'],
@@ -28,19 +28,17 @@ export default function OutfitCloset({ tab, onTabChange }) {
           </TouchableOpacity>
         ))}
       </View>
-      <FlatList
-        data={items}
-        numColumns={4}
-        keyExtractor={(item) => item}
-        renderItem={({ item }) => (
+      <View style={styles.itemsWrap}>
+        {items.map((item) => (
           <TouchableOpacity
+            key={item}
             onPress={() => handleEquip(item)}
             style={[styles.item, equipped[tab] === item && styles.itemActive]}
           >
             <Text style={styles.emoji}>{item}</Text>
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </View>
     </View>
   );
 }
@@ -85,5 +83,10 @@ const styles = StyleSheet.create({
   },
   emoji: {
     fontSize: 24,
+  },
+  itemsWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
 });

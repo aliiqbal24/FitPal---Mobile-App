@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -7,6 +7,10 @@ const ITEM_WIDTH_ACTIVE = 70;
 
 export default function BottomNavBar({ items, activeIndex = 0, onSelect }) {
   const [index, setIndex] = useState(activeIndex);
+
+  useEffect(() => {
+    setIndex(activeIndex);
+  }, [activeIndex]);
 
   const handleSelect = (i) => {
     setIndex(i);

@@ -529,83 +529,7 @@ export default function GymScreen() {
   };
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
   
-const toggleWorkout = useCallback(() => {
-  if (tutorialStep === 4) {
-    AsyncStorage.setItem(TUTORIAL_KEY, 'true');
-    setTutorialCompleted(true);
-  }
-  setTutorialStep(0);
-  const shouldPromptAuth = liftCount === 0 && !user;
-setWorkoutActive(active => {
-  const next = !active;
-  if (active && !next) {
-    const totalSets = setCounts.reduce((sum, c) => sum + c, 0);
-    if (totalSets > 0) {
-      const dateStr = toDateKey();
-      const now = Date.now();
-      addEntry(dateStr, {
-        ...workouts[selectedWorkoutIdx],
-        completedSets: setCounts,
-        timestamp: now,
-      });
-
-      let weight = 0;
-      workouts[selectedWorkoutIdx].exercises.forEach((ex, idx) => {
-        const setsDone = setCounts[idx] || 0;
-        const reps = parseInt(ex.reps, 10) || 0;
-        const w = parseFloat(ex.weight) || 0;
-        weight += setsDone * reps * w;
-      });
-
-      addWorkout(weight, true);
-      recordLiftTime(now);
-
-      if (shouldPromptAuth) {
-        setPendingAuthPrompt(true);
-      }
-
-      if (level > startLevel) {
-        setShowLevelUpModal(true);
-      } else if (shouldPromptAuth) {
-        setShowAuthModal(true);
-        setPendingAuthPrompt(false);
-      }
-
-      setSetCounts([]);
-    }
-  }
-  return next;
-});
-
-  if (workoutActive) {
-    setSetCounts([]);
-    setWorkoutActive(false);
-
-    if (level > startLevel) {
-      setShowLevelUpModal(true);
-    } else if (shouldPromptAuth) {
-      setShowAuthModal(true);
-      setPendingAuthPrompt(false);
-    }
-  } else {
-    setSetCounts(currentExercises.map(() => 0));
-    setStartLevel(level);
-    setWorkoutActive(true);
-  }
-}, [
-  workoutActive,
-  workouts,
-  selectedWorkoutIdx,
-  currentExercises,
-  setCounts,
-  addEntry,
-  addWorkout,
-  level,
-  startLevel,
-  user,
-  liftCount,
-  recordLiftTime,
-]);
+const toggleWorkout = useCallback(() => {}, []);
 
   useEffect(() => {
     if (workoutActive) {
@@ -715,13 +639,7 @@ setWorkoutActive(active => {
           />
         </GameEngine>
       </View>
-      {workoutActive && (
-        <EquipmentGrid
-          exercises={currentExercises}
-          progress={setCounts}
-          onIncrement={incrementSet}
-        />
-      )}
+      <EquipmentGrid exercises={currentExercises} showProgress={false} />
 
       {!workoutActive && (
         <>

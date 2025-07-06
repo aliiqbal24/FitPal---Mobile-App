@@ -7,8 +7,8 @@ const DATA = {
   Bottoms: ['👖', '👗', '🩳', '🩱'],
 };
 
-export default function OutfitCloset({ tab, onTabChange }) {
-  const items = DATA[tab];
+export default function OutfitCloset({ tab = 'Hats', onTabChange }) {
+  const items = DATA[tab] || [];
   const [equipped, setEquipped] = useState({});
 
   const handleEquip = (item) => {

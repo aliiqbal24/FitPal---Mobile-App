@@ -9,7 +9,8 @@ import CharacterRoster from '../components/CharacterRoster';
 import CustomizationBottomTabs from '../components/CustomizationBottomTabs';
 
 export default function CharacterCustomizationScreen() {
-  const [tab, setTab] = useState('Outfits');
+  const [bottomTab, setBottomTab] = useState('Outfits');
+  const [closetTab, setClosetTab] = useState('Hats');
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.container}>
@@ -20,10 +21,12 @@ export default function CharacterCustomizationScreen() {
       >
         <CharacterStage />
         <EvolutionTimeline currentLevel={3} />
-        <OutfitCloset tab={tab} onTabChange={setTab} />
+        {bottomTab === 'Outfits' && (
+          <OutfitCloset tab={closetTab} onTabChange={setClosetTab} />
+        )}
         <CharacterRoster unlocked={1} />
       </ScrollView>
-      <CustomizationBottomTabs tab={tab} onTabChange={setTab} />
+      <CustomizationBottomTabs tab={bottomTab} onTabChange={setBottomTab} />
     </SafeAreaView>
   );
 }

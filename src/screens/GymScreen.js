@@ -23,7 +23,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
 import { toDateKey } from '../utils/dateUtils';
-import ExpCircle from '../components/ExpCircle';
 import AvatarWithLevelBadge from '../components/AvatarWithLevelBadge';
 import ExpBar from '../components/ExpBar';
 import TouchHandler from '../systems/TouchHandler';
@@ -33,6 +32,7 @@ import LevelUpModal from '../components/LevelUpModal';
 import NamePetModal from '../components/NamePetModal';
 import QuickWorkoutModal from '../components/QuickWorkoutModal';
 import SignInModal from '../components/SignInModal';
+import PokemonStatsCard from '../components/PokemonStatsCard';
 import { useAuth } from '../context/AuthContext';
 import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
@@ -952,11 +952,7 @@ setWorkoutActive(active => {
       <Modal visible={showStatsModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Character Stats</Text>
-            <Text style={styles.levelText}>Level {level}</Text>
-            <View style={styles.circleWrapper}>
-              <ExpCircle exp={exp} />
-            </View>
+            <PokemonStatsCard />
             <TouchableOpacity
               style={styles.modalButton}
               onPress={() => setShowStatsModal(false)}

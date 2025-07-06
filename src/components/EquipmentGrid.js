@@ -2,7 +2,12 @@ import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { getEquipmentImage } from '../data/exerciseEquipmentMap';
 
-export default function EquipmentGrid({ exercises = [], progress = [], onIncrement }) {
+export default function EquipmentGrid({
+  exercises = [],
+  progress = [],
+  onIncrement,
+  showProgress = true,
+}) {
   const { width, height } = Dimensions.get('window');
 
   // Shift the entire grid up by five percent of the screen height
@@ -39,21 +44,26 @@ export default function EquipmentGrid({ exercises = [], progress = [], onIncreme
         <TouchableOpacity
           key={idx}
           style={[styles.box, { left: pos.left, top: pos.top, width: cellWidth, height: cellHeight }]}
-          onPress={() => onIncrement && onIncrement(idx)}
+          onPress={showProgress && onIncrement ? () => onIncrement(idx) : undefined}
+          activeOpacity={showProgress && onIncrement ? 0.2 : 1}
         >
           <Image source={getEquipmentImage(pos.name)} style={styles.equipmentImage} resizeMode="contain" />
-          <View style={styles.setRow}>
-            {Array.from({ length: pos.sets }).map((_, sIdx) => (
-              <View
-                key={sIdx}
-                style={[
-                  styles.setDot,
-                  (progress[idx] ?? 0) > sIdx && styles.setDotFilled,
-                ]}
-              />
-            ))}
-          </View>
-          <Text style={styles.progress}>{(progress[idx] ?? 0)}/{pos.sets}</Text>
+          {showProgress && (
+            <>
+              <View style={styles.setRow}>
+                {Array.from({ length: pos.sets }).map((_, sIdx) => (
+                  <View
+                    key={sIdx}
+                    style={[
+                      styles.setDot,
+                      (progress[idx] ?? 0) > sIdx && styles.setDotFilled,
+                    ]}
+                  />
+                ))}
+              </View>
+              <Text style={styles.progress}>{(progress[idx] ?? 0)}/{pos.sets}</Text>
+            </>
+          )}
           <Text style={styles.label} numberOfLines={1} adjustsFontSizeToFit>
             {pos.name}
           </Text>

@@ -8,14 +8,12 @@ import { SwipeProvider } from '../context/SwipeContext';
 
 import GymScreen from '../screens/GymScreen';
 import HistoryScreen from '../screens/HistoryScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import CharacterCustomizationScreen from '../screens/CharacterCustomizationScreen';
 
 const routes = [
-  { key: 'Profile', icon: 'person' },
+  { key: 'Customize', icon: 'color-palette' },
   { key: 'Gym', icon: 'barbell' },
   { key: 'History', icon: 'calendar' },
-  { key: 'Customize', icon: 'color-palette' },
 ];
 
 export default function TabNavigator({ route }) {
@@ -26,8 +24,6 @@ export default function TabNavigator({ route }) {
       ? 1
       : initialRoute === 'History'
       ? 2
-      : initialRoute === 'Customize'
-      ? 3
       : 0;
   const [index, setIndex] = useState(initialIndex);
 
@@ -37,10 +33,8 @@ export default function TabNavigator({ route }) {
       setIndex(1);
     } else if (newRoute === 'History') {
       setIndex(2);
-    } else if (newRoute === 'Profile') {
+    } else {
       setIndex(0);
-    } else if (newRoute === 'Customize') {
-      setIndex(3);
     }
   }, [route?.params?.screen]);
 
@@ -48,8 +42,6 @@ export default function TabNavigator({ route }) {
 
   const renderScene = ({ route }) => {
     switch (route.key) {
-      case 'Profile':
-        return <ProfileScreen />;
       case 'Gym':
         return <GymScreen />;
       case 'History':

@@ -7,6 +7,7 @@ import SettingsScreen from "../screens/SettingsScreen";
 import ActivityScreen from "../screens/ActivityScreen";
 import FriendsScreen from "../screens/FriendsScreen";
 import ComicScreen from "../screens/ComicScreen";
+import CharacterCustomizationScreen from "../screens/CharacterCustomizationScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Settings" component={SettingsScreen} />
       <Stack.Screen name="Activity" component={ActivityScreen} />
       <Stack.Screen name="Friends" component={FriendsScreen} />
+      <Stack.Screen name="Customize" component={CharacterCustomizationScreen} />
     </Stack.Navigator>
   );
 }

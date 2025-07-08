@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,7 @@ export default function LiftModeScreen() {
     { name: 'Lat Pulldown (Cable Machine)', sets: 3, weight: 40, reps: 10, completed: 0 },
   ]);
   const openRow = useRef(null);
-  const { characterId } = useCharacter();
+  const { characterId, addExp } = useCharacter();
   const navigation = useNavigation();
   const petSprite = CHARACTER_IMAGES[characterId];
   const [activeIndex, setActiveIndex] = useState(0);
@@ -73,6 +73,14 @@ export default function LiftModeScreen() {
     setEdit({ index: null, field: null, value: '' });
   };
 
+  const handleEndWorkout = useCallback(() => {
+    const total = exercises.reduce((sum, ex) => sum + ex.completed, 0);
+    if (total > 0) {
+      addExp(total);
+    }
+    navigation.goBack();
+  }, [exercises, addExp, navigation]);
+
   return (
     <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -92,7 +100,7 @@ export default function LiftModeScreen() {
             />
           </Animated.View>
         ))}
-        <TouchableOpacity style={styles.endButton} onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.endButton} onPress={handleEndWorkout}>
           <Text style={styles.endText}>End Workout</Text>
         </TouchableOpacity>
       </ScrollView>

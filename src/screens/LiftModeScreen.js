@@ -50,13 +50,10 @@ export default function LiftModeScreen() {
       if (ex.completed < ex.sets) {
         ex.completed += 1;
         arr[index] = ex;
-        if (ex.completed >= ex.sets) {
-          const next = arr.findIndex(e => e.completed < e.sets);
-          setActiveIndex(next === -1 ? arr.length - 1 : next);
-        }
       }
       return arr;
     });
+    setActiveIndex(index);
   };
 
   const handleEdit = (index, field) => {

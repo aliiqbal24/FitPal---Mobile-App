@@ -70,18 +70,19 @@ const styles = StyleSheet.create({
   row: {
     backgroundColor: '#222',
     borderRadius: 12,
-    padding: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 18,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 18,
   },
   activeRow: {
     borderWidth: 2,
     borderColor: '#1db954',
   },
   icon: {
-    width: 50,
-    height: 50,
+    width: 75,
+    height: 75,
     marginRight: 12,
     borderRadius: 8,
   },
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   pet: {
-    width: 40,
-    height: 40,
+    width: 60,
+    height: 60,
   },
 });

@@ -60,7 +60,8 @@ function AnimatedCharacter({ char, index, total, angle, onSelect }) {
     const x = Math.cos(a) * RADIUS;
     const y = Math.sin(a) * 20;
     const scale = interpolate(y, [-20, 20], [1.1, 0.9]);
-    const zIndex = interpolate(y, [-20, 20], [2, 0]);
+    // zIndex must be an integer on native; round to avoid precision errors
+    const zIndex = Math.round(interpolate(y, [-20, 20], [2, 0]));
     const opacity = interpolate(y, [-20, 20], [1, 0.5]);
     return {
       position: 'absolute',

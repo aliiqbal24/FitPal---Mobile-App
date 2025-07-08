@@ -5,7 +5,8 @@ import * as Progress from 'react-native-progress';
 export default function EvolutionTimeline({ currentLevel }) {
   const stages = [1, 5, 10];
   const maxLevel = 10;
-  const progress = Math.min(currentLevel, maxLevel) / maxLevel;
+  const lvl = Number(currentLevel) || 0;
+  const progress = lvl > 0 ? Math.min(lvl, maxLevel) / maxLevel : 0;
   const [barWidth, setBarWidth] = useState(0);
 
   return (

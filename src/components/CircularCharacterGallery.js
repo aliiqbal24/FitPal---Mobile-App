@@ -75,14 +75,6 @@ function AnimatedCharacter({ char, index, total, angle, onSelect }) {
 
   return (
     <Animated.View style={animStyle}>
-      {/* Render your character component */}
-    </Animated.View>
-  );
-}
-
-
-  return (
-    <Animated.View style={animStyle}>
       <TouchableOpacity onPress={() => onSelect && onSelect(char.id)}>
         <Image source={char.image} style={styles.image} />
       </TouchableOpacity>

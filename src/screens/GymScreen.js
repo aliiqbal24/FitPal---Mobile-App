@@ -517,11 +517,11 @@ export default function GymScreen() {
     });
     setShowExerciseModal(false);
   };
-  const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
-  
+const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
+
 const toggleWorkout = useCallback(() => {
-  navigation.navigate('LiftMode');
-}, [navigation]);
+  navigation.navigate('LiftMode', { exercises: currentExercises });
+}, [navigation, currentExercises]);
 
   useEffect(() => {
     if (workoutActive) {

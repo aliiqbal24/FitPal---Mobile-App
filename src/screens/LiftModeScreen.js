@@ -10,17 +10,31 @@ import {
   Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ExerciseRow from '../components/ExerciseRow';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useCharacter } from '../context/CharacterContext';
 
 export default function LiftModeScreen() {
-  const [exercises, setExercises] = useState([
-    { name: 'Barbell Squat', sets: 3, weight: 60, reps: 10, completed: 0 },
-    { name: 'Dumbbell Bench Press', sets: 3, weight: 25, reps: 8, completed: 0 },
-    { name: 'Lat Pulldown (Cable Machine)', sets: 3, weight: 40, reps: 10, completed: 0 },
-  ]);
+  const route = useRoute();
+  const initialExercises = React.useMemo(() => {
+    const passed = route?.params?.exercises;
+    if (Array.isArray(passed) && passed.length) {
+      return passed.map(ex => ({
+        name: ex.name,
+        sets: parseInt(ex.sets, 10) || 0,
+        weight: parseFloat(ex.weight) || 0,
+        reps: parseInt(ex.reps, 10) || 0,
+        completed: 0,
+      }));
+    }
+    return [
+      { name: 'Barbell Squat', sets: 3, weight: 60, reps: 10, completed: 0 },
+      { name: 'Dumbbell Bench Press', sets: 3, weight: 25, reps: 8, completed: 0 },
+      { name: 'Lat Pulldown (Cable Machine)', sets: 3, weight: 40, reps: 10, completed: 0 },
+    ];
+  }, [route?.params?.exercises]);
+  const [exercises, setExercises] = useState(initialExercises);
   const openRow = useRef(null);
   const { characterId } = useCharacter();
   const navigation = useNavigation();

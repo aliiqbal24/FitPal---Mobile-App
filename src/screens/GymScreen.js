@@ -435,16 +435,10 @@ export default function GymScreen() {
     );
   };
 
-  const MAX_EXERCISES = 7;
   const MAX_REPS = 100;
   const MAX_WEIGHT = 2000;
 
   const openNewExercise = idx => {
-    const exercises = workouts[idx]?.exercises ?? [];
-    if (exercises.length >= MAX_EXERCISES) {
-      Alert.alert('Limit Reached', `You can only have ${MAX_EXERCISES} exercises per workout.`);
-      return;
-    }
     setCurrentWorkoutIdx(idx);
     if (tutorialStep === 2) {
       setExerciseForm({ name: 'Bodyweight Pushups', sets: '1', reps: '5', weight: '0' });
@@ -500,10 +494,6 @@ export default function GymScreen() {
       if (editingExerciseIdx !== null) {
         exercises[editingExerciseIdx] = ex;
       } else {
-        if (exercises.length >= MAX_EXERCISES) {
-          Alert.alert('Limit Reached', `You can only have ${MAX_EXERCISES} exercises per workout.`);
-          return w;
-        }
         exercises.push(ex);
         didAdd = true;
       }
@@ -639,7 +629,9 @@ const toggleWorkout = useCallback(() => {}, []);
           />
         </GameEngine>
       </View>
-      <EquipmentGrid exercises={currentExercises} showProgress={false} />
+      {!workoutActive && (
+        <EquipmentGrid exercises={currentExercises} showProgress={false} />
+      )}
 
       {!workoutActive && (
         <>

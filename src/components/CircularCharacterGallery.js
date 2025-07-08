@@ -60,11 +60,11 @@ function AnimatedCharacter({ char, index, total, angle, onSelect }) {
     const x = Math.cos(a) * RADIUS;
     const y = Math.sin(a) * 20;
     const scale = interpolate(y, [-20, 20], [1.1, 0.9]);
-    // zIndex must be an integer or React Native will warn about precision
-    // loss when converting the value across the native bridge. Round the
-    // interpolated value to avoid fractional zIndex values.
+
+    // zIndex must be an integer to prevent precision errors in native bridge
     const zIndex = Math.round(interpolate(y, [-20, 20], [2, 0]));
     const opacity = interpolate(y, [-20, 20], [1, 0.5]);
+
     return {
       position: 'absolute',
       transform: [{ translateX: x }, { translateY: y }, { scale }],
@@ -72,6 +72,14 @@ function AnimatedCharacter({ char, index, total, angle, onSelect }) {
       opacity,
     };
   });
+
+  return (
+    <Animated.View style={animStyle}>
+      {/* Render your character component */}
+    </Animated.View>
+  );
+}
+
 
   return (
     <Animated.View style={animStyle}>

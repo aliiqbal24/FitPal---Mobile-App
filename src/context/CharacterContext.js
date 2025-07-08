@@ -6,9 +6,11 @@ import { TEST_MODE } from '../utils/config';
 const CharacterContext = createContext({
   exp: 0,
   level: 1,
-  characterId: 'GorillaM',
+  characterId: 'Gorilla1',
+  petGender: 'Male',
   petName: '',
   setCharacterId: () => {},
+  setPetGender: () => {},
   setPetName: () => {},
   addExp: () => {},
 });
@@ -16,8 +18,9 @@ const CharacterContext = createContext({
 export const CharacterProvider = ({ children }) => {
   const [exp, setExp] = useState(0);
   const [level, setLevel] = useState(1);
-  const [characterId, setCharacterId] = useState('GorillaM');
+  const [characterId, setCharacterId] = useState('Gorilla1');
   const [petName, setPetName] = useState('');
+  const [petGender, setPetGender] = useState('Male');
 
   // Load saved experience, character and pet name on mount
   useEffect(() => {
@@ -43,6 +46,10 @@ export const CharacterProvider = ({ children }) => {
         if (char) {
           setCharacterId(char);
         }
+        const gender = await AsyncStorage.getItem('petGender');
+        if (gender) {
+          setPetGender(gender);
+        }
         const name = await AsyncStorage.getItem('petName');
         if (name) {
           setPetName(name);
@@ -65,6 +72,11 @@ export const CharacterProvider = ({ children }) => {
     AsyncStorage.setItem('characterId', characterId);
   }, [characterId]);
 
+  // Persist pet gender
+  useEffect(() => {
+    AsyncStorage.setItem('petGender', petGender);
+  }, [petGender]);
+
   // Persist pet name
   useEffect(() => {
     AsyncStorage.setItem('petName', petName);
@@ -76,7 +88,17 @@ export const CharacterProvider = ({ children }) => {
 
   return (
     <CharacterContext.Provider
-      value={{ exp, level, characterId, petName, setCharacterId, setPetName, addExp }}
+      value={{
+        exp,
+        level,
+        characterId,
+        petGender,
+        petName,
+        setCharacterId,
+        setPetGender,
+        setPetName,
+        addExp,
+      }}
     >
       {children}
     </CharacterContext.Provider>

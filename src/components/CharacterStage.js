@@ -3,7 +3,7 @@ import { View, Image, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CHARACTER_IMAGES } from '../data/characters';
 
-export default function CharacterStage({ character = 'GorillaM' }) {
+export default function CharacterStage({ character = 'Gorilla1' }) {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#FDEBEB', '#FFF']} style={styles.stage} />

@@ -1,9 +1,9 @@
 export const CHARACTER_IMAGES = {
-  GorillaF: require('../../assets/characters/GorillaF.png'),
+  Gorilla1: require('../../assets/characters/gorilla1.png'),
+  GorillaM2: require('../../assets/characters/gorillaM2.png'),
+  GorillaM3: require('../../assets/characters/GorillaM3.png'),
   GorillaF2: require('../../assets/characters/GorillaF2.png'),
   GorillaF3: require('../../assets/characters/GorillaF3.png'),
-  GorillaM: require('../../assets/characters/GorillaM.png'),
-  GorillaM2: require('../../assets/characters/GorillaM.png'),
 };
 
 export const CHARACTER_OPTIONS = Object.keys(CHARACTER_IMAGES).map(key => ({

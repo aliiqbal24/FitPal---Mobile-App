@@ -11,7 +11,7 @@ import CircularCharacterGallery from '../components/CircularCharacterGallery';
 export default function CharacterCustomizationScreen() {
   const [bottomTab, setBottomTab] = useState('Outfits');
   const [closetTab, setClosetTab] = useState('Hats');
-  const [character, setCharacter] = useState('GorillaM');
+  const [character, setCharacter] = useState('Gorilla1');
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.container}>

@@ -202,9 +202,9 @@ export default function GymScreen() {
     };
   }, [world, characterBody]);
 
-  const { exp, level, addExp, characterId, petName } = useCharacter();
+  const { exp, level, addExp, characterId, petName, petGender, setCharacterId } = useCharacter();
   const { background } = useBackground();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.Gorilla1;
   const { addWorkout, liftCount } = useStats();
   const { enabled: notificationsEnabled, recordLiftTime } = useNotifications();
   const { user } = useAuth();
@@ -250,18 +250,37 @@ export default function GymScreen() {
     setNameModalShown(true);
   }, []);
 
+  const computeSprite = useCallback(
+    (lvl) => {
+      if (lvl >= 10) return petGender === 'Female' ? 'GorillaF3' : 'GorillaM3';
+      if (lvl >= 5) return petGender === 'Female' ? 'GorillaF2' : 'GorillaM2';
+      return 'Gorilla1';
+    },
+    [petGender]
+  );
+
   const handleLevelUpClose = useCallback(() => {
     setShowLevelUpModal(false);
+    setCharacterId(computeSprite(level));
     if (pendingAuthPrompt) {
       setShowAuthModal(true);
       setPendingAuthPrompt(false);
     }
-  }, [pendingAuthPrompt]);
+  }, [pendingAuthPrompt, computeSprite, level, setCharacterId]);
 
   const handleQuickWorkoutContinue = useCallback(() => {
     setShowQuickWorkoutModal(false);
     setTutorialStep(1);
   }, []);
+
+  useEffect(() => {
+    if (level > startLevel) {
+      if (level === 5 || level === 10) {
+        setShowLevelUpModal(true);
+      }
+      setStartLevel(level);
+    }
+  }, [level, startLevel]);
 
   const entities = {
     physics: { engine: engine.current, world },
@@ -870,6 +889,7 @@ const toggleWorkout = useCallback(() => {
         visible={showLevelUpModal}
         onClose={handleLevelUpClose}
         petName={petName}
+        sprite={CHARACTER_IMAGES[computeSprite(level)]}
       />
 
       {/* Stats Modal */}

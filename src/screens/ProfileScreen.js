@@ -33,7 +33,7 @@ export default function ProfileScreen() {
   const { level, characterId, petName } = useCharacter();
   const { enabled: notificationsEnabled } = useNotifications();
   const { user } = useAuth();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.Gorilla1;
 
   const openViewer = index => {
     const items = tab === 'Gallery' ? galleryItems : privateItems;

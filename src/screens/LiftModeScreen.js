@@ -8,6 +8,7 @@ import {
   Modal,
   TextInput,
   Animated,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -41,6 +42,13 @@ export default function LiftModeScreen() {
   const petSprite = CHARACTER_IMAGES[characterId];
   const [activeIndex, setActiveIndex] = useState(0);
   const [edit, setEdit] = useState({ index: null, field: null, value: '' });
+  const [newExercise, setNewExercise] = useState({
+    name: '',
+    sets: '',
+    reps: '',
+    weight: '',
+  });
+  const [showNewExerciseModal, setShowNewExerciseModal] = useState(false);
   const rowAnim = useRef(
     exercises.map((_, i) => new Animated.Value(i % 2 === 0 ? -300 : 300))
   ).current;
@@ -84,6 +92,23 @@ export default function LiftModeScreen() {
     setEdit({ index: null, field: null, value: '' });
   };
 
+  const saveNewExercise = () => {
+    if (exercises.length >= 12) {
+      Alert.alert('Limit Reached', 'Exercises cannot exceed 12.');
+      return;
+    }
+    const ex = {
+      name: newExercise.name || 'New Exercise',
+      sets: Number(newExercise.sets) || 0,
+      reps: Number(newExercise.reps) || 0,
+      weight: Number(newExercise.weight) || 0,
+      completed: 0,
+    };
+    setExercises(prev => [...prev, ex]);
+    setShowNewExerciseModal(false);
+    setNewExercise({ name: '', sets: '', reps: '', weight: '' });
+  };
+
   const handleEndWorkout = useCallback(() => {
     const total = exercises.reduce((sum, ex) => sum + ex.completed, 0);
     if (total > 0) {
@@ -111,6 +136,14 @@ export default function LiftModeScreen() {
             />
           </Animated.View>
         ))}
+        {exercises.length < 12 && (
+          <TouchableOpacity
+            style={styles.addExerciseBtn}
+            onPress={() => setShowNewExerciseModal(true)}
+          >
+            <Text style={styles.addExerciseText}>Add Exercise</Text>
+          </TouchableOpacity>
+        )}
         <TouchableOpacity style={styles.endButton} onPress={handleEndWorkout}>
           <Text style={styles.endText}>End Workout</Text>
         </TouchableOpacity>
@@ -130,6 +163,57 @@ export default function LiftModeScreen() {
                 <Text style={styles.modalBtnText}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity style={[styles.modalBtn, styles.saveBtn]} onPress={saveEdit}>
+                <Text style={[styles.modalBtnText, styles.saveBtnText]}>Save</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal visible={showNewExerciseModal} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <TextInput
+              style={styles.input}
+              placeholder="Exercise Name"
+              placeholderTextColor="#888"
+              value={newExercise.name}
+              onChangeText={t => setNewExercise(e => ({ ...e, name: t }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Sets"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={newExercise.sets}
+              onChangeText={t => setNewExercise(e => ({ ...e, sets: t }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Reps"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={newExercise.reps}
+              onChangeText={t => setNewExercise(e => ({ ...e, reps: t }))}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Weight"
+              placeholderTextColor="#888"
+              keyboardType="numeric"
+              value={newExercise.weight}
+              onChangeText={t => setNewExercise(e => ({ ...e, weight: t }))}
+            />
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => setShowNewExerciseModal(false)}
+              >
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalBtn, styles.saveBtn]}
+                onPress={saveNewExercise}
+              >
                 <Text style={[styles.modalBtnText, styles.saveBtnText]}>Save</Text>
               </TouchableOpacity>
             </View>
@@ -158,6 +242,15 @@ const styles = StyleSheet.create({
   },
   endText: {
     color: '#fff',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  addExerciseBtn: {
+    marginTop: 12,
+    alignItems: 'center',
+  },
+  addExerciseText: {
+    color: '#1db954',
     fontWeight: '600',
     fontSize: 16,
   },

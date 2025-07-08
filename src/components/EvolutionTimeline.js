@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
 
 export default function EvolutionTimeline({ currentLevel }) {
   const stages = [1, 5, 10];
-  const progress = Math.min(currentLevel, 10) / 10;
+  const maxLevel = 10;
+  const progress = Math.min(currentLevel, maxLevel) / maxLevel;
+  const [barWidth, setBarWidth] = useState(0);
+
   return (
     <View style={styles.container}>
-      <Progress.Bar
-        progress={progress}
-        width={null}
-        color="#4CAF50"
-        unfilledColor="#eee"
-        borderWidth={0}
-        style={styles.bar}
-      />
-      <View style={styles.stages}>
-        {stages.map((lvl) => (
-          <View key={lvl} style={styles.stage}>
-            <View
-              style={[styles.circle, currentLevel >= lvl ? styles.unlocked : styles.locked]}
-            />
-            <Text style={styles.label}>Lvl {lvl}</Text>
-          </View>
-        ))}
+      <View
+        style={styles.barWrapper}
+        onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
+      >
+        <Progress.Bar
+          progress={progress}
+          width={null}
+          color="#4CAF50"
+          unfilledColor="#eee"
+          borderWidth={0}
+          style={styles.bar}
+        />
+        {barWidth > 0 &&
+          stages.map((lvl) => {
+            const left = (lvl / maxLevel) * barWidth - 12;
+            return (
+              <View key={lvl} style={[styles.nodeContainer, { left }]}>
+                <View
+                  style={[styles.circle, currentLevel >= lvl ? styles.unlocked : styles.locked]}
+                />
+                <Text style={styles.label}>Lvl {lvl}</Text>
+              </View>
+            );
+          })}
+        {barWidth > 0 && (
+          <View
+            style={[styles.userMarker, { left: progress * barWidth - 6 }]}
+          />
+        )}
       </View>
     </View>
   );
@@ -34,16 +49,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 16,
   },
+  barWrapper: {
+    position: 'relative',
+  },
   bar: {
     marginBottom: 8,
   },
-  stages: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  stage: {
+  nodeContainer: {
+    position: 'absolute',
+    top: -12,
+    width: 24,
     alignItems: 'center',
-    flex: 1,
   },
   circle: {
     width: 24,
@@ -56,6 +72,14 @@ const styles = StyleSheet.create({
   },
   locked: {
     backgroundColor: '#ccc',
+  },
+  userMarker: {
+    position: 'absolute',
+    top: -6,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: '#000',
   },
   label: {
     fontSize: 12,

@@ -30,6 +30,7 @@ import TouchHandler from '../systems/TouchHandler';
 import ExerciseSelector from '../components/ExerciseSelector';
 import EquipmentGrid from '../components/EquipmentGrid';
 import LevelUpModal from '../components/LevelUpModal';
+import LevelUpCard from '../components/LevelUpCard';
 import NamePetModal from '../components/NamePetModal';
 import QuickWorkoutModal from '../components/QuickWorkoutModal';
 import SignInModal from '../components/SignInModal';
@@ -211,6 +212,7 @@ export default function GymScreen() {
   const navigation = useNavigation();
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showLevelUpModal, setShowLevelUpModal] = useState(false);
+  const [showLevelCard, setShowLevelCard] = useState(false);
   const [startLevel, setStartLevel] = useState(level);
 
   useEffect(() => {
@@ -268,6 +270,10 @@ export default function GymScreen() {
     }
   }, [pendingAuthPrompt, computeSprite, level, setCharacterId]);
 
+  const handleLevelCardClose = useCallback(() => {
+    setShowLevelCard(false);
+  }, []);
+
   const handleQuickWorkoutContinue = useCallback(() => {
     setShowQuickWorkoutModal(false);
     setTutorialStep(1);
@@ -277,6 +283,8 @@ export default function GymScreen() {
     if (level > startLevel) {
       if (level === 5 || level === 10) {
         setShowLevelUpModal(true);
+      } else {
+        setShowLevelCard(true);
       }
       setStartLevel(level);
     }
@@ -890,6 +898,12 @@ const toggleWorkout = useCallback(() => {
         onClose={handleLevelUpClose}
         petName={petName}
         sprite={CHARACTER_IMAGES[computeSprite(level)]}
+      />
+
+      <LevelUpCard
+        visible={showLevelCard}
+        onClose={handleLevelCardClose}
+        petName={petName}
       />
 
       {/* Stats Modal */}

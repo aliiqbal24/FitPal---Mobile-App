@@ -47,12 +47,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 8,
     marginBottom: 8,
-    color: '#222',
+    color: '#fff',
+    backgroundColor: '#333',
   },
   option: {
     paddingVertical: 6,
+    backgroundColor: '#333',
+    borderRadius: 4,
+    paddingHorizontal: 4,
+    marginBottom: 4,
   },
   optionText: {
-    color: '#222',
+    color: '#fff',
   },
 });

@@ -13,6 +13,7 @@ import {
   Button,
   Alert,
   Animated,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { GameEngine } from 'react-native-game-engine';
 import Matter from 'matter-js';
@@ -490,13 +491,16 @@ export default function GymScreen() {
     let didAdd = false;
     setWorkouts(w => {
       const updated = [...w];
-      const exercises = updated[currentWorkoutIdx].exercises;
+      const workout = { ...updated[currentWorkoutIdx] };
+      const exercises = [...workout.exercises];
       if (editingExerciseIdx !== null) {
         exercises[editingExerciseIdx] = ex;
       } else {
         exercises.push(ex);
         didAdd = true;
       }
+      workout.exercises = exercises;
+      updated[currentWorkoutIdx] = workout;
       return updated;
     });
     if (didAdd && workoutActive) {
@@ -512,7 +516,9 @@ export default function GymScreen() {
     if (editingExerciseIdx === null) return;
     setWorkouts(w => {
       const updated = [...w];
-      updated[currentWorkoutIdx].exercises = updated[currentWorkoutIdx].exercises.filter((_, i) => i !== editingExerciseIdx);
+      const workout = { ...updated[currentWorkoutIdx] };
+      workout.exercises = workout.exercises.filter((_, i) => i !== editingExerciseIdx);
+      updated[currentWorkoutIdx] = workout;
       return updated;
     });
     setShowExerciseModal(false);
@@ -562,6 +568,11 @@ const toggleWorkout = useCallback(() => {
       style={styles.background}
       resizeMode="cover"
     >
+      <TouchableWithoutFeedback
+        onPress={() => {
+          if (deleteMode) setDeleteMode(false);
+        }}
+      >
       <View style={{flex: 1}} pointerEvents="box-none">
       <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.contentContainer}>
@@ -877,6 +888,7 @@ const toggleWorkout = useCallback(() => {
       <SignInModal visible={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </SafeAreaView>
     </View>
+    </TouchableWithoutFeedback>
     </ImageBackground>
   );
 }

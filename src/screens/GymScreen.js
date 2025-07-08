@@ -519,7 +519,9 @@ export default function GymScreen() {
   };
   const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
   
-const toggleWorkout = useCallback(() => {}, []);
+const toggleWorkout = useCallback(() => {
+  navigation.navigate('LiftMode');
+}, [navigation]);
 
   useEffect(() => {
     if (workoutActive) {

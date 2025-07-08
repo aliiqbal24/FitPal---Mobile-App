@@ -652,7 +652,7 @@ const toggleWorkout = useCallback(() => {
         </TouchableOpacity>
         {!workoutActive && (
           <View style={styles.expBar}>
-            <ExpBar exp={exp} />
+            <ExpBar exp={exp} showFraction />
           </View>
         )}
       </View>

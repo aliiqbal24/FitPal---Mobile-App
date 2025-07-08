@@ -1,6 +1,16 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Modal, TextInput } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  Animated,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import ExerciseRow from '../components/ExerciseRow';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useCharacter } from '../context/CharacterContext';
@@ -13,9 +23,25 @@ export default function LiftModeScreen() {
   ]);
   const openRow = useRef(null);
   const { characterId } = useCharacter();
+  const navigation = useNavigation();
   const petSprite = CHARACTER_IMAGES[characterId];
   const [activeIndex, setActiveIndex] = useState(0);
   const [edit, setEdit] = useState({ index: null, field: null, value: '' });
+  const rowAnim = useRef(
+    exercises.map((_, i) => new Animated.Value(i % 2 === 0 ? -300 : 300))
+  ).current;
+
+  useEffect(() => {
+    const animations = rowAnim.map((anim, idx) =>
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 400,
+        delay: idx * 150,
+        useNativeDriver: true,
+      })
+    );
+    Animated.stagger(100, animations).start();
+  }, [rowAnim]);
 
   const handleAddSet = index => {
     setExercises(prev => {
@@ -51,18 +77,22 @@ export default function LiftModeScreen() {
     <SafeAreaView edges={['left','right','bottom']} style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {exercises.map((ex, idx) => (
-          <ExerciseRow
+          <Animated.View
             key={idx}
-            exercise={ex}
-            isActive={idx === activeIndex}
-            onAddSet={() => handleAddSet(idx)}
-            onEdit={field => handleEdit(idx, field)}
-            openRef={openRow}
-            setOpenRef={ref => (openRow.current = ref)}
-            petSprite={idx === activeIndex ? petSprite : null}
-          />
+            style={{ transform: [{ translateX: rowAnim[idx] }] }}
+          >
+            <ExerciseRow
+              exercise={ex}
+              isActive={idx === activeIndex}
+              onAddSet={() => handleAddSet(idx)}
+              onEdit={field => handleEdit(idx, field)}
+              openRef={openRow}
+              setOpenRef={ref => (openRow.current = ref)}
+              petSprite={idx === activeIndex ? petSprite : null}
+            />
+          </Animated.View>
         ))}
-        <TouchableOpacity style={styles.endButton}>
+        <TouchableOpacity style={styles.endButton} onPress={() => navigation.goBack()}>
           <Text style={styles.endText}>End Workout</Text>
         </TouchableOpacity>
       </ScrollView>

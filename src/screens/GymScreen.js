@@ -524,10 +524,11 @@ export default function GymScreen() {
     setShowExerciseModal(false);
   };
 const currentExercises = workouts[selectedWorkoutIdx]?.exercises ?? [];
+const currentName = workouts[selectedWorkoutIdx]?.name ?? 'Workout';
 
 const toggleWorkout = useCallback(() => {
-  navigation.navigate('LiftMode', { exercises: currentExercises });
-}, [navigation, currentExercises]);
+  navigation.navigate('LiftMode', { exercises: currentExercises, name: currentName });
+}, [navigation, currentExercises, currentName]);
 
   useEffect(() => {
     if (workoutActive) {

@@ -67,6 +67,7 @@ const EXERCISE_EQUIPMENT_MAP = {
   'EZ Bar Curl': 'barbell_rack',
   'Hammer Curl': 'dumbbells',
   'Zottman Curl': 'dumbbells',
+  'Spider Curl (EZ Bar)': 'incline_bench',
   'Preacher Curl (EZ)': 'flat_bench',
   'Tricep Pushdown': 'cable_machine_dual',
   'Cable Tricep Pushdown (Rope)': 'cable_machine_dual',

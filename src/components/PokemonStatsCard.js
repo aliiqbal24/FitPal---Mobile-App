@@ -20,7 +20,7 @@ export default function PokemonStatsCard() {
       <View style={styles.leftColumn}>
         <Text style={styles.name}>{`${petName} - Lv. ${level}`}</Text>
         <View style={styles.spriteBox}>
-          <Image source={CHARACTER_IMAGES.GorillaM} style={styles.sprite} resizeMode="contain" />
+          <Image source={CHARACTER_IMAGES.Gorilla1} style={styles.sprite} resizeMode="contain" />
         </View>
       </View>
       <View style={styles.rightColumn}>

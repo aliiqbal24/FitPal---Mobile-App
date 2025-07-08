@@ -16,9 +16,10 @@ import { useCharacter } from '../context/CharacterContext';
 import { CHARACTER_IMAGES } from '../data/characters';
 
 export default function NamePetModal({ visible, onClose }) {
-  const { characterId, setPetName } = useCharacter();
-  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.GorillaM;
+  const { characterId, setPetName, setPetGender, setCharacterId } = useCharacter();
+  const sprite = CHARACTER_IMAGES[characterId] || CHARACTER_IMAGES.Gorilla1;
   const [name, setName] = useState('');
+  const [gender, setGender] = useState('Male');
   const [showExp, setShowExp] = useState(false);
 
   const handleSave = () => {
@@ -30,6 +31,9 @@ export default function NamePetModal({ visible, onClose }) {
       return;
     }
     setPetName(trimmed);
+    setPetGender(gender);
+    // ensure starting sprite
+    setCharacterId('Gorilla1');
     setShowExp(true);
   };
 
@@ -51,6 +55,24 @@ export default function NamePetModal({ visible, onClose }) {
                       value={name}
                       onChangeText={setName}
                     />
+                    <View style={styles.genderRow}>
+                      {['Male', 'Female'].map(opt => (
+                        <TouchableOpacity
+                          key={opt}
+                          style={[
+                            styles.genderButton,
+                            gender === opt && styles.genderSelected,
+                          ]}
+                          onPress={() => setGender(opt)}
+                        >
+                          <Text
+                            style={gender === opt ? styles.genderSelectedText : styles.genderText}
+                          >
+                            {opt}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </View>
                     <TouchableOpacity style={styles.button} onPress={handleSave}>
                       <Text style={styles.buttonText}>Save</Text>
                     </TouchableOpacity>
@@ -110,6 +132,31 @@ const styles = StyleSheet.create({
     padding: 8,
     marginBottom: 12,
     color: '#222',
+  },
+  genderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  genderButton: {
+    flex: 1,
+    paddingVertical: 6,
+    marginHorizontal: 4,
+    borderWidth: 1,
+    borderColor: '#4CAF50',
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  genderSelected: {
+    backgroundColor: '#4CAF50',
+  },
+  genderText: {
+    color: '#4CAF50',
+    fontWeight: '600',
+  },
+  genderSelectedText: {
+    color: '#fff',
+    fontWeight: '600',
   },
   button: {
     backgroundColor: '#4CAF50',

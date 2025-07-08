@@ -71,10 +71,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#222',
     borderRadius: 12,
     paddingHorizontal: 12,
-    paddingVertical: 18,
+    paddingVertical: 27,
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 18,
+    alignItems: 'flex-start',
+    marginBottom: 27,
   },
   activeRow: {
     borderWidth: 2,
@@ -88,11 +88,13 @@ const styles = StyleSheet.create({
   },
   info: {
     flex: 1,
+    justifyContent: 'flex-start',
   },
   name: {
     color: '#fff',
     fontWeight: '600',
     marginBottom: 4,
+    fontSize: 18,
   },
   details: {
     flexDirection: 'row',
@@ -102,6 +104,7 @@ const styles = StyleSheet.create({
   detail: {
     color: '#ccc',
     marginRight: 12,
+    fontSize: 16,
   },
   leftAction: {
     backgroundColor: '#1db954',

@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Modal, View, Text, StyleSheet, Animated, TouchableWithoutFeedback, Image } from 'react-native';
-import * as Progress from 'react-native-progress';
 
-const AnimatedBar = Animated.createAnimatedComponent(Progress.Bar);
+const BAR_WIDTH = 200;
 
 export default function LevelUpModal({ visible, onClose, petName, sprite }) {
   const progress = useRef(new Animated.Value(0)).current;
@@ -43,14 +42,19 @@ export default function LevelUpModal({ visible, onClose, petName, sprite }) {
             {phase !== 'done' && (
               <>
                 <Text style={styles.text}>{`${petName || 'Your pet'} is getting stronger!`}</Text>
-                <AnimatedBar
-                  progress={progress}
-                  width={200}
-                  height={12}
-                  color="#4CAF50"
-                  unfilledColor="#eee"
-                  borderWidth={0}
-                />
+                <View style={styles.barBackground}>
+                  <Animated.View
+                    style={[
+                      styles.barFill,
+                      {
+                        width: progress.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [0, BAR_WIDTH],
+                        }),
+                      },
+                    ]}
+                  />
+                </View>
               </>
             )}
             {phase === 'done' && (
@@ -92,6 +96,18 @@ const styles = StyleSheet.create({
     marginTop: 12,
     color: '#555',
     fontSize: 14,
+  },
+  barBackground: {
+    width: BAR_WIDTH,
+    height: 12,
+    backgroundColor: '#eee',
+    borderRadius: 6,
+    overflow: 'hidden',
+    marginTop: 4,
+  },
+  barFill: {
+    height: '100%',
+    backgroundColor: '#4CAF50',
   },
   sprite: {
     width: 150,

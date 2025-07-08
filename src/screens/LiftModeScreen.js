@@ -11,12 +11,16 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useHistory } from '../context/HistoryContext';
+import { useStats } from '../context/StatsContext';
+import { toDateKey } from '../utils/dateUtils';
 import ExerciseRow from '../components/ExerciseRow';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useCharacter } from '../context/CharacterContext';
 
 export default function LiftModeScreen() {
   const route = useRoute();
+  const workoutName = route?.params?.name || 'Workout';
   const initialExercises = React.useMemo(() => {
     const passed = route?.params?.exercises;
     if (Array.isArray(passed) && passed.length) {
@@ -37,6 +41,8 @@ export default function LiftModeScreen() {
   const [exercises, setExercises] = useState(initialExercises);
   const openRow = useRef(null);
   const { characterId, addExp } = useCharacter();
+  const { addEntry } = useHistory();
+  const { addWorkout } = useStats();
   const navigation = useNavigation();
   const petSprite = CHARACTER_IMAGES[characterId];
   const [activeIndex, setActiveIndex] = useState(0);
@@ -85,12 +91,29 @@ export default function LiftModeScreen() {
   };
 
   const handleEndWorkout = useCallback(() => {
-    const total = exercises.reduce((sum, ex) => sum + ex.completed, 0);
-    if (total > 0) {
-      addExp(total);
+    const totalSets = exercises.reduce((sum, ex) => sum + ex.completed, 0);
+    if (totalSets > 0) {
+      addExp(totalSets);
+      const completedSets = exercises.map(ex => ex.completed);
+      const workout = {
+        name: workoutName,
+        exercises: exercises.map(ex => ({
+          name: ex.name,
+          sets: ex.sets,
+          reps: ex.reps,
+          weight: ex.weight,
+        })),
+        completedSets,
+      };
+      addEntry(toDateKey(), workout);
+      const totalWeight = exercises.reduce(
+        (sum, ex) => sum + ex.completed * ex.reps * ex.weight,
+        0
+      );
+      addWorkout(totalWeight, true);
     }
     navigation.goBack();
-  }, [exercises, addExp, navigation]);
+  }, [exercises, addExp, navigation, workoutName, addEntry, addWorkout]);
 
   return (
     <SafeAreaView edges={['left','right','bottom']} style={styles.container}>

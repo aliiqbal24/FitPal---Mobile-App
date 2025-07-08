@@ -3,11 +3,11 @@ import { View, Image, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CHARACTER_IMAGES } from '../data/characters';
 
-export default function CharacterStage() {
+export default function CharacterStage({ character = 'GorillaM' }) {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#FDEBEB', '#FFF']} style={styles.stage} />
-      <Image source={CHARACTER_IMAGES.GorillaM} style={styles.character} />
+      <Image source={CHARACTER_IMAGES[character]} style={styles.character} />
       <View style={[styles.layer, styles.hat]} />
       <View style={[styles.layer, styles.top]} />
       <View style={[styles.layer, styles.bottom]} />

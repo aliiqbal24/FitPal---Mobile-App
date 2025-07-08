@@ -5,12 +5,13 @@ import CharacterCustomizationTopBar from '../components/CharacterCustomizationTo
 import CharacterStage from '../components/CharacterStage';
 import EvolutionTimeline from '../components/EvolutionTimeline';
 import OutfitCloset from '../components/OutfitCloset';
-import CharacterRoster from '../components/CharacterRoster';
 import CustomizationBottomTabs from '../components/CustomizationBottomTabs';
+import CircularCharacterGallery from '../components/CircularCharacterGallery';
 
 export default function CharacterCustomizationScreen() {
   const [bottomTab, setBottomTab] = useState('Outfits');
   const [closetTab, setClosetTab] = useState('Hats');
+  const [character, setCharacter] = useState('GorillaM');
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.container}>
@@ -19,12 +20,14 @@ export default function CharacterCustomizationScreen() {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <CharacterStage />
+        <CharacterStage character={character} />
+        <CircularCharacterGallery onSelect={setCharacter} />
         <EvolutionTimeline currentLevel={3} />
         {bottomTab === 'Outfits' && (
           <OutfitCloset tab={closetTab} onTabChange={setClosetTab} />
         )}
-        <CharacterRoster unlocked={1} />
+        {/* Legacy roster kept for reference */}
+        {/* <CharacterRoster unlocked={1} /> */}
       </ScrollView>
       <CustomizationBottomTabs tab={bottomTab} onTabChange={setBottomTab} />
     </SafeAreaView>

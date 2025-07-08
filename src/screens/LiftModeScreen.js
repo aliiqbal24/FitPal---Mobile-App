@@ -16,6 +16,7 @@ import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
 import { toDateKey } from '../utils/dateUtils';
 import ExerciseRow from '../components/ExerciseRow';
+import ExerciseSelector from '../components/ExerciseSelector';
 import { CHARACTER_IMAGES } from '../data/characters';
 import { useCharacter } from '../context/CharacterContext';
 
@@ -195,12 +196,9 @@ export default function LiftModeScreen() {
       <Modal visible={showNewExerciseModal} transparent animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalCard}>
-            <TextInput
-              style={styles.input}
-              placeholder="Exercise Name"
-              placeholderTextColor="#888"
+            <ExerciseSelector
               value={newExercise.name}
-              onChangeText={t => setNewExercise(e => ({ ...e, name: t }))}
+              onChange={t => setNewExercise(e => ({ ...e, name: t }))}
             />
             <TextInput
               style={styles.input}

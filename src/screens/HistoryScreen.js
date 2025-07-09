@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, Share } from 'react-native';
-import LineChart from 'react-native-chart-kit/dist/line-chart';
+import { LineChart } from 'react-native-chart-kit';
 import { Ionicons } from '@expo/vector-icons';
 import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';

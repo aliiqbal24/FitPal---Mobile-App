@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as Progress from 'react-native-progress';
 
+const NODE_WIDTH = 36;
+
 export default function EvolutionTimeline({ currentLevel }) {
   const stages = [1, 5, 10];
   const maxLevel = 10;
@@ -25,13 +27,18 @@ export default function EvolutionTimeline({ currentLevel }) {
         />
         {barWidth > 0 &&
           stages.map((lvl) => {
-            const left = (lvl / maxLevel) * barWidth - 12;
+            const left =
+              lvl === 1
+                ? 0
+                : (lvl / maxLevel) * barWidth - NODE_WIDTH / 2;
             return (
               <View key={lvl} style={[styles.nodeContainer, { left }]}>
                 <View
                   style={[styles.circle, currentLevel >= lvl ? styles.unlocked : styles.locked]}
                 />
-                <Text style={styles.label}>Lvl {lvl}</Text>
+                <Text style={styles.label} numberOfLines={1}>
+                  Lvl {lvl}
+                </Text>
               </View>
             );
           })}
@@ -59,7 +66,7 @@ const styles = StyleSheet.create({
   nodeContainer: {
     position: 'absolute',
     top: -12,
-    width: 24,
+    width: NODE_WIDTH,
     alignItems: 'center',
   },
   circle: {

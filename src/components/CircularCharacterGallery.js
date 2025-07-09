@@ -10,12 +10,24 @@ import Animated, {
   useAnimatedGestureHandler,
 } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
-import { CHARACTER_OPTIONS } from '../data/characters';
+import { CHARACTER_IMAGES } from '../data/characters';
+import { useCharacter } from '../context/CharacterContext';
 
 const ITEM_SIZE = 80;
 const RADIUS = 130;
 
 export default function CircularCharacterGallery({ onSelect }) {
+  const { petGender } = useCharacter();
+  const characters = [
+    { id: 'Gorilla1', image: CHARACTER_IMAGES.Gorilla1 },
+    petGender === 'Female'
+      ? { id: 'GorillaF2', image: CHARACTER_IMAGES.GorillaF2 }
+      : { id: 'GorillaM2', image: CHARACTER_IMAGES.GorillaM2 },
+    petGender === 'Female'
+      ? { id: 'GorillaF3', image: CHARACTER_IMAGES.GorillaF3 }
+      : { id: 'GorillaM3', image: CHARACTER_IMAGES.GorillaM3 },
+  ];
+
   const angle = useSharedValue(0);
 
   useEffect(() => {
@@ -38,12 +50,12 @@ export default function CircularCharacterGallery({ onSelect }) {
   return (
     <PanGestureHandler onGestureEvent={gestureHandler}>
       <Animated.View style={styles.wrap}>
-        {CHARACTER_OPTIONS.map((char, index) => (
+        {characters.map((char, index) => (
           <AnimatedCharacter
             key={char.id}
             char={char}
             index={index}
-            total={CHARACTER_OPTIONS.length}
+            total={characters.length}
             angle={angle}
             onSelect={onSelect}
           />

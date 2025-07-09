@@ -12,6 +12,11 @@ export default function CharacterCustomizationScreen() {
   const [bottomTab, setBottomTab] = useState('Outfits');
   const [closetTab, setClosetTab] = useState('Hats');
   const [character, setCharacter] = useState('Gorilla1');
+  const [equipped, setEquipped] = useState({});
+
+  const handleEquip = (item) => {
+    setEquipped((prev) => ({ ...prev, [closetTab]: item }));
+  };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={styles.container}>
@@ -20,11 +25,16 @@ export default function CharacterCustomizationScreen() {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <CharacterStage character={character} />
+        <CharacterStage character={character} accessories={equipped} />
         <CircularCharacterGallery onSelect={setCharacter} />
         <EvolutionTimeline currentLevel={3} />
         {bottomTab === 'Outfits' && (
-          <OutfitCloset tab={closetTab} onTabChange={setClosetTab} />
+          <OutfitCloset
+            tab={closetTab}
+            equipped={equipped}
+            onEquip={handleEquip}
+            onTabChange={setClosetTab}
+          />
         )}
         {/* Legacy roster kept for reference */}
         {/* <CharacterRoster unlocked={1} /> */}

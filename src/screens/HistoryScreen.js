@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, Share } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
 import { Ionicons } from '@expo/vector-icons';
 import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';
@@ -54,6 +55,37 @@ export default function HistoryScreen({ setSwipeEnabled }) {
   const { history } = useHistory();
   const { weekWeight, yearWeight, liftCount } = useStats();
   const [selectedEntry, setSelectedEntry] = useState(null);
+
+  const weeklyWeights = useMemo(() => {
+    const now = new Date();
+    const weights = [];
+    for (let i = 4; i >= 0; i--) {
+      const start = new Date(now);
+      start.setDate(now.getDate() - now.getDay() - i * 7);
+      start.setHours(0, 0, 0, 0);
+      const end = new Date(start);
+      end.setDate(start.getDate() + 6);
+      end.setHours(23, 59, 59, 999);
+
+      let sum = 0;
+      Object.entries(history).forEach(([dateStr, workouts]) => {
+        const d = new Date(dateStr);
+        if (d >= start && d <= end) {
+          workouts.forEach(w => {
+            w.exercises?.forEach((ex, idx) => {
+              const setsDone =
+                w.completedSets && w.completedSets[idx] !== undefined
+                  ? w.completedSets[idx]
+                  : 0;
+              sum += setsDone * ex.reps * ex.weight;
+            });
+          });
+        }
+      });
+      weights.push(sum);
+    }
+    return weights;
+  }, [history]);
 
   // Pre-compute all months so users can swipe between them
   const months = monthOptions.map(opt => generateMonth(opt.year, opt.month));
@@ -190,6 +222,27 @@ export default function HistoryScreen({ setSwipeEnabled }) {
           <Ionicons name="share-outline" size={24} color="#007AFF" />
         </TouchableOpacity>
       </View>
+      <LineChart
+        data={{
+          labels: ['-4w', '-3w', '-2w', '-1w', 'Now'],
+          datasets: [{ data: weeklyWeights }],
+        }}
+        width={SCREEN_WIDTH - 32}
+        height={220}
+        withInnerLines={false}
+        yAxisSuffix=""
+        chartConfig={{
+          backgroundColor: '#fff',
+          backgroundGradientFrom: '#fff',
+          backgroundGradientTo: '#fff',
+          decimalPlaces: 0,
+          color: (o = 1) => `rgba(0, 122, 255, ${o})`,
+          labelColor: (o = 1) => `rgba(0,0,0,${o})`,
+          propsForDots: { r: '4', strokeWidth: '2', stroke: '#007AFF' },
+        }}
+        bezier
+        style={styles.chart}
+      />
       <View style={styles.placeholder}>
         <Text style={styles.placeholderText}>Tap a green date to view details.</Text>
       </View>
@@ -293,6 +346,10 @@ const styles = StyleSheet.create({
   shareBtn: {
     padding: 8,
     alignSelf: 'flex-start',
+  },
+  chart: {
+    alignSelf: 'center',
+    marginBottom: 8,
   },
   dayCell: {
     width: CELL_SIZE,

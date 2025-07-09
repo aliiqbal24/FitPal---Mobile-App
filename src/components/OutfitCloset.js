@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 const DATA = {
@@ -7,12 +7,16 @@ const DATA = {
   Bottoms: ['👖', '👗', '🩳', '🩱'],
 };
 
-export default function OutfitCloset({ tab = 'Hats', onTabChange }) {
+export default function OutfitCloset({
+  tab = 'Hats',
+  equipped = {},
+  onEquip,
+  onTabChange,
+}) {
   const items = DATA[tab] || [];
-  const [equipped, setEquipped] = useState({});
 
   const handleEquip = (item) => {
-    setEquipped({ ...equipped, [tab]: item });
+    onEquip && onEquip(item);
   };
 
   return (

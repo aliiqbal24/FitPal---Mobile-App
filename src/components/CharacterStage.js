@@ -1,16 +1,25 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, Text } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { CHARACTER_IMAGES } from '../data/characters';
 
-export default function CharacterStage({ character = 'Gorilla1' }) {
+export default function CharacterStage({ character = 'Gorilla1', accessories = {} }) {
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#FDEBEB', '#FFF']} style={styles.stage} />
+      <View style={[styles.compartment, styles.hatCompartment]} />
+      <View style={[styles.compartment, styles.topCompartment]} />
+      <View style={[styles.compartment, styles.bottomCompartment]} />
       <Image source={CHARACTER_IMAGES[character]} style={styles.character} />
-      <View style={[styles.layer, styles.hat]} />
-      <View style={[styles.layer, styles.top]} />
-      <View style={[styles.layer, styles.bottom]} />
+      {accessories.Hats && (
+        <Text style={[styles.accessory, styles.hatItem]}>{accessories.Hats}</Text>
+      )}
+      {accessories.Tops && (
+        <Text style={[styles.accessory, styles.topItem]}>{accessories.Tops}</Text>
+      )}
+      {accessories.Bottoms && (
+        <Text style={[styles.accessory, styles.bottomItem]}>{accessories.Bottoms}</Text>
+      )}
     </View>
   );
 }
@@ -31,26 +40,40 @@ const styles = StyleSheet.create({
     height: 150,
     resizeMode: 'contain',
   },
-  layer: {
+  compartment: {
     position: 'absolute',
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: '#fff',
+    opacity: 0.5,
   },
-  hat: {
+  hatCompartment: {
     width: 40,
     height: 20,
-    backgroundColor: '#FFD700',
     top: 30,
   },
-  top: {
+  topCompartment: {
     width: 60,
     height: 40,
-    backgroundColor: '#B3E5FC',
     top: 90,
   },
-  bottom: {
+  bottomCompartment: {
     width: 60,
     height: 40,
-    backgroundColor: '#FFCDD2',
+    top: 135,
+  },
+  accessory: {
+    position: 'absolute',
+    fontSize: 24,
+  },
+  hatItem: {
+    top: 30,
+  },
+  topItem: {
+    top: 90,
+  },
+  bottomItem: {
     top: 135,
   },
 });

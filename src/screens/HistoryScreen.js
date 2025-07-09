@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Modal, Share } from 'react-native';
-import { LineChart } from 'react-native-chart-kit';
+// Import LineChart directly to avoid importing missing PieChart from index
+import LineChart from 'react-native-chart-kit/dist/line-chart';
 import { Ionicons } from '@expo/vector-icons';
 import { useHistory } from '../context/HistoryContext';
 import { useStats } from '../context/StatsContext';

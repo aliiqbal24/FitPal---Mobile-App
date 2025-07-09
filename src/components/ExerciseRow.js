@@ -7,6 +7,7 @@ import { getEquipmentImage } from '../data/exerciseEquipmentMap';
 export default function ExerciseRow({
   exercise,
   onAddSet,
+  onRemoveSet,
   onEdit,
   isActive,
   openRef,
@@ -22,9 +23,14 @@ export default function ExerciseRow({
     setOpenRef(swipeRef.current);
   };
 
-  const handleSwipe = () => {
+  const handleAddSwipe = () => {
     onAddSet && onAddSet();
-    setTimeout(() => swipeRef.current?.close(), 200);
+    swipeRef.current?.close();
+  };
+
+  const handleRemoveSwipe = () => {
+    onRemoveSet && onRemoveSet();
+    swipeRef.current?.close();
   };
 
   const leftActions = () => (
@@ -33,14 +39,24 @@ export default function ExerciseRow({
     </View>
   );
 
+  const rightActions = () => (
+    <View style={styles.rightAction}>
+      <Ionicons name="remove" size={24} color="#fff" />
+    </View>
+  );
+
   return (
     <Swipeable
       ref={swipeRef}
       renderLeftActions={leftActions}
+      renderRightActions={rightActions}
       overshootLeft={false}
+      overshootRight={false}
       leftThreshold={30}
+      rightThreshold={30}
       onSwipeableWillOpen={handleOpen}
-      onSwipeableOpen={handleSwipe}
+      onSwipeableLeftOpen={handleAddSwipe}
+      onSwipeableRightOpen={handleRemoveSwipe}
     >
       <View style={[styles.row, isActive && styles.activeRow]}>
         <Image source={getEquipmentImage(exercise.name)} style={styles.icon} />
@@ -108,6 +124,14 @@ const styles = StyleSheet.create({
   },
   leftAction: {
     backgroundColor: '#1db954',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 70,
+    marginVertical: 6,
+    borderRadius: 12,
+  },
+  rightAction: {
+    backgroundColor: '#e63946',
     justifyContent: 'center',
     alignItems: 'center',
     width: 70,

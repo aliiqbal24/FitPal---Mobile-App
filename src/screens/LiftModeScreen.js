@@ -85,6 +85,19 @@ export default function LiftModeScreen() {
     setActiveIndex(index);
   };
 
+  const handleRemoveSet = index => {
+    setExercises(prev => {
+      const arr = [...prev];
+      const ex = { ...arr[index] };
+      if (ex.completed > 0) {
+        ex.completed -= 1;
+        arr[index] = ex;
+      }
+      return arr;
+    });
+    setActiveIndex(index);
+  };
+
   const handleEdit = (index, field) => {
     setEdit({ index, field, value: String(exercises[index][field]) });
   };
@@ -153,6 +166,7 @@ export default function LiftModeScreen() {
               exercise={ex}
               isActive={idx === activeIndex}
               onAddSet={() => handleAddSet(idx)}
+              onRemoveSet={() => handleRemoveSet(idx)}
               onEdit={field => handleEdit(idx, field)}
               openRef={openRow}
               setOpenRef={ref => (openRow.current = ref)}

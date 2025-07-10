@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 70,
-    marginVertical: 6,
+    height: '100%',
     borderRadius: 12,
   },
   rightAction: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: 70,
-    marginVertical: 6,
+    height: '100%',
     borderRadius: 12,
   },
   pet: {

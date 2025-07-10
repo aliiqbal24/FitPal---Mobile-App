@@ -76,10 +76,8 @@ export default function LiftModeScreen() {
     setExercises(prev => {
       const arr = [...prev];
       const ex = { ...arr[index] };
-      if (ex.completed < ex.sets) {
-        ex.completed += 1;
-        arr[index] = ex;
-      }
+      ex.completed += 1;
+      arr[index] = ex;
       return arr;
     });
     setActiveIndex(index);

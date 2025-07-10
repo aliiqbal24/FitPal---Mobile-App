@@ -37,6 +37,7 @@ const EXERCISE_EQUIPMENT_MAP = {
   'Cable Crossover': 'cable_machine_dual',
   'Cable Crossover (Standing)': 'cable_machine_dual',
   'Barbell Back Squat': 'barbell_rack',
+  'Barbell Squat': 'barbell_rack',
   'Dumbbell Goblet Squat': 'mat',
   'Leg Press': 'leg_press_machine',
   'Leg Press (Machine)': 'leg_press_machine',

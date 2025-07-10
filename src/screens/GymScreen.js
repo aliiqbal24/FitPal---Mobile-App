@@ -158,9 +158,11 @@ export default function GymScreen() {
   const arrowStyle = React.useMemo(() => {
     switch (tutorialStep) {
       case 1:
-        return { right: 40, bottom: 80 };
+        // Arrow above the add workout button
+        return { right: 24, bottom: 80 };
       case 2:
-        return { alignSelf: 'center', bottom: 320 };
+        // Arrow pointing to the newly created workout card
+        return { left: 60, bottom: 240 };
       case 3:
         return { alignSelf: 'center', bottom: 250 };
       case 4:

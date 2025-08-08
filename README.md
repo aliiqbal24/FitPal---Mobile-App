@@ -25,7 +25,7 @@ https://drive.google.com/drive/folders/1vsNmwWpDVS9z5safRQsNMvZAXI1bLIdV?usp=sha
    ```
 2. Start the development server (Expo):
    ```bash
-   npm start
+   npx expo start
    ```
 3. The app entry point is `App.js`. Source files live under `src/`.
 

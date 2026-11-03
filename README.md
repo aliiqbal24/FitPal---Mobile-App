@@ -11,7 +11,7 @@ I built this around a personal question: could tracking workouts feel rewarding 
   <img src="docs/images/character.png" alt="FitPal character interface" width="240">
 </p>
 
-*Captured app screens, retained from my project portfolio. They illustrate the interface; they are not a claim of an App Store release.*
+*Screens from my project portfolio: the opening comic and character customization.*
 
 ## What is here
 
@@ -31,7 +31,7 @@ npm ci
 npx expo start
 ```
 
-Follow Expo's terminal instructions to open the app on a device or emulator. The app targets mobile; the presence of a web script does not establish web support. Firebase sign-in and provider-specific authentication require your own project configuration. Never use another person's account or production data for a demonstration.
+Follow Expo's terminal instructions to open the app on a device or emulator. The app targets Android and iOS. Firebase sign-in and provider-specific authentication require your own project configuration.
 
 To check the Android JavaScript bundle without publishing a native app:
 
@@ -45,4 +45,4 @@ npx expo export --platform android
 
 ## Project status
 
-This is a portfolio project, not a supported production service. There is no automated test suite or verified store release. Authentication, notifications, and platform-specific behavior need device testing with a separately configured development backend. Source features and screenshots should not be read as evidence that every flow has been tested on both platforms.
+The Android JavaScript bundle has been verified with Expo. Authentication and notifications require a configured development backend and device testing. Automated tests and a store release are future work.

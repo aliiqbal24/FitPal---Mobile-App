@@ -1,48 +1,48 @@
 # FitPal
 
-FitPal is a mobile workout companion built with **React Native** and **Expo**. The app gamifies weightlifting by letting you train alongside a virtual gym buddy that levels up as you log workouts.
+A workout companion where your progress helps a virtual gym buddy grow. Built with React Native and Expo, FitPal combines workout logging, character progression, and a playful gym interface.
 
+I built this around a personal question: could tracking workouts feel rewarding in the moment, instead of being another spreadsheet to maintain?
 
-# I recomend checking out these images of the App and its UI to get a better feel for it
+## A look inside
 
-https://drive.google.com/drive/folders/1vsNmwWpDVS9z5safRQsNMvZAXI1bLIdV?usp=sharing
+<p>
+  <img src="docs/images/workout.png" alt="FitPal opening comic" width="240">
+  <img src="docs/images/character.png" alt="FitPal character interface" width="240">
+</p>
 
+*Captured app screens, retained from my project portfolio. They illustrate the interface; they are not a claim of an App Store release.*
 
-## Features
+## What is here
 
-- **Character progression** – Earn experience from each set and watch your buddy evolve.
-- **Workout tracking** – Create routines, record sets and reps, and review past sessions in a calendar view.
-- **Stats dashboard** – See weekly and yearly totals of weight lifted and share your progress.
-- **Customization** – Personalize your buddy with outfits and backgrounds.
-- **Notifications** – Optional reminders encourage you to lift if you haven’t logged a workout in a while.
-- **Sign in** – Supports email/password, Google and Apple sign‑in using Firebase.
+- Workout and routine screens, set logging, and history views.
+- A virtual character, experience progression, equipment, and backgrounds.
+- Local state providers for workouts, history, and progression.
+- Firebase authentication integration and optional notification flows.
 
-## Getting Started
+The interesting product decision is tying progression to training: a practical logging tool and a playful companion share the same interaction.
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Start the development server (Expo):
-   ```bash
-   npx expo start
-   ```
-3. The app entry point is `App.js`. Source files live under `src/`.
+## Run locally
 
-## Project Structure
-
-- `src/components` – Reusable UI components.
-- `src/screens` – App screens (Gym, History, Character customization, etc.).
-- `src/navigation` – Navigation configuration.
-- `src/context` – React context providers for state such as authentication and stats.
-
-## Contributing
-
-This project currently has no automated tests. If you add features, consider writing tests with **Jest** and **React Native Testing Library** and running:
+Use Node.js and an Expo-compatible Android/iOS environment:
 
 ```bash
-npm test
+npm ci
+npx expo start
 ```
 
----
-Built with cross‑platform compatibility in mind, FitPal aims to make tracking workouts fun and approachable without overwhelming users.
+Follow Expo's terminal instructions to open the app on a device or emulator. The app targets mobile; the presence of a web script does not establish web support. Firebase sign-in and provider-specific authentication require your own project configuration. Never use another person's account or production data for a demonstration.
+
+To check the Android JavaScript bundle without publishing a native app:
+
+```bash
+npx expo export --platform android
+```
+
+## Code map
+
+`App.js` composes the providers and navigation. `src/screens/` contains the product views; `src/components/` holds shared UI. `src/context/` owns local state and authentication, and `src/data/` contains character and equipment definitions.
+
+## Project status
+
+This is a portfolio project, not a supported production service. There is no automated test suite or verified store release. Authentication, notifications, and platform-specific behavior need device testing with a separately configured development backend. Source features and screenshots should not be read as evidence that every flow has been tested on both platforms.
